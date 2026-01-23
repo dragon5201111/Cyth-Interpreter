@@ -1,0 +1,8 @@
+func my_func(){
+    decl x
+    x = 23
+    return x
+}
+
+call my_func()
+y = !false
