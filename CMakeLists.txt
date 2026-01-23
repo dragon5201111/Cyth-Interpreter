@@ -18,4 +18,5 @@ add_executable(Interpreter2
         include/Reader.h
         src/Reader.cpp
         include/Expr.h
+        include/Stmnt.h
 )
