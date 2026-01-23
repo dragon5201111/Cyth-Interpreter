@@ -40,13 +40,13 @@ Token Tokenizer::advance_current() {
         case '/': current++; return Token(TokenType::OPERATOR, "/");
         case '%': current++; return Token(TokenType::OPERATOR, "%");
         case '<':
-            return match_operator('<', "<=", TokenType::OPERATOR);
+            return match_operator('<', '=', "<=");
         case '>':
-            return match_operator('>', ">=", TokenType::OPERATOR);
+            return match_operator('>', '=', ">=");
         case '!':
-            return match_operator('!', "!=", TokenType::OPERATOR);
+            return match_operator('!', '=', "!=");
         case '=':
-            return match_operator('=', "==", TokenType::ASSIGN);
+            return match_operator('=', '=', "==");
 
         case '\"':
             return get_string();
@@ -72,14 +72,15 @@ Token Tokenizer::get_string() {
     return Token(TokenType::STRING, input.substr(sub_start, current++ - sub_start));
 }
 
-Token Tokenizer::match_operator(const char current_char, std::string value, const TokenType default_type) {
-    if (current + 1 < input_size && input[current + 1] == '=') {
+Token Tokenizer::match_operator(const char current_char, const char expected, const std::string& two_char) {
+    if (current + 1 < input_size && input[current + 1] == expected) {
         current += 2;
-        return Token(TokenType::OPERATOR, std::move(value));
+        return Token(TokenType::OPERATOR, two_char);
     }
     current++;
-    return Token(default_type, std::string(1, current_char));
+    return Token(TokenType::OPERATOR, std::string(1, current_char));
 }
+
 
 Token Tokenizer::get_number() {
     const int sub_start = current++;

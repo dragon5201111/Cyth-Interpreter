@@ -6,3 +6,4 @@ func my_func(){
 
 call my_func()
 y = !false
+x = x >= 23

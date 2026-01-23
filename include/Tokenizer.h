@@ -29,7 +29,7 @@ class Tokenizer {
     Token get_string();
     Token get_number();
     Token get_identifier();
-    Token match_operator(char current_char, std::string value, TokenType default_type);
+    Token match_operator(char current_char, char expected, const std::string &two_char);
 public:
     explicit Tokenizer(std::string input) {
         this->input = std::move(input);
