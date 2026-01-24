@@ -8,12 +8,14 @@
 class Token : public Printable {
     TokenType type;
     std::string value;
+    int line_number;
 public:
-    explicit Token (const TokenType type) : type(type) {}
-    explicit Token (const TokenType type, std::string value) : type(type), value(std::move(value)) {}
+    explicit Token (const TokenType type, const int line_number) : type(type), line_number(line_number) {}
+    explicit Token (const TokenType type, std::string value, const int line_number) : type(type), value(std::move(value)), line_number(line_number) {}
 
     [[nodiscard]] std::string get_value() const { return value; }
     [[nodiscard]] TokenType get_type() const { return type; }
+    [[nodiscard]] int get_line_number() const { return line_number; }
 
     [[nodiscard]] std::string to_string() const override {
         std::string string_rep;
@@ -40,6 +42,6 @@ public:
             case TokenType::END_OF_FILE: string_rep = "END_OF_FILE"; break;
             default: string_rep = "UNKNOWN";
         }
-        return "TYPE:" + string_rep + " [value=\"" + value + "\"]";
+        return "TYPE:" + string_rep + " [value=\"" + value + "\", line_number=" + std::to_string(line_number) + "]";
     }
 };

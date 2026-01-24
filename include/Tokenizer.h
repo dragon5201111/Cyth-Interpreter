@@ -7,22 +7,23 @@
 #include "./Token.h"
 
 class Tokenizer {
-    const std::unordered_map<std::string, Token> fragment_map = {
-        {"if", Token(TokenType::IF)},
-        {"while", Token(TokenType::WHILE)},
-        {"return", Token(TokenType::RETURN)},
-        {"decl", Token(TokenType::DECL)},
-        {"print", Token(TokenType::PRINT)},
-        {"call", Token(TokenType::CALL)},
-        {"func", Token(TokenType::FUNC)},
-        {"true", Token(TokenType::TRUE)},
-        {"false", Token(TokenType::FALSE)}
+    const std::unordered_map<std::string, TokenType> fragment_map = {
+        {"if", TokenType::IF},
+        {"while", TokenType::WHILE},
+        {"return", TokenType::RETURN},
+        {"decl", TokenType::DECL},
+        {"print", TokenType::PRINT},
+        {"call", TokenType::CALL},
+        {"func", TokenType::FUNC},
+        {"true", TokenType::TRUE},
+        {"false", TokenType::FALSE}
     };
 
     std::string input;
     std::string::size_type input_size;
 
     int current;
+    int current_line;
     std::optional<Token> cached;
 
     Token advance_current();
@@ -35,6 +36,7 @@ public:
         this->input = std::move(input);
         input_size = this->input.size();
         current = 0;
+        current_line = 1;
     }
 
     Token peek();

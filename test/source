@@ -1,6 +1,6 @@
 func my_func(){
     decl x
-    x = 23
+    x = "foo\n"
     return x
 }
 
