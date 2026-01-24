@@ -9,8 +9,10 @@
 ## Expressions
 ```
 <expression> := <binary> | <unary> | <primary>
+<primary> := <bool> | <number> | <string> | <identifier> | <function-call> | <array-literal> | <array-access> | "(" <expression> ")"
+<array-literal> := "[" <expression-list>? "]"
+<array-access> := <identifier> "[" <expression> "]"
 <unary> := "!" <expression>
-<primary> := <bool> | <number> | <string> | <identifier> | <function-call>
 <binary> := "(" <expression> <op> <expression> ")"
 <bool> := "true" | "false"
 <number> := <digit>+
@@ -24,7 +26,7 @@
 ```
 <statement> := <variable-declaration> | <variable-assignment> | <return> | <print> | <while> | <if>
 <variable-declaration> := decl <identifier> ("=" <expression>)?
-<variable-assignment> := <identifier> = <expression>
+<variable-assignment> := <identifier> = <expression> | <array-access> = <expression>
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ }
 <return> := return <expression>

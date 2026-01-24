@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+class ArrayLiteralExpr;
+class ArrayAccessExpr;
 class IdentifierExpr;
 class UnaryExpr;
 class BinaryExpr;
@@ -14,6 +16,8 @@ class FunctionCallExpr;
 class ExprVisitor {
 public:
     virtual ~ExprVisitor() = default;
+    virtual void visit_array_literal_expr(const ArrayLiteralExpr& expr) = 0;
+    virtual void visit_array_access_expr(const ArrayAccessExpr& expr) = 0;
     virtual void visit_identifier_expr(const IdentifierExpr& expr) = 0;
     virtual void visit_unary_expr(const UnaryExpr& expr) = 0;
     virtual void visit_binary_expr(const BinaryExpr& expr) = 0;
@@ -28,6 +32,30 @@ public:
     virtual ~Expr() = default;
     virtual void accept(ExprVisitor& visitor) const = 0;
 };
+
+class ArrayLiteralExpr final : public Expr {
+public:
+    std::vector<std::unique_ptr<Expr>> elements;
+
+    explicit ArrayLiteralExpr(std::vector<std::unique_ptr<Expr>> elements) : elements(std::move(elements)) {}
+
+    void accept(ExprVisitor& visitor) const override {
+        visitor.visit_array_literal_expr(*this);
+    }
+};
+
+class ArrayAccessExpr final : public Expr {
+public:
+    std::unique_ptr<Expr> array;
+    std::unique_ptr<Expr> index;
+
+    ArrayAccessExpr(std::unique_ptr<Expr> array, std::unique_ptr<Expr> index) : array(std::move(array)), index(std::move(index)) {}
+
+    void accept(ExprVisitor& visitor) const override {
+        visitor.visit_array_access_expr(*this);
+    }
+};
+
 
 class IdentifierExpr final : public Expr {
 public:

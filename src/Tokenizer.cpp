@@ -35,6 +35,8 @@ Token Tokenizer::advance_current() {
         case ')': current++; return Token(TokenType::RIGHT_PAREN, current_line);
         case '{': current++; return Token(TokenType::LEFT_BRACE, current_line);
         case '}': current++; return Token(TokenType::RIGHT_BRACE, current_line);
+        case '[': current++; return Token(TokenType::LEFT_BRACKET, current_line);
+        case ']': current++; return Token(TokenType::RIGHT_BRACKET, current_line);
         case ',': current++; return Token(TokenType::COMMA, current_line);
 
         case '+': current++; return Token(TokenType::OPERATOR,"+", current_line);
