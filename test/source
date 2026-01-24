@@ -1,9 +1,1 @@
-func my_func(){
-    decl x
-    x = "foo\n"
-    return x
-}
-
-call my_func()
-y = !false
-x = x >= 23
+!!!!!!((((1 + (2 + true)) / false) && arr[1]) || call foo(1,2,3,4))

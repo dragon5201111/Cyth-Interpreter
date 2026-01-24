@@ -11,6 +11,7 @@ enum class TokenType {
     FUNC,
     TRUE,
     FALSE,
+    NIL,
 
     // Types
     NUMBER,

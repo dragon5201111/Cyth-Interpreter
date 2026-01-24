@@ -19,4 +19,9 @@ add_executable(Interpreter2
         src/Reader.cpp
         include/Expr.h
         include/Stmnt.h
+        include/Parser.h
+        src/Parser.cpp
+        src/AstPrinter.cpp
+        include/AstPrinter.h
+        include/Prog.h
 )

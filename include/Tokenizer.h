@@ -16,7 +16,8 @@ class Tokenizer {
         {"call", TokenType::CALL},
         {"func", TokenType::FUNC},
         {"true", TokenType::TRUE},
-        {"false", TokenType::FALSE}
+        {"false", TokenType::FALSE},
+        {"nil", TokenType::NIL}
     };
 
     std::string input;

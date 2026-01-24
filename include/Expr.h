@@ -1,7 +1,21 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <variant>
 #include <vector>
+
+class Value;
+using ValueVariant = std::variant<std::monostate, bool, uint64_t, std::string, std::vector<Value>>;
+
+class Value final {
+    ValueVariant value;
+public:
+    explicit Value() : value(std::monostate()) {}
+    explicit Value(bool boolean) : value(boolean) {}
+    explicit Value(uint64_t number) : value(number) {}
+    explicit Value(std::string string) : value(std::move(string)) {}
+    explicit Value(std::vector<Value> values) : value(std::move(values)) {}
+};
 
 class ArrayLiteralExpr;
 class ArrayAccessExpr;
@@ -12,25 +26,27 @@ class StringExpr;
 class BoolExpr;
 class ConstantExpr;
 class FunctionCallExpr;
+class NilExpr;
 
 class ExprVisitor {
 public:
     virtual ~ExprVisitor() = default;
-    virtual void visit_array_literal_expr(const ArrayLiteralExpr& expr) = 0;
-    virtual void visit_array_access_expr(const ArrayAccessExpr& expr) = 0;
-    virtual void visit_identifier_expr(const IdentifierExpr& expr) = 0;
-    virtual void visit_unary_expr(const UnaryExpr& expr) = 0;
-    virtual void visit_binary_expr(const BinaryExpr& expr) = 0;
-    virtual void visit_string_expr(const StringExpr& expr) = 0;
-    virtual void visit_bool_expr(const BoolExpr& expr) = 0;
-    virtual void visit_constant_expr(const ConstantExpr& expr) = 0;
-    virtual void visit_function_call_expr(const FunctionCallExpr& expr) = 0;
+    virtual Value visit_array_literal_expr(const ArrayLiteralExpr& expr) = 0;
+    virtual Value visit_array_access_expr(const ArrayAccessExpr& expr) = 0;
+    virtual Value visit_identifier_expr(const IdentifierExpr& expr) = 0;
+    virtual Value visit_unary_expr(const UnaryExpr& expr) = 0;
+    virtual Value visit_binary_expr(const BinaryExpr& expr) = 0;
+    virtual Value visit_string_expr(const StringExpr& expr) = 0;
+    virtual Value visit_bool_expr(const BoolExpr& expr) = 0;
+    virtual Value visit_constant_expr(const ConstantExpr& expr) = 0;
+    virtual Value visit_function_call_expr(const FunctionCallExpr& expr) = 0;
+    virtual Value visit_nil_expr(const NilExpr& expr) = 0;
 };
 
 class Expr {
 public:
     virtual ~Expr() = default;
-    virtual void accept(ExprVisitor& visitor) const = 0;
+    virtual Value accept(ExprVisitor& visitor) const = 0;
 };
 
 class ArrayLiteralExpr final : public Expr {
@@ -39,8 +55,8 @@ public:
 
     explicit ArrayLiteralExpr(std::vector<std::unique_ptr<Expr>> elements) : elements(std::move(elements)) {}
 
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_array_literal_expr(*this);
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_array_literal_expr(*this);
     }
 };
 
@@ -51,8 +67,8 @@ public:
 
     ArrayAccessExpr(std::unique_ptr<Expr> array, std::unique_ptr<Expr> index) : array(std::move(array)), index(std::move(index)) {}
 
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_array_access_expr(*this);
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_array_access_expr(*this);
     }
 };
 
@@ -63,8 +79,8 @@ public:
 
     explicit IdentifierExpr(std::string name) : name(std::move(name)) {}
 
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_identifier_expr(*this);
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_identifier_expr(*this);
     }
 };
 
@@ -73,9 +89,9 @@ public:
     std::unique_ptr<Expr> rhs;
     std::string op;
 
-    explicit UnaryExpr(std::string op, std::unique_ptr<Expr> rhs) : op(std::move(op)), rhs(std::move(rhs)) {}
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_unary_expr(*this);
+    explicit UnaryExpr(std::string op, std::unique_ptr<Expr> rhs) : rhs(std::move(rhs)), op(std::move(op)) {}
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_unary_expr(*this);
     }
 };
 
@@ -87,8 +103,8 @@ public:
     explicit BinaryExpr(std::unique_ptr<Expr> lhs, std::string op,  std::unique_ptr<Expr> rhs)
         : lhs(std::move(lhs)), rhs(std::move(rhs)), op(std::move(op)) {}
 
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_binary_expr(*this);
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_binary_expr(*this);
     }
 };
 
@@ -98,8 +114,8 @@ public:
     std::string value;
     explicit StringExpr(std::string value) : value(std::move(value)) {}
 
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_string_expr(*this);
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_string_expr(*this);
     }
 };
 
@@ -108,18 +124,18 @@ public:
     bool value;
     explicit BoolExpr(const bool value) : value(value) {}
 
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_bool_expr(*this);
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_bool_expr(*this);
     }
 };
 
 class ConstantExpr final : public Expr {
 public:
-    uint32_t value;
-    explicit ConstantExpr(const uint32_t value) : value(value) {}
+    uint64_t value;
+    explicit ConstantExpr(const uint64_t value) : value(value) {}
 
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_constant_expr(*this);
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_constant_expr(*this);
     }
 };
 
@@ -130,7 +146,14 @@ public:
     explicit FunctionCallExpr(std::string name, std::vector<std::unique_ptr<Expr>> args)
         : name(std::move(name)), args(std::move(args)) {}
 
-    void accept(ExprVisitor& visitor) const override {
-        visitor.visit_function_call_expr(*this);
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_function_call_expr(*this);
+    }
+};
+
+class NilExpr final : public Expr {
+public:
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_nil_expr(*this);
     }
 };

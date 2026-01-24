@@ -1,6 +1,6 @@
 ## General
 ```
-<program> := <function-declaration>* <statement>+
+<program> := <function-declaration>* <statement>+ | empty
 <identifier> := <letter>(<letter>|<digit>)*
 <letter> := "a" | "b" | ... | "z" | "A" | "B" | ... | "Z"
 <digit> := "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
@@ -9,7 +9,7 @@
 ## Expressions
 ```
 <expression> := <binary> | <unary> | <primary>
-<primary> := <bool> | <number> | <string> | <identifier> | <function-call> | <array-literal> | <array-access> | "(" <expression> ")"
+<primary> := <bool> | <number> | <string> | <identifier> | <function-call> | <array-literal> | <array-access> | "(" <expression> ")" | "nil"
 <array-literal> := "[" <expression-list>? "]"
 <array-access> := <identifier> "[" <expression> "]"
 <unary> := "!" <expression>
