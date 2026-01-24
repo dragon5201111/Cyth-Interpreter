@@ -47,10 +47,12 @@ Token Tokenizer::advance_current() {
             return match_operator('!', '=', "!=");
         case '=':
             return match_operator('=', '=', "==");
-
+        case '&':
+            return match_operator('&', '&', "&&");
+        case '|':
+            return match_operator('|', '|', "||");
         case '\"':
             return get_string();
-
         default:
             if (std::isdigit(current_char)) {
                 return get_number();
