@@ -23,7 +23,7 @@
 ## Statements
 ```
 <statement> := <variable-declaration> | <variable-assignment> | <return> | <print> | <while> | <if>
-<variable-declaration> := decl <identifier>
+<variable-declaration> := decl <identifier> ("=" <expression>)?
 <variable-assignment> := <identifier> = <expression>
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ }

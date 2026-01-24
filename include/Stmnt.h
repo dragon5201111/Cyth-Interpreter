@@ -32,12 +32,15 @@ public:
 class VariableDeclStmnt final : public Stmnt {
 public:
     std::string name;
-    explicit VariableDeclStmnt(std::string name) : name(std::move(name)) {}
+    std::unique_ptr<Expr> initializer; // nullptr if no "= expr"
 
-    void accept(StmntVisitor &visitor) const override {
+    explicit VariableDeclStmnt(std::string name, std::unique_ptr<Expr> initializer = nullptr) : name(std::move(name)), initializer(std::move(initializer)) {}
+
+    void accept(StmntVisitor& visitor) const override {
         visitor.visit_variable_decl_stmnt(*this);
     }
 };
+
 
 class VariableAssignStmnt final : public Stmnt {
 public:
