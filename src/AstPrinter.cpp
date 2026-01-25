@@ -146,5 +146,5 @@ void AstPrinter::visit_program(const ProgramDecl &program) {
         stmnt->accept(*this);
         writer->write("\n");
     }
-    writer->write("}");
+    writer->write("}\n");
 }

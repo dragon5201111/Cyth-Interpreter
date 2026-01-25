@@ -4,18 +4,51 @@
 #include <variant>
 #include <vector>
 
+#include "Print.h"
+
 class Value;
 using ValueVariant = std::variant<std::monostate, bool, uint64_t, std::string, std::vector<Value>>;
 
-class Value final {
+class Value final : public Printable {
     ValueVariant value;
+
+    [[nodiscard]] std::string to_string_impl(const std::monostate&) const { return "nil"; }
+    [[nodiscard]] std::string to_string_impl(const bool b) const { return b ? "true" : "false"; }
+    [[nodiscard]] std::string to_string_impl(const uint64_t n) const { return std::to_string(n); }
+    [[nodiscard]] std::string to_string_impl(const std::string& s) const { return s; }
+    [[nodiscard]] std::string to_string_impl(const std::vector<Value>& arr) const {
+        std::string result = "[";
+        for (size_t i = 0; i < arr.size(); ++i) {
+            result += arr[i].to_string();
+            if (i + 1 < arr.size()) {
+                result += ", ";
+            }
+        }
+        result += "]";
+        return result;
+    }
+
 public:
-    explicit Value() : value(std::monostate()) {}
-    explicit Value(bool boolean) : value(boolean) {}
-    explicit Value(uint64_t number) : value(number) {}
-    explicit Value(std::string string) : value(std::move(string)) {}
-    explicit Value(std::vector<Value> values) : value(std::move(values)) {}
+    explicit Value() : value(std::monostate{}) {}
+    explicit Value(bool b) : value(b) {}
+    explicit Value(uint64_t n) : value(n) {}
+    explicit Value(std::string s) : value(std::move(s)) {}
+    explicit Value(std::vector<Value> v) : value(std::move(v)) {}
+
+    [[nodiscard]] bool is_bool() const { return std::holds_alternative<bool>(value); }
+    [[nodiscard]] bool as_bool() const { return std::get<bool>(value); }
+
+    [[nodiscard]] bool is_number() const { return std::holds_alternative<uint64_t>(value); }
+    [[nodiscard]] uint64_t as_number() const { return std::get<uint64_t>(value); }
+
+    [[nodiscard]] bool is_string() const { return std::holds_alternative<std::string>(value); }
+    [[nodiscard]] std::string as_string() const { return std::get<std::string>(value); }
+
+    [[nodiscard]] std::string to_string() const override {
+        return std::visit([this](const auto& v) { return this->to_string_impl(v); }, value);
+    }
 };
+
 
 class ArrayLiteralExpr;
 class ArrayAccessExpr;

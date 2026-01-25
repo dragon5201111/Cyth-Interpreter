@@ -1,9 +1,14 @@
 #include "Interpreter.h"
 
+#include <iostream>
 #include <stdexcept>
 
 Value Interpreter::evaluate(const std::unique_ptr<Expr>& expr) {
     return expr->accept(*this);
+}
+
+void Interpreter::execute(const std::unique_ptr<Stmnt> &stmnt) {
+    stmnt->accept(*this);
 }
 
 Value Interpreter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
@@ -22,7 +27,7 @@ Value Interpreter::visit_array_access_expr(const ArrayAccessExpr &expr) {
 }
 
 Value Interpreter::visit_identifier_expr(const IdentifierExpr &expr) {
-    throw std::runtime_error("Identifier expr not implemented");
+    return local_env->get(expr.name);
 }
 
 Value Interpreter::visit_unary_expr(const UnaryExpr &expr) {
@@ -54,11 +59,16 @@ Value Interpreter::visit_nil_expr(const NilExpr &expr) {
 }
 
 void Interpreter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
-
+    Value value = stmnt.initializer ? evaluate(stmnt.initializer) : Value();
+    local_env->define(stmnt.name, std::move(value));
 }
 
 void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
+    if (const auto identifier_expr = dynamic_cast<const IdentifierExpr*>(stmnt.lhs.get())) {
+        local_env->assign(identifier_expr->name, evaluate(stmnt.rhs));
+    }else if (const auto array_access_expr = dynamic_cast<const ArrayAccessExpr*>(stmnt.lhs.get())) {
 
+    }
 }
 
 void Interpreter::visit_return_stmnt(const ReturnStmnt &stmnt) {
@@ -74,9 +84,22 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
 }
 
 void Interpreter::visit_print_stmnt(const PrintStmnt &stmnt) {
+    std::cout << evaluate(stmnt.expr);
+}
+
+void Interpreter::visit_function_decl(const FunctionDecl &func) {
 
 }
 
+void Interpreter::visit_program(const ProgramDecl &program) {
+    for (const auto& func_decl : program.declarations) {
+        func_decl->accept(*this);
+    }
+
+    for (const auto& stmnt : program.body) {
+        execute(stmnt);
+    }
+}
 
 
 

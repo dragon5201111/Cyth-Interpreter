@@ -16,6 +16,7 @@ public:
     }
 
     Value evaluate(const std::unique_ptr<Expr> &expr);
+    void execute(const std::unique_ptr<Stmnt> &stmnt);
 
     Value visit_array_literal_expr(const ArrayLiteralExpr &expr) override;
     Value visit_array_access_expr(const ArrayAccessExpr &expr) override;
@@ -34,4 +35,7 @@ public:
     void visit_if_stmnt(const IfStmnt &stmnt) override;
     void visit_while_stmnt(const WhileStmnt &stmnt) override;
     void visit_print_stmnt(const PrintStmnt &stmnt) override;
+
+    void visit_function_decl(const FunctionDecl &func) override;
+    void visit_program(const ProgramDecl &program) override;
 };

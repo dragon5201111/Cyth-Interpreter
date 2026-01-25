@@ -50,7 +50,7 @@ std::unique_ptr<Stmnt> Parser::parse_stmnt() {
         case TokenType::END_OF_FILE: throw std::runtime_error("No expression to parse, end of file.");
         case TokenType::DECL: return parse_variable_decl();
         case TokenType::IDENTIFIER: return parse_assignment();
-        case TokenType::RETURN: return std::make_unique<ReturnStmnt>(parse_expr());
+        case TokenType::RETURN: return parse_return();
         case TokenType::IF: return parse_if();
         case TokenType::WHILE: return parse_while();
         case TokenType::PRINT: return parse_print();
@@ -75,6 +75,11 @@ std::unique_ptr<Stmnt> Parser::parse_assignment() {
     std::unique_ptr<Expr> lhs = parse_identifier(tokenizer.last());
     check_operator(tokenizer.next(), "=");
     return std::make_unique<AssignStmnt>(std::move(lhs), parse_expr());
+}
+
+std::unique_ptr<ReturnStmnt> Parser::parse_return() {
+    // TODO: Implement return without expr (nil)
+    return std::make_unique<ReturnStmnt>(parse_expr());
 }
 
 std::unique_ptr<Stmnt> Parser::parse_if() {

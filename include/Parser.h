@@ -13,6 +13,8 @@ class Parser {
     std::unique_ptr<Stmnt> parse_variable_decl();
     std::unique_ptr<Stmnt> parse_assignment();
 
+    std::unique_ptr<ReturnStmnt> parse_return();
+
     std::unique_ptr<Stmnt> parse_if();
     std::unique_ptr<Stmnt> parse_while();
     std::vector<std::unique_ptr<Stmnt>> parse_branch();
