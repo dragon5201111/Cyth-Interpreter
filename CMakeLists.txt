@@ -26,4 +26,6 @@ add_executable(Interpreter2
         include/Prog.h
         include/Env.h
         src/Env.cpp
+        include/Interpreter.h
+        src/Interpreter.cpp
 )
