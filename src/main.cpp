@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "AstPrinter.h"
 #include "Parser.h"
 #include "../include/Reader.h"

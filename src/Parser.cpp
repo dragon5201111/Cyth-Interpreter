@@ -1,3 +1,4 @@
+#include <functional>
 #include <stdexcept>
 
 #include "parser.h"
@@ -12,6 +13,7 @@ std::unique_ptr<Stmnt> Parser::parse_stmnt() {
         case TokenType::DECL: return parse_variable_decl();
         case TokenType::IDENTIFIER: return parse_assignment();
         case TokenType::RETURN: return std::make_unique<ReturnStmnt>(parse_expr());
+        case TokenType::IF: return parse_if();
         case TokenType::PRINT: return parse_print();
         default: throw std::runtime_error("Token " + token.to_string() + " is not a valid start of a statement.");
     }
@@ -34,6 +36,43 @@ std::unique_ptr<Stmnt> Parser::parse_assignment() {
     std::unique_ptr<Expr> lhs = parse_identifier(tokenizer.last());
     check_operator(tokenizer.next(), "=");
     return std::make_unique<AssignStmnt>(std::move(lhs), parse_expr());
+}
+
+std::unique_ptr<Stmnt> Parser::parse_if() {
+    check_token_type(tokenizer.next(), TokenType::LEFT_PAREN, "left parenthesis");
+    std::unique_ptr<Expr> condition = parse_expr();
+    check_token_type(tokenizer.next(), TokenType::RIGHT_PAREN, "right parenthesis");
+
+    std::vector<std::unique_ptr<Stmnt>> then_branch = parse_branch();
+
+    std::vector<std::unique_ptr<Stmnt>> else_branch;
+    if (tokenizer.peek().get_type() == TokenType::ELSE) {
+        check_token_type(tokenizer.next(), TokenType::ELSE, "else");
+        else_branch = std::move(parse_branch());
+    }
+
+    return std::make_unique<IfStmnt>(std::move(condition), std::move(then_branch), std::move(else_branch));
+}
+
+std::vector<std::unique_ptr<Stmnt>> Parser::parse_branch() {
+    check_token_type(tokenizer.next(), TokenType::LEFT_BRACE, "left brace");
+
+    std::vector<std::unique_ptr<Stmnt>> branch = parse_stmnts([this] {
+        const Token token = tokenizer.peek();
+        return token.get_type() != TokenType::RIGHT_BRACE;
+    });
+
+    check_token_type(tokenizer.next(), TokenType::RIGHT_BRACE, "right brace");
+    return branch;
+}
+
+std::vector<std::unique_ptr<Stmnt>> Parser::parse_stmnts(
+     const std::function<bool()>& should_continue) {
+    std::vector<std::unique_ptr<Stmnt>> stmnts;
+    while (should_continue()) {
+        stmnts.push_back(parse_stmnt());
+    }
+    return stmnts;
 }
 
 std::unique_ptr<Stmnt> Parser::parse_print() {

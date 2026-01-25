@@ -21,6 +21,7 @@ public:
         std::string string_rep;
         switch (type) {
             case TokenType::IF: string_rep = "IF"; break;
+            case TokenType::ELSE: string_rep = "ELSE"; break;
             case TokenType::WHILE: string_rep = "WHILE"; break;
             case TokenType::RETURN: string_rep = "RETURN"; break;
             case TokenType::DECL: string_rep = "DECL"; break;

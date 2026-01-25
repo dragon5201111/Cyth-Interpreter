@@ -3,6 +3,7 @@
 enum class TokenType {
     // Keywords
     IF,
+    ELSE,
     WHILE,
     RETURN,
     DECL,

@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <functional>
 #include "Expr.h"
 #include "Stmnt.h"
 #include "Token.h"
@@ -10,6 +11,11 @@ class Parser {
     // Statements
     std::unique_ptr<Stmnt> parse_variable_decl();
     std::unique_ptr<Stmnt> parse_assignment();
+
+    std::unique_ptr<Stmnt> parse_if();
+    std::vector<std::unique_ptr<Stmnt>> parse_branch();
+    std::vector<std::unique_ptr<Stmnt>> parse_stmnts(const std::function<bool()>& should_continue);
+
     std::unique_ptr<Stmnt> parse_print();
     // Expressions
     std::unique_ptr<Expr> parse_binary_expr();

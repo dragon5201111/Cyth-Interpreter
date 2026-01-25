@@ -1,1 +1,2 @@
-print(arr[12321])
+decl x = 4
+print(X)

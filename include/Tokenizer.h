@@ -9,6 +9,7 @@
 class Tokenizer {
     const std::unordered_map<std::string, TokenType> fragment_map = {
         {"if", TokenType::IF},
+        {"else", TokenType::ELSE},
         {"while", TokenType::WHILE},
         {"return", TokenType::RETURN},
         {"decl", TokenType::DECL},

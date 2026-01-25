@@ -89,7 +89,20 @@ void AstPrinter::visit_return_stmnt(const ReturnStmnt &stmnt) {
 }
 
 void AstPrinter::visit_if_stmnt(const IfStmnt &stmnt) {
-
+    writer->write("if (");
+    stmnt.condition->accept(*this);
+    writer->write("){");
+    for (const auto& s : stmnt.then_branch) {
+        writer->write("\n");
+        s->accept(*this);
+    }
+    writer->write("\n}");
+    std::cout << "else{" << std::endl;
+    for (const auto& s : stmnt.else_branch) {
+        s->accept(*this);
+        writer->write("\n");
+    }
+    std::cout << "}" << std::endl;
 }
 
 void AstPrinter::visit_while_stmnt(const WhileStmnt &stmnt) {

@@ -28,7 +28,7 @@
 <variable-declaration> := decl <identifier> ("=" <expression>)?
 <variable-assignment> := <identifier> = <expression> | <array-access> = <expression>
 <while> := while (<expression>) { <statement>+ }
-<if> := if (<expression>) { <statement>+ }
+<if> := if (<expression>) { <statement>+ } (else { <statement>+ })?
 <return> := return <expression>
 <print> := print(<expression>)
 ```
