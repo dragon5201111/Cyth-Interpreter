@@ -19,12 +19,7 @@ Token Tokenizer::next() {
 }
 
 Token Tokenizer::advance_current() {
-    while (current < input_size && isspace(input[current])) {
-        if (input[current] == '\n') {
-            current_line++;
-        }
-        current++;
-    }
+    skip_whitespace();
 
     if (current >= input_size) {
         return Token(TokenType::END_OF_FILE, current_line);
@@ -38,7 +33,6 @@ Token Tokenizer::advance_current() {
         case '[': current++; return Token(TokenType::LEFT_BRACKET, current_line);
         case ']': current++; return Token(TokenType::RIGHT_BRACKET, current_line);
         case ',': current++; return Token(TokenType::COMMA, current_line);
-
         case '+': current++; return Token(TokenType::OPERATOR,"+", current_line);
         case '-': current++; return Token(TokenType::OPERATOR, "-", current_line);
         case '*': current++; return Token(TokenType::OPERATOR, "*", current_line);
@@ -68,6 +62,30 @@ Token Tokenizer::advance_current() {
             }
 
             throw std::invalid_argument("Unsupported character: " + std::string(1, current_char));
+    }
+}
+
+
+void Tokenizer::skip_whitespace() {
+    while (current < input_size) {
+        const char current_char = input[current];
+        if (current_char == '#') {
+            while (current < input_size && input[current] != '\n') {
+                current++;
+            }
+            continue;
+        }
+
+        if (current_char == '\n') {
+            current_line++;
+        }
+
+        if (std::isspace(current_char)) {
+            current++;
+            continue;
+        }
+
+        break;
     }
 }
 

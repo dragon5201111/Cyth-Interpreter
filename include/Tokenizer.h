@@ -28,6 +28,7 @@ class Tokenizer {
     std::optional<Token> cached;
 
     Token advance_current();
+    void skip_whitespace();
     Token get_string();
     Token get_number();
     Token get_identifier();
