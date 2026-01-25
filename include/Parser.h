@@ -10,6 +10,7 @@ class Parser {
     // Statements
     std::unique_ptr<Stmnt> parse_variable_decl();
     std::unique_ptr<Stmnt> parse_assignment();
+    std::unique_ptr<Stmnt> parse_print();
     // Expressions
     std::unique_ptr<Expr> parse_binary_expr();
     std::unique_ptr<Expr> parse_array_literal_expr();
