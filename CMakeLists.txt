@@ -24,4 +24,6 @@ add_executable(Interpreter2
         src/AstPrinter.cpp
         include/AstPrinter.h
         include/Prog.h
+        include/Env.h
+        src/Env.cpp
 )
