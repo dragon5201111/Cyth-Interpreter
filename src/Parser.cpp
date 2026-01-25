@@ -9,6 +9,7 @@ std::unique_ptr<Expr> Parser::parse_expr() {
     switch (const Token& token = tokenizer.next(); token.get_type()) {
         case TokenType::END_OF_FILE: throw std::runtime_error("No expression to parse, end of file.");
         case TokenType::LEFT_PAREN: return parse_binary_expr();
+        case TokenType::LEFT_BRACKET: return parse_array_literal_expr();
         case TokenType::NUMBER: return std::make_unique<ConstantExpr>(static_cast<uint64_t>(std::stoul(token.get_value())));
         case TokenType::TRUE: return std::make_unique<BoolExpr>(true);
         case TokenType::FALSE: return std::make_unique<BoolExpr>(false);
@@ -32,6 +33,12 @@ std::unique_ptr<Expr> Parser::parse_binary_expr() {
 
     return std::make_unique<BinaryExpr>(std::move(lhs), op.get_value(), std::move(rhs));
 }
+
+std::unique_ptr<Expr> Parser::parse_array_literal_expr() {
+    std::vector<std::unique_ptr<Expr>> expr_list = parse_expression_list_and_consume(TokenType::RIGHT_BRACKET, "right parenthesis");
+    return std::make_unique<ArrayLiteralExpr>(std::move(expr_list));
+}
+
 
 std::unique_ptr<Expr> Parser::parse_identifier(const Token &token) {
     std::unique_ptr<Expr> expr = std::make_unique<IdentifierExpr>(token.get_value());
@@ -59,20 +66,34 @@ std::unique_ptr<Expr> Parser::parse_function_call_expr() {
     check_token_type(identifier, TokenType::IDENTIFIER, "identifier");
     check_token_type(tokenizer.next(), TokenType::LEFT_PAREN, "left parenthesis");
 
-    std::vector<std::unique_ptr<Expr>> args;
-    if (tokenizer.peek().get_type() != TokenType::RIGHT_PAREN) {
-        args.push_back(parse_expr());
-
-        while (tokenizer.peek().get_type() == TokenType::COMMA) {
-            tokenizer.next();
-            args.push_back(parse_expr());
-        }
-    }
-
-    // Consume right parenthesis
-    check_token_type(tokenizer.next(), TokenType::RIGHT_PAREN, "right parenthesis");
+    std::vector<std::unique_ptr<Expr>> args = parse_expression_list_and_consume(TokenType::RIGHT_PAREN, "right parenthesis");
     return std::make_unique<FunctionCallExpr>(identifier.get_value(), std::move(args));
 }
+
+
+std::vector<std::unique_ptr<Expr>> Parser::parse_expression_list(const TokenType end_type) {
+    std::vector<std::unique_ptr<Expr>> expr_list;
+
+    if (tokenizer.peek().get_type() == end_type) {
+        return expr_list;
+    }
+
+    expr_list.push_back(parse_expr());
+
+    while (tokenizer.peek().get_type() == TokenType::COMMA) {
+        tokenizer.next();
+        expr_list.push_back(parse_expr());
+    }
+
+    return expr_list;
+}
+
+std::vector<std::unique_ptr<Expr>> Parser::parse_expression_list_and_consume(const TokenType end_type, const std::string &end_name) {
+    auto expr_list = parse_expression_list(end_type);
+    check_token_type(tokenizer.next(), end_type, end_name);
+    return expr_list;
+}
+
 
 void Parser::check_token_type(const Token &token, const TokenType expected, const std::string& expected_message) {
     if (token.get_type() != expected) {

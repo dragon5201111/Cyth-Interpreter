@@ -3,7 +3,12 @@
 #include <iostream>
 
 Value AstPrinter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
-
+    std::cout << "[";
+    for (const auto& e: expr.elements) {
+        e->accept(*this);
+        std::cout << ",";
+    }
+    std::cout << "]";
     return Value();
 }
 
