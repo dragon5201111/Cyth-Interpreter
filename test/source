@@ -1,1 +1,1 @@
-[[call foo(call bar())], 1, 2, 4, 5]
+arr[1][1] = !arr[1]

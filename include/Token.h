@@ -33,7 +33,6 @@ public:
             case TokenType::NUMBER: string_rep = "NUMBER"; break;
             case TokenType::STRING: string_rep = "STRING"; break;
             case TokenType::IDENTIFIER: string_rep = "IDENTIFIER"; break;
-            case TokenType::ASSIGN: string_rep = "ASSIGN"; break;
             case TokenType::OPERATOR: string_rep = "OPERATOR"; break;
             case TokenType::LEFT_PAREN: string_rep = "LEFT_PAREN"; break;
             case TokenType::RIGHT_PAREN: string_rep = "RIGHT_PAREN"; break;

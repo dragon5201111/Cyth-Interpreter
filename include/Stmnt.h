@@ -6,7 +6,7 @@
 #include "Expr.h"
 
 class VariableDeclStmnt;
-class VariableAssignStmnt;
+class AssignStmnt;
 class ReturnStmnt;
 class IfStmnt;
 class WhileStmnt;
@@ -16,7 +16,7 @@ class StmntVisitor {
 public:
     virtual ~StmntVisitor() = default;
     virtual void visit_variable_decl_stmnt(const VariableDeclStmnt& stmnt) = 0;
-    virtual void visit_variable_assign_stmnt(const VariableAssignStmnt& stmnt) = 0;
+    virtual void visit_variable_assign_stmnt(const AssignStmnt& stmnt) = 0;
     virtual void visit_return_stmnt(const ReturnStmnt& stmnt) = 0;
     virtual void visit_if_stmnt(const IfStmnt& stmnt) = 0;
     virtual void visit_while_stmnt(const WhileStmnt& stmnt) = 0;
@@ -32,9 +32,9 @@ public:
 class VariableDeclStmnt final : public Stmnt {
 public:
     std::string name;
-    std::unique_ptr<Expr> initializer; // nullptr if no "= expr"
+    std::unique_ptr<Expr> initializer;
 
-    explicit VariableDeclStmnt(std::string name, std::unique_ptr<Expr> initializer = nullptr) : name(std::move(name)), initializer(std::move(initializer)) {}
+    explicit VariableDeclStmnt(std::string name, std::unique_ptr<Expr> initializer = {}) : name(std::move(name)), initializer(std::move(initializer)) {}
 
     void accept(StmntVisitor& visitor) const override {
         visitor.visit_variable_decl_stmnt(*this);
@@ -42,12 +42,12 @@ public:
 };
 
 
-class VariableAssignStmnt final : public Stmnt {
+class AssignStmnt final : public Stmnt {
 public:
-    std::string name;
+    std::unique_ptr<Expr> lhs;
     std::unique_ptr<Expr> rhs;
 
-    explicit VariableAssignStmnt(std::string name, std::unique_ptr<Expr> rhs) : name(std::move(name)), rhs(std::move(rhs)) {}
+    explicit AssignStmnt(std::unique_ptr<Expr> lhs, std::unique_ptr<Expr> rhs) : lhs(std::move(lhs)), rhs(std::move(rhs)) {}
 
     void accept(StmntVisitor &visitor) const override {
         visitor.visit_variable_assign_stmnt(*this);

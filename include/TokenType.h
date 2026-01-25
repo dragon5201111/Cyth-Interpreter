@@ -19,7 +19,6 @@ enum class TokenType {
     IDENTIFIER,
 
     // Operators
-    ASSIGN,
     OPERATOR,
 
     LEFT_PAREN,

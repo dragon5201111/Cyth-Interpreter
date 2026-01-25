@@ -26,6 +26,7 @@ class Tokenizer {
     int current;
     int current_line;
     std::optional<Token> cached;
+    std::optional<Token> previous;
 
     Token advance_current();
     void skip_whitespace();
@@ -41,6 +42,7 @@ public:
         current_line = 1;
     }
 
+    Token last();
     Token peek();
     Token next();
     std::vector<Token> collect();

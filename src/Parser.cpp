@@ -1,9 +1,40 @@
 #include <stdexcept>
 
 #include "parser.h"
+#include "Stmnt.h"
 #include "Token.h"
 #include "TokenType.h"
 #include "Tokenizer.h"
+
+std::unique_ptr<Stmnt> Parser::parse_stmnt() {
+    switch (const Token token = tokenizer.next(); token.get_type()) {
+        case TokenType::END_OF_FILE: throw std::runtime_error("No expression to parse, end of file.");
+        case TokenType::DECL: return parse_variable_decl();
+        case TokenType::IDENTIFIER: return parse_assignment();
+        case TokenType::RETURN: return std::make_unique<ReturnStmnt>(parse_expr());
+        default: throw std::runtime_error("Token " + token.to_string() + " is not a valid start of a statement.");
+    }
+}
+
+std::unique_ptr<Stmnt> Parser::parse_variable_decl() {
+    const auto identifier = tokenizer.next();
+    check_token_type(identifier, TokenType::IDENTIFIER, "identifier");
+
+    if (const Token next_token = tokenizer.peek(); next_token.get_type() == TokenType::OPERATOR) {
+        check_operator(tokenizer.next(), "=");
+        return std::make_unique<VariableDeclStmnt>(identifier.get_value(), parse_expr());
+    }
+
+    // Empty initializer
+    return std::make_unique<VariableDeclStmnt>(identifier.get_value());
+}
+
+std::unique_ptr<Stmnt> Parser::parse_assignment() {
+    std::unique_ptr<Expr> lhs = parse_identifier(tokenizer.last());
+    check_operator(tokenizer.next(), "=");
+    return std::make_unique<AssignStmnt>(std::move(lhs), parse_expr());
+}
+
 
 std::unique_ptr<Expr> Parser::parse_expr() {
     switch (const Token& token = tokenizer.next(); token.get_type()) {
@@ -94,6 +125,12 @@ std::vector<std::unique_ptr<Expr>> Parser::parse_expression_list_and_consume(con
     return expr_list;
 }
 
+
+void Parser::check_operator(const Token &token, const std::string& expected_op) {
+    if (token.get_value() != expected_op) {
+        throw std::runtime_error("Expected operator " + expected_op + ", got " + token.get_value());
+    }
+}
 
 void Parser::check_token_type(const Token &token, const TokenType expected, const std::string& expected_message) {
     if (token.get_type() != expected) {

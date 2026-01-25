@@ -2,6 +2,14 @@
 
 #include <stdexcept>
 
+Token Tokenizer::last() {
+    if (previous.has_value()) {
+        return previous.value();
+    }
+
+    throw std::runtime_error("No previous token avaliable!");
+}
+
 Token Tokenizer::peek() {
     if (!cached.has_value()) {
         cached = advance_current();
@@ -11,10 +19,14 @@ Token Tokenizer::peek() {
 
 Token Tokenizer::next() {
     if (!cached.has_value()) {
-        return advance_current();
+        Token next = advance_current();
+        previous = next;
+        return next;
     }
+
     Token temp = cached.value();
     cached.reset();
+    previous = temp;
     return temp;
 }
 

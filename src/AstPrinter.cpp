@@ -3,40 +3,40 @@
 #include <iostream>
 
 Value AstPrinter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
-    std::cout << "[";
+   writer->write("[");
     for (const auto& e: expr.elements) {
         e->accept(*this);
-        std::cout << ",";
+        writer->write(",");
     }
-    std::cout << "]";
+    writer->write("]");
     return Value();
 }
 
 Value AstPrinter::visit_array_access_expr(const ArrayAccessExpr &expr) {
     expr.array->accept(*this);
-    std::cout << "[";
+    writer->write("[");
     expr.index->accept(*this);
-    std::cout << "]";
+    writer->write("]");
     return Value();
 }
 
 Value AstPrinter::visit_identifier_expr(const IdentifierExpr &expr) {
-    std::cout << expr.name;
+    writer->write(expr.name);
     return Value();
 }
 
 Value AstPrinter::visit_unary_expr(const UnaryExpr &expr) {
-    std::cout << expr.op;
+   writer->write(expr.op);
     expr.rhs->accept(*this);
     return Value();
 }
 
 Value AstPrinter::visit_binary_expr(const BinaryExpr &expr) {
-    std::cout << "(";
+    writer->write("(");
     expr.lhs->accept(*this);
-    std::cout << " " + expr.op + " ";
+    writer->write(" " + expr.op + " ");
     expr.rhs->accept(*this);
-    std::cout << ")";
+    writer->write(")");
     return Value();
 }
 
@@ -45,26 +45,57 @@ Value AstPrinter::visit_string_expr(const StringExpr &expr) {
 }
 
 Value AstPrinter::visit_bool_expr(const BoolExpr &expr) {
-    std::cout << (expr.value ? "true" : "false");
+    writer->write(expr.value ? "true" : "false");
     return Value();
 }
 
 Value AstPrinter::visit_constant_expr(const ConstantExpr &expr) {
-    std::cout << std::to_string(expr.value);
+    writer->write(std::to_string(expr.value));
     return Value();
 }
 
 Value AstPrinter::visit_function_call_expr(const FunctionCallExpr &expr) {
-    std::cout << "call " + expr.name + "(";
+   writer->write("call " + expr.name + "(");
     for (const auto& e : expr.args) {
         e->accept(*this);
-        std::cout << ",";
+        writer->write(",");
     }
-    std::cout << ")";
+    writer->write(")");
     return Value();
 }
 
 Value AstPrinter::visit_nil_expr(const NilExpr &expr) {
-    std::cout << "nil";
+   writer->write("nil");
     return Value();
+}
+
+void AstPrinter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
+    writer->write("decl " + stmnt.name);
+    if (stmnt.initializer) {
+       writer->write(" = ");
+        stmnt.initializer->accept(*this);
+    }
+}
+
+void AstPrinter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
+    stmnt.lhs->accept(*this);
+    writer->write(" = ");
+    stmnt.rhs->accept(*this);
+}
+
+void AstPrinter::visit_return_stmnt(const ReturnStmnt &stmnt) {
+    writer->write("return ");
+    stmnt.value->accept(*this);
+}
+
+void AstPrinter::visit_if_stmnt(const IfStmnt &stmnt) {
+
+}
+
+void AstPrinter::visit_while_stmnt(const WhileStmnt &stmnt) {
+
+}
+
+void AstPrinter::visit_print_stmnt(const PrintStmnt &stmnt) {
+
 }

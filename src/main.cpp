@@ -9,8 +9,8 @@ int main() {
     FileReader file_reader("../test/source");
     Tokenizer tokenizer(file_reader.read());
     Parser parser(tokenizer);
-    std::unique_ptr<Expr> expr = parser.parse_expr();
-    AstPrinter ast_printer;
-    expr->accept(ast_printer);
+    auto stmnt = parser.parse_stmnt();
+    AstPrinter ast_printer(std::make_shared<ConsoleWriter>());
+    stmnt->accept(ast_printer);
     return 0;
 }
