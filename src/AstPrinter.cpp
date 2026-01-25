@@ -106,11 +106,45 @@ void AstPrinter::visit_if_stmnt(const IfStmnt &stmnt) {
 }
 
 void AstPrinter::visit_while_stmnt(const WhileStmnt &stmnt) {
-
+    writer->write("while (");
+    stmnt.condition->accept(*this);
+    writer->write("){\n");
+    for (const auto& s : stmnt.body) {
+        s->accept(*this);
+        writer->write("\n");
+    }
+    writer->write("}");
 }
 
 void AstPrinter::visit_print_stmnt(const PrintStmnt &stmnt) {
     writer->write("print(");
     stmnt.expr->accept(*this);
     writer->write(")");
+}
+
+void AstPrinter::visit_function_decl(const FunctionDecl &func) {
+    writer->write("func " + func.name + "(");
+    for (const auto& param : func.parameters) {
+        writer->write(param + ",");
+    }
+    writer->write("){\n");
+    for (const auto& stmnt : func.body) {
+        stmnt->accept(*this);
+        writer->write("\n");
+    }
+    writer->write("}");
+}
+
+void AstPrinter::visit_program(const ProgramDecl &program) {
+    for (const auto& func_decl : program.declarations) {
+        func_decl->accept(*this);
+        writer->write("\n");
+    }
+
+    writer->write("main {\n");
+    for (const auto& stmnt : program.body) {
+        stmnt->accept(*this);
+        writer->write("\n");
+    }
+    writer->write("}");
 }

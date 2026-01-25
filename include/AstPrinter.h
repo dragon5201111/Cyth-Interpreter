@@ -1,11 +1,13 @@
 #pragma once
 #include "Expr.h"
+#include "Prog.h"
 #include "Stmnt.h"
 #include "Writer.h"
 
 class AstPrinter final :
     public ExprVisitor,
-    public StmntVisitor{
+    public StmntVisitor,
+    public DeclVisitor{
 
     std::shared_ptr<Writer> writer;
 public:
@@ -28,4 +30,7 @@ public:
     void visit_if_stmnt(const IfStmnt &stmnt) override;
     void visit_while_stmnt(const WhileStmnt &stmnt) override;
     void visit_print_stmnt(const PrintStmnt &stmnt) override;
+
+    void visit_function_decl(const FunctionDecl &func) override;
+    void visit_program(const ProgramDecl &program) override;
 };

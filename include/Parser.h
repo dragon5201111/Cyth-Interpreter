@@ -2,6 +2,7 @@
 #include <memory>
 #include <functional>
 #include "Expr.h"
+#include "Prog.h"
 #include "Stmnt.h"
 #include "Token.h"
 #include "Tokenizer.h"
@@ -13,10 +14,13 @@ class Parser {
     std::unique_ptr<Stmnt> parse_assignment();
 
     std::unique_ptr<Stmnt> parse_if();
+    std::unique_ptr<Stmnt> parse_while();
     std::vector<std::unique_ptr<Stmnt>> parse_branch();
     std::vector<std::unique_ptr<Stmnt>> parse_stmnts(const std::function<bool()>& should_continue);
 
     std::unique_ptr<Stmnt> parse_print();
+    std::vector<std::string> parse_identifiers(const std::function<bool()>& should_continue, const std::string& what);
+
     // Expressions
     std::unique_ptr<Expr> parse_binary_expr();
     std::unique_ptr<Expr> parse_array_literal_expr();
@@ -30,6 +34,8 @@ class Parser {
     void check_operator(const Token &token, const std::string& expected_op);
     void check_token_type(const Token &token, TokenType expected, const std::string& expected_message);
 public:
+    std::unique_ptr<ProgramDecl> parse_program_decl();
+    std::unique_ptr<FunctionDecl> parse_function_decl();
     std::unique_ptr<Stmnt> parse_stmnt();
     std::unique_ptr<Expr> parse_expr();
     explicit Parser(Tokenizer tokenizer) : tokenizer(std::move(tokenizer)) {}

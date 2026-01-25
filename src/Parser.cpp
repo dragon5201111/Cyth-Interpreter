@@ -2,10 +2,48 @@
 #include <stdexcept>
 
 #include "parser.h"
+#include "Prog.h"
 #include "Stmnt.h"
 #include "Token.h"
 #include "TokenType.h"
 #include "Tokenizer.h"
+
+std::unique_ptr<ProgramDecl> Parser::parse_program_decl() {
+    std::vector<std::unique_ptr<FunctionDecl>> declarations;
+    while (tokenizer.peek().get_type() != TokenType::MAIN) {
+        declarations.push_back(parse_function_decl());
+    }
+
+    check_token_type(tokenizer.next(), TokenType::MAIN, "main");
+    check_token_type(tokenizer.next(), TokenType::LEFT_BRACE, "left brace");
+
+    std::vector<std::unique_ptr<Stmnt>> body = parse_stmnts([this] {
+        const Token token = tokenizer.peek();
+        return token.get_type() != TokenType::RIGHT_BRACE;
+    });
+
+    check_token_type(tokenizer.next(), TokenType::RIGHT_BRACE, "left brace");
+    check_token_type(tokenizer.next(), TokenType::END_OF_FILE, "end of file");
+
+    return std::make_unique<ProgramDecl>(std::move(declarations), std::move(body));
+}
+
+std::unique_ptr<FunctionDecl> Parser::parse_function_decl() {
+    check_token_type(tokenizer.next(), TokenType::FUNC, "func");
+
+    const Token identifier = tokenizer.next();
+    check_token_type(identifier, TokenType::IDENTIFIER, "identifier");
+
+    check_token_type(tokenizer.next(), TokenType::LEFT_PAREN, "left parenthesis");
+
+    std::vector<std::string> parameters = parse_identifiers([this] {
+        const Token token = tokenizer.peek();
+        return token.get_type() != TokenType::RIGHT_PAREN;
+    }, "identifier");
+
+    check_token_type(tokenizer.next(), TokenType::RIGHT_PAREN, "right parenthesis");
+    return std::make_unique<FunctionDecl>(identifier.get_value(), parameters, std::move(parse_branch()));
+}
 
 std::unique_ptr<Stmnt> Parser::parse_stmnt() {
     switch (const Token token = tokenizer.next(); token.get_type()) {
@@ -14,6 +52,7 @@ std::unique_ptr<Stmnt> Parser::parse_stmnt() {
         case TokenType::IDENTIFIER: return parse_assignment();
         case TokenType::RETURN: return std::make_unique<ReturnStmnt>(parse_expr());
         case TokenType::IF: return parse_if();
+        case TokenType::WHILE: return parse_while();
         case TokenType::PRINT: return parse_print();
         default: throw std::runtime_error("Token " + token.to_string() + " is not a valid start of a statement.");
     }
@@ -52,6 +91,32 @@ std::unique_ptr<Stmnt> Parser::parse_if() {
     }
 
     return std::make_unique<IfStmnt>(std::move(condition), std::move(then_branch), std::move(else_branch));
+}
+
+std::unique_ptr<Stmnt> Parser::parse_while() {
+    check_token_type(tokenizer.next(), TokenType::LEFT_PAREN, "left parenthesis");
+    std::unique_ptr<Expr> condition = parse_expr();
+    check_token_type(tokenizer.next(), TokenType::RIGHT_PAREN, "right parenthesis");
+    return std::make_unique<WhileStmnt>(std::move(condition), std::move(parse_branch()));
+}
+
+std::vector<std::string> Parser::parse_identifiers(
+    const std::function<bool()>& should_continue,
+    const std::string& what) {
+    std::vector<std::string> identifiers;
+
+    while (should_continue()) {
+        Token token = tokenizer.next();
+        check_token_type(token, TokenType::IDENTIFIER, what);
+        identifiers.push_back(token.get_value());
+
+        if (tokenizer.peek().get_type() == TokenType::COMMA) {
+            tokenizer.next();
+            check_token_type(tokenizer.peek(), TokenType::IDENTIFIER, "identifier");
+        }
+    }
+
+    return identifiers;
 }
 
 std::vector<std::unique_ptr<Stmnt>> Parser::parse_branch() {

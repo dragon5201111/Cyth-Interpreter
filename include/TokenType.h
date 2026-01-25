@@ -13,6 +13,7 @@ enum class TokenType {
     TRUE,
     FALSE,
     NIL,
+    MAIN,
 
     // Types
     NUMBER,

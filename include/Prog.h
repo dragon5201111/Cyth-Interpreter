@@ -38,10 +38,10 @@ public:
 class ProgramDecl final : public Decl {
 public:
     std::vector<std::unique_ptr<FunctionDecl>> declarations;
-    std::vector<std::unique_ptr<Stmnt>> stmts;
+    std::vector<std::unique_ptr<Stmnt>> body;
 
-    explicit ProgramDecl(std::vector<std::unique_ptr<FunctionDecl>> declarations = {}, std::vector<std::unique_ptr<Stmnt>> stmts = {})
-        : declarations(std::move(declarations)), stmts(std::move(stmts)) {}
+    explicit ProgramDecl(std::vector<std::unique_ptr<FunctionDecl>> declarations = {}, std::vector<std::unique_ptr<Stmnt>> body = {})
+        : declarations(std::move(declarations)), body(std::move(body)) {}
 
     void accept(DeclVisitor &visitor) const override {
         visitor.visit_program(*this);
