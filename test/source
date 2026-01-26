@@ -1,3 +1,4 @@
 main {
-    print((0 > 2))
+    decl g = (5 > 4)
+    print(g)
 }

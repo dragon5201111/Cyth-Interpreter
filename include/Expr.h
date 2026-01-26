@@ -77,7 +77,7 @@ public:
             }
 
             for (size_t i = 0; i < lhs_array_size; ++i) {
-                if (!(lhs_array[i] == rhs_array[i])) {
+                if (lhs_array[i] != rhs_array[i]) {
                     return false;
                 }
             }

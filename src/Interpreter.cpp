@@ -86,7 +86,7 @@ Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
         return Value(lhs.as_number() >= rhs.as_number());
     }
 
-    // TODO: FINISH OPERATORS: , , <=, <, >= , >, &&, ||
+    // TODO: FINISH OPERATORS: +, &&, ||
     throw std::runtime_error("Unsupported operator");
 }
 
