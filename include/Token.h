@@ -25,7 +25,6 @@ public:
             case TokenType::WHILE: string_rep = "WHILE"; break;
             case TokenType::RETURN: string_rep = "RETURN"; break;
             case TokenType::DECL: string_rep = "DECL"; break;
-            case TokenType::PRINT: string_rep = "PRINT"; break;
             case TokenType::CALL: string_rep = "CALL"; break;
             case TokenType::FUNC: string_rep = "FUNC"; break;
             case TokenType::TRUE: string_rep = "TRUE"; break;

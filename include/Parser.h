@@ -20,7 +20,6 @@ class Parser {
     std::vector<std::unique_ptr<Stmnt>> parse_branch();
     std::vector<std::unique_ptr<Stmnt>> parse_stmnts(const std::function<bool()>& should_continue);
 
-    std::unique_ptr<Stmnt> parse_print();
     std::vector<std::string> parse_identifiers(const std::function<bool()>& should_continue, const std::string& what);
 
     // Expressions

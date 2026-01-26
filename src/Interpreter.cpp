@@ -228,10 +228,6 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
 
 }
 
-void Interpreter::visit_print_stmnt(const PrintStmnt &stmnt) {
-    std::cout << evaluate(stmnt.expr);
-}
-
 void Interpreter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
     stmnt.function_call_expr->accept(*this);
 }

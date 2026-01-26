@@ -7,7 +7,6 @@ enum class TokenType {
     WHILE,
     RETURN,
     DECL,
-    PRINT,
     CALL,
     FUNC,
     TRUE,

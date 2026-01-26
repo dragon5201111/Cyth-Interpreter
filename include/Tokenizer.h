@@ -13,7 +13,6 @@ class Tokenizer {
         {"while", TokenType::WHILE},
         {"return", TokenType::RETURN},
         {"decl", TokenType::DECL},
-        {"print", TokenType::PRINT},
         {"call", TokenType::CALL},
         {"func", TokenType::FUNC},
         {"true", TokenType::TRUE},

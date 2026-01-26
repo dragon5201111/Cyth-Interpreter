@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 #include "Env.h"
 #include "Prog.h"
 #include "Stmnt.h"
@@ -19,6 +21,11 @@ public:
     explicit Interpreter() {
         global_env = std::make_shared<Env>();
         local_env = global_env;
+
+        local_env->define("printl", std::make_shared<PrimitiveFunction>([](const std::vector<Value>& args) {
+            std::cout << args[0].to_string() << std::endl;
+            return Value();
+        }));
     }
 
     Value evaluate(const std::unique_ptr<Expr> &expr);
@@ -47,7 +54,6 @@ public:
     void visit_return_stmnt(const ReturnStmnt &stmnt) override;
     void visit_if_stmnt(const IfStmnt &stmnt) override;
     void visit_while_stmnt(const WhileStmnt &stmnt) override;
-    void visit_print_stmnt(const PrintStmnt &stmnt) override;
     void visit_function_call_stmnt(const FunctionCallStmnt &stmnt) override;
 
     void visit_function_decl(const FunctionDecl &func) override;

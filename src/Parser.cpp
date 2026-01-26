@@ -53,7 +53,6 @@ std::unique_ptr<Stmnt> Parser::parse_stmnt() {
         case TokenType::RETURN: return parse_return();
         case TokenType::IF: return parse_if();
         case TokenType::WHILE: return parse_while();
-        case TokenType::PRINT: return parse_print();
         case TokenType::CALL: return std::make_unique<FunctionCallStmnt>(parse_function_call_expr());
         default: throw std::runtime_error("Token " + token.to_string() + " is not a valid start of a statement.");
     }
@@ -143,13 +142,6 @@ std::vector<std::unique_ptr<Stmnt>> Parser::parse_stmnts(
         stmnts.push_back(parse_stmnt());
     }
     return stmnts;
-}
-
-std::unique_ptr<Stmnt> Parser::parse_print() {
-    check_token_type(tokenizer.next(), TokenType::LEFT_PAREN, "left parenthesis");
-    std::unique_ptr<Expr> expr = parse_expr();
-    check_token_type(tokenizer.next(), TokenType::RIGHT_PAREN, "right parenthesis");
-    return std::make_unique<PrintStmnt>(std::move(expr));
 }
 
 std::unique_ptr<Expr> Parser::parse_expr() {

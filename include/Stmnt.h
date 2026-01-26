@@ -9,7 +9,6 @@ class AssignStmnt;
 class ReturnStmnt;
 class IfStmnt;
 class WhileStmnt;
-class PrintStmnt;
 class FunctionCallStmnt;
 
 class StmntVisitor {
@@ -20,7 +19,6 @@ public:
     virtual void visit_return_stmnt(const ReturnStmnt& stmnt) = 0;
     virtual void visit_if_stmnt(const IfStmnt& stmnt) = 0;
     virtual void visit_while_stmnt(const WhileStmnt& stmnt) = 0;
-    virtual void visit_print_stmnt(const PrintStmnt& stmnt) = 0;
     virtual void visit_function_call_stmnt(const FunctionCallStmnt& stmnt) = 0;
 };
 
@@ -90,16 +88,6 @@ public:
 
     void accept(StmntVisitor& visitor) const override {
         visitor.visit_while_stmnt(*this);
-    }
-};
-
-class PrintStmnt final: public Stmnt {
-public:
-    std::unique_ptr<Expr> expr;
-    explicit PrintStmnt(std::unique_ptr<Expr> expr) : expr(std::move(expr)) {}
-
-    void accept(StmntVisitor& visitor) const override {
-        visitor.visit_print_stmnt(*this);
     }
 };
 
