@@ -1,3 +1,5 @@
 main {
-    print(("foo" + " bar"))
+    decl mya = [[1,2,3,4]]
+    mya[0][1] = true
+    print(mya)
 }

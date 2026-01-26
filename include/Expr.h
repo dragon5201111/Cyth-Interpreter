@@ -74,6 +74,7 @@ public:
 
     [[nodiscard]] bool is_array() const { return std::holds_alternative<std::vector<Value>>(value); }
     [[nodiscard]] const std::vector<Value>& as_array() const { return std::get<std::vector<Value>>(value); }
+    [[nodiscard]] std::vector<Value>& as_array() { return std::get<std::vector<Value>>(value);}
 
     bool operator==(const Value& other) const {
         if (this->is_number() && other.is_number()) {

@@ -1,6 +1,7 @@
 #include "Interpreter.h"
 
 #include <iostream>
+#include <stack>
 #include <stdexcept>
 
 Value Interpreter::evaluate(const std::unique_ptr<Expr>& expr) {
@@ -23,7 +24,16 @@ Value Interpreter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
 }
 
 Value Interpreter::visit_array_access_expr(const ArrayAccessExpr &expr) {
-    throw std::runtime_error("Array access expr not implemented");
+    const Value base = evaluate(expr.array);
+
+    const auto& array = base.as_array();
+    const uint64_t index = evaluate(expr.index).as_number();
+
+    if (index >= array.size()) {
+        throw std::runtime_error("Index out of bounds");
+    }
+
+    return array[index];
 }
 
 Value Interpreter::visit_identifier_expr(const IdentifierExpr &expr) {
@@ -31,7 +41,11 @@ Value Interpreter::visit_identifier_expr(const IdentifierExpr &expr) {
 }
 
 Value Interpreter::visit_unary_expr(const UnaryExpr &expr) {
-    throw std::runtime_error("Unary expr not implemented");
+    if (expr.op != "!") {
+        throw std::runtime_error("Unsupported unary operator");
+    }
+
+    return Value(!evaluate(expr.rhs).is_truthy());
 }
 
 Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
@@ -94,7 +108,7 @@ Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
         return evaluate_addition(expr);
     }
 
-    throw std::runtime_error("Unsupported operator");
+    throw std::runtime_error("Unsupported binary operator");
 }
 
 Value Interpreter::evaluate_logical_expr(const BinaryExpr &expr) {
@@ -164,8 +178,23 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
         return;
     }
 
-    // TODO: ADD SUPPORT FOR ARRAYS
-    throw std::runtime_error("Assignment not implemented for statement");
+    auto parent = dynamic_cast<ArrayAccessExpr*>(stmnt.lhs.get());
+    std::deque<uint64_t> indices;
+    while (const auto current = dynamic_cast<ArrayAccessExpr*>(parent->array.get())) {
+        indices.push_front(evaluate(parent->index).as_number());
+        parent = current;
+    }
+
+    indices.push_front(evaluate(parent->index).as_number());
+    const auto identifier = dynamic_cast<IdentifierExpr*>(parent->array.get());
+    Value* array = &local_env->get(identifier->name);
+
+    for (size_t i = 1; i < indices.size(); ++i) {
+        array = &array->as_array()[indices.front()];
+        indices.pop_front();
+    }
+
+    array->as_array()[indices.front()] = std::move(value);
 }
 
 void Interpreter::visit_return_stmnt(const ReturnStmnt &stmnt) {
