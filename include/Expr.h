@@ -15,7 +15,7 @@ class Value final : public Printable {
     [[nodiscard]] std::string to_string_impl(const std::monostate&) const { return "nil"; }
     [[nodiscard]] std::string to_string_impl(const bool b) const { return b ? "true" : "false"; }
     [[nodiscard]] std::string to_string_impl(const uint64_t n) const { return std::to_string(n); }
-    [[nodiscard]] std::string to_string_impl(const std::string& s) const { return s; }
+    [[nodiscard]] std::string to_string_impl(const std::string& s) const { return "\"" + s + "\""; }
     [[nodiscard]] std::string to_string_impl(const std::vector<Value>& arr) const {
         std::string result = "[";
         for (size_t i = 0; i < arr.size(); ++i) {
@@ -35,6 +35,9 @@ public:
     explicit Value(std::string s) : value(std::move(s)) {}
     explicit Value(std::vector<Value> v) : value(std::move(v)) {}
 
+
+    [[nodiscard]] bool is_nil() const { return std::holds_alternative<std::monostate>(value); }
+
     [[nodiscard]] bool is_bool() const { return std::holds_alternative<bool>(value); }
     [[nodiscard]] bool as_bool() const { return std::get<bool>(value); }
 
@@ -44,11 +47,54 @@ public:
     [[nodiscard]] bool is_string() const { return std::holds_alternative<std::string>(value); }
     [[nodiscard]] std::string as_string() const { return std::get<std::string>(value); }
 
+    [[nodiscard]] bool is_array() const { return std::holds_alternative<std::vector<Value>>(value); }
+    [[nodiscard]] const std::vector<Value>& as_array() const { return std::get<std::vector<Value>>(value); }
+
+    bool operator==(const Value& other) const {
+        if (this->is_number() && other.is_number()) {
+            return this->as_number() == other.as_number();
+        }
+
+        if (this->is_bool() && other.is_bool()) {
+            return this->as_bool() == other.as_bool();
+        }
+
+        if (this->is_nil() && other.is_nil()) {
+            return true;
+        }
+
+        if (this->is_string() && other.is_string()) {
+            return this->as_string() == other.as_string();
+        }
+
+        if (this->is_array() && other.is_array()) {
+            const auto& lhs_array = this->as_array();
+            const auto& rhs_array = other.as_array();
+
+            const auto lhs_array_size = lhs_array.size();
+            if (lhs_array_size != rhs_array.size()) {
+                return false;
+            }
+
+            for (size_t i = 0; i < lhs_array_size; ++i) {
+                if (!(lhs_array[i] == rhs_array[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    bool operator!=(const Value& other) const {
+        return !(*this == other);
+    }
+
     [[nodiscard]] std::string to_string() const override {
         return std::visit([this](const auto& v) { return this->to_string_impl(v); }, value);
     }
 };
-
 
 class ArrayLiteralExpr;
 class ArrayAccessExpr;

@@ -22,7 +22,7 @@ void Env::assign(const std::string &name, Value value) {
 }
 
 
-Value Env::get(const std::string &name) {
+Value& Env::get(const std::string &name) {
     if (values.count(name)) {
         return values[name];
     }

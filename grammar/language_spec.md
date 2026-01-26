@@ -11,7 +11,7 @@
 <expression> := <binary> | <unary> | <primary>
 <primary> := <bool> | <number> | <string> | <identifier> | <function-call> | <array-literal> | <array-access> | "(" <expression> ")" | "nil"
 <array-literal> := "[" <expression-list>? "]"
-<array-access> := <identifier> "[" <expression> "]"
+<array-access> := (<identifier> | <array-access>) "[" <expression> "]"
 <unary> := "!" <expression>
 <binary> := "(" <expression> <op> <expression> ")"
 <bool> := "true" | "false"
@@ -26,7 +26,7 @@
 ```
 <statement> := <variable-declaration> | <variable-assignment> | <return> | <print> | <while> | <if>
 <variable-declaration> := decl <identifier> ("=" <expression>)?
-<variable-assignment> := <identifier> = <expression> | <array-access> = <expression>
++ <variable-assignment> := (<identifier> | <array-access>) "=" <expression>
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ } (else { <statement>+ })?
 <return> := return <expression>

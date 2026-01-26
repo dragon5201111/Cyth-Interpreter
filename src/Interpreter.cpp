@@ -35,8 +35,61 @@ Value Interpreter::visit_unary_expr(const UnaryExpr &expr) {
 }
 
 Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
-    throw std::runtime_error("Binary expr not implemented");
+    const Value lhs = evaluate(expr.lhs);
+    const Value rhs = evaluate(expr.rhs);
+
+    if (expr.op == "*") {
+        return Value(lhs.as_number() * rhs.as_number());
+    }
+
+    if (expr.op == "/"){
+        return Value(lhs.as_number() / rhs.as_number());
+    }
+
+    if (expr.op == "-") {
+        return Value(lhs.as_number() - rhs.as_number());
+    }
+
+    if (expr.op == "&") {
+        return Value(lhs.as_number() & rhs.as_number());
+    }
+
+    if (expr.op == "|") {
+        return Value(lhs.as_number() | rhs.as_number());
+    }
+
+    if (expr.op == "%") {
+        return Value(lhs.as_number() % rhs.as_number());
+    }
+
+    if (expr.op == "==") {
+        return Value(lhs == rhs);
+    }
+
+    if (expr.op == "!=") {
+        return Value(lhs != rhs);
+    }
+
+    if (expr.op == ">") {
+        return Value(lhs.as_number() > rhs.as_number());
+    }
+
+    if (expr.op == "<") {
+        return Value(lhs.as_number() < rhs.as_number());
+    }
+
+    if (expr.op == "<=") {
+        return Value(lhs.as_number() <= rhs.as_number());
+    }
+
+    if (expr.op == ">=") {
+        return Value(lhs.as_number() >= rhs.as_number());
+    }
+
+    // TODO: FINISH OPERATORS: , , <=, <, >= , >, &&, ||
+    throw std::runtime_error("Unsupported operator");
 }
+
 
 Value Interpreter::visit_string_expr(const StringExpr &expr) {
     return Value(expr.value);
@@ -64,11 +117,15 @@ void Interpreter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
 }
 
 void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
-    if (const auto identifier_expr = dynamic_cast<const IdentifierExpr*>(stmnt.lhs.get())) {
-        local_env->assign(identifier_expr->name, evaluate(stmnt.rhs));
-    }else if (const auto array_access_expr = dynamic_cast<const ArrayAccessExpr*>(stmnt.lhs.get())) {
+    Value value = evaluate(stmnt.rhs);
 
+    if (const auto identifier = dynamic_cast<const IdentifierExpr*>(stmnt.lhs.get())) {
+        local_env->assign(identifier->name, std::move(value));
+        return;
     }
+
+    // TODO: ADD SUPPORT FOR ARRAYS
+    throw std::runtime_error("Assignment not implemented for statement");
 }
 
 void Interpreter::visit_return_stmnt(const ReturnStmnt &stmnt) {
