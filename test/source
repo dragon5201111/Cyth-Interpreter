@@ -1,13 +1,10 @@
-func ret21(){
-    return call ret22()
-}
-
-func ret22(){
-    return 22
+func test(){
+    print(1)
+    return 2
 }
 
 main{
-    decl x = call ret21()
+    call test()
+    decl x = call test()
     print(x)
-    return 0
 }

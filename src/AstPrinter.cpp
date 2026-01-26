@@ -148,3 +148,7 @@ void AstPrinter::visit_program(const ProgramDecl &program) {
     }
     writer->write("}\n");
 }
+
+void AstPrinter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
+    stmnt.function_call_expr->accept(*this);
+}

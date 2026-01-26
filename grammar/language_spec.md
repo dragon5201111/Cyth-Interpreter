@@ -24,13 +24,14 @@
 ```
 ## Statements
 ```
-<statement> := <variable-declaration> | <variable-assignment> | <return> | <print> | <while> | <if>
+<statement> := <variable-declaration> | <variable-assignment> | <return> | <print> | <while> | <if> | <function-call-stmnt>
 <variable-declaration> := decl <identifier> ("=" <expression>)?
 <variable-assignment> := (<identifier> | <array-access>) "=" <expression>
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ } (else { <statement>+ })?
 <return> := return <expression>
 <print> := print(<expression>)
+<function-call-stmnt> := "call" <identifier> "(" <expression-list>? ")"
 ```
 
 ## Declarations

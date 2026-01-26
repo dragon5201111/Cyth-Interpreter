@@ -232,6 +232,10 @@ void Interpreter::visit_print_stmnt(const PrintStmnt &stmnt) {
     std::cout << evaluate(stmnt.expr);
 }
 
+void Interpreter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
+    stmnt.function_call_expr->accept(*this);
+}
+
 void Interpreter::visit_function_decl(const FunctionDecl &func) {
     local_env.get()->define(func.name, std::make_shared<UserFunction>(local_env, func));
 }

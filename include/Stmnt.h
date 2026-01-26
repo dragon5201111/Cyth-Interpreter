@@ -10,6 +10,7 @@ class ReturnStmnt;
 class IfStmnt;
 class WhileStmnt;
 class PrintStmnt;
+class FunctionCallStmnt;
 
 class StmntVisitor {
 public:
@@ -20,6 +21,7 @@ public:
     virtual void visit_if_stmnt(const IfStmnt& stmnt) = 0;
     virtual void visit_while_stmnt(const WhileStmnt& stmnt) = 0;
     virtual void visit_print_stmnt(const PrintStmnt& stmnt) = 0;
+    virtual void visit_function_call_stmnt(const FunctionCallStmnt& stmnt) = 0;
 };
 
 class Stmnt {
@@ -98,5 +100,17 @@ public:
 
     void accept(StmntVisitor& visitor) const override {
         visitor.visit_print_stmnt(*this);
+    }
+};
+
+// TODO: Change this to discard statement?
+class FunctionCallStmnt : public Stmnt {
+public:
+    std::unique_ptr<Expr> function_call_expr;
+
+    explicit FunctionCallStmnt(std::unique_ptr<Expr> function_call_expr) : function_call_expr(std::move(function_call_expr)) {}
+
+    void accept(StmntVisitor& visitor) const override {
+        visitor.visit_function_call_stmnt(*this);
     }
 };

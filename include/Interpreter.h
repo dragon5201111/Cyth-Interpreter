@@ -48,6 +48,7 @@ public:
     void visit_if_stmnt(const IfStmnt &stmnt) override;
     void visit_while_stmnt(const WhileStmnt &stmnt) override;
     void visit_print_stmnt(const PrintStmnt &stmnt) override;
+    void visit_function_call_stmnt(const FunctionCallStmnt &stmnt) override;
 
     void visit_function_decl(const FunctionDecl &func) override;
     void visit_program(const ProgramDecl &program) override;
