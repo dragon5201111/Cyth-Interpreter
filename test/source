@@ -1,4 +1,6 @@
 main {
-    decl g = (5 > 4)
-    print(g)
+    decl x #This is a comment
+    decl y = x
+    decl z = y
+    print(z)
 }
