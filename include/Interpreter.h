@@ -22,9 +22,28 @@ public:
         global_env = std::make_shared<Env>();
         local_env = global_env;
 
-        local_env->define("printl", std::make_shared<PrimitiveFunction>([](const std::vector<Value>& args) {
-            std::cout << args[0].to_string() << std::endl;
+        local_env->define("print", std::make_shared<PrimitiveFunction>([](const std::vector<Value>& args) {
+            for (const auto& arg : args) {
+                std::cout << arg << " ";
+            }
             return Value();
+        }));
+
+        local_env->define("len", std::make_shared<PrimitiveFunction>([](const std::vector<Value>& args) {
+            if (args.size() != 1) {
+                throw std::runtime_error("len expects one argument.");
+            }
+
+            const Value& value = args[0];
+            if (value.is_array()) {
+                return Value(value.as_array().size());
+            }
+
+            if (value.is_string()) {
+                return Value(value.as_string().size());
+            }
+
+            throw std::runtime_error("Argument must be an array or string.");
         }));
     }
 
