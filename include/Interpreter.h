@@ -23,7 +23,10 @@ public:
 
     Value visit_identifier_expr(const IdentifierExpr &expr) override;
     Value visit_unary_expr(const UnaryExpr &expr) override;
+
     Value visit_binary_expr(const BinaryExpr &expr) override;
+    Value evaluate_logical_expr(const BinaryExpr &expr);
+    Value evaluate_addition(const BinaryExpr & expr);
 
     Value visit_string_expr(const StringExpr &expr) override;
     Value visit_bool_expr(const BoolExpr &expr) override;

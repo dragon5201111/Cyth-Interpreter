@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <variant>
 #include <vector>
@@ -34,6 +35,30 @@ public:
     explicit Value(uint64_t n) : value(n) {}
     explicit Value(std::string s) : value(std::move(s)) {}
     explicit Value(std::vector<Value> v) : value(std::move(v)) {}
+
+    [[nodiscard]] bool is_truthy() const {
+        if (is_nil()) {
+            return false;
+        }
+
+        if (is_bool()) {
+            return as_bool();
+        }
+
+        if (is_number()) {
+            return as_number() != 0;
+        }
+
+        if (is_string()) {
+            return !as_string().empty();
+        }
+
+        if (is_array()) {
+            return !as_array().empty();
+        }
+
+        throw std::runtime_error("Cannot evaluate is truthy");
+    }
 
 
     [[nodiscard]] bool is_nil() const { return std::holds_alternative<std::monostate>(value); }

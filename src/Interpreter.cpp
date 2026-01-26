@@ -86,8 +86,48 @@ Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
         return Value(lhs.as_number() >= rhs.as_number());
     }
 
-    // TODO: FINISH OPERATORS: +, &&, ||
+    if (expr.op == "&&" || expr.op == "||") {
+        return evaluate_logical_expr(expr);
+    }
+
+    if (expr.op == "+") {
+        return evaluate_addition(expr);
+    }
+
     throw std::runtime_error("Unsupported operator");
+}
+
+Value Interpreter::evaluate_logical_expr(const BinaryExpr &expr) {
+    const Value lhs = evaluate(expr.lhs);
+    if (expr.op == "||") {
+        // Short-circuit
+        if (lhs.is_truthy()) {
+            return Value(true);
+        }
+        return Value(evaluate(expr.rhs).is_truthy());
+    }
+
+    // Is a logical AND
+    if (!lhs.is_truthy()) {
+        return Value(false); // Short-circuit
+    }
+
+    return Value(evaluate(expr.rhs).is_truthy());
+}
+
+Value Interpreter::evaluate_addition(const BinaryExpr &expr) {
+    const Value lhs = evaluate(expr.lhs);
+    const Value rhs = evaluate(expr.rhs);
+
+    if (lhs.is_number() && rhs.is_number()) {
+        return Value(lhs.as_number() + rhs.as_number());
+    }
+
+    if (lhs.is_string() && rhs.is_string()) {
+        return Value(lhs.as_string() + rhs.as_string());
+    }
+
+    throw std::runtime_error("Unsupported operator between types");
 }
 
 

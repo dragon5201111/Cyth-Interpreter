@@ -1,6 +1,3 @@
 main {
-    decl x #This is a comment
-    decl y = x
-    decl z = y
-    print(z)
+    print(("foo" + " bar"))
 }
