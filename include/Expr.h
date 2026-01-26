@@ -236,6 +236,7 @@ public:
 
 class ConstantExpr final : public Expr {
 public:
+    // TODO: Change to int64_t
     uint64_t value;
     explicit ConstantExpr(const uint64_t value) : value(value) {}
 
