@@ -1,16 +1,23 @@
 #pragma once
-#include <memory>
-#include <unordered_map>
 
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <variant>
 #include "Expr.h"
+#include "Call.h"
+
+using Binding = std::variant<Value, std::shared_ptr<Callable>>;
 
 class Env {
     std::shared_ptr<Env> enclosing;
-    std::unordered_map<std::string, Value> values;
+    std::unordered_map<std::string, Binding> bindings;
+
 public:
-    explicit Env() : enclosing({}) {}
-    explicit Env(const std::shared_ptr<Env> &enclosing) : enclosing(enclosing) {}
-    void define(const std::string& name, Value value);
-    void assign(const std::string& name, Value value);
-    Value& get(const std::string& name);
+    explicit Env(std::shared_ptr<Env> enclosing = nullptr)
+        : enclosing(std::move(enclosing)) {}
+
+    void define(const std::string& name, Binding value);
+    void assign(const std::string& name, Binding value);
+    Binding& get(const std::string& name);
 };

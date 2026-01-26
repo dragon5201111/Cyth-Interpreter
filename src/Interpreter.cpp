@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stack>
 #include <stdexcept>
+#include "Call.h"
 
 Value Interpreter::evaluate(const std::unique_ptr<Expr>& expr) {
     return expr->accept(*this);
@@ -10,6 +11,17 @@ Value Interpreter::evaluate(const std::unique_ptr<Expr>& expr) {
 
 void Interpreter::execute(const std::unique_ptr<Stmnt> &stmnt) {
     stmnt->accept(*this);
+}
+
+void Interpreter::execute_in_new_env(const std::vector<std::unique_ptr<Stmnt> > &stmnts, const std::shared_ptr<Env>& new_env) {
+    const std::shared_ptr<Env> previous_env = local_env;
+    local_env = new_env;
+
+    for (const auto& stmnt : stmnts) {
+        execute(stmnt);
+    }
+
+    local_env = previous_env;
 }
 
 Value Interpreter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
@@ -37,7 +49,7 @@ Value Interpreter::visit_array_access_expr(const ArrayAccessExpr &expr) {
 }
 
 Value Interpreter::visit_identifier_expr(const IdentifierExpr &expr) {
-    return local_env->get(expr.name);
+    return std::get<Value>(local_env->get(expr.name));
 }
 
 Value Interpreter::visit_unary_expr(const UnaryExpr &expr) {
@@ -158,7 +170,14 @@ Value Interpreter::visit_constant_expr(const ConstantExpr &expr) {
 }
 
 Value Interpreter::visit_function_call_expr(const FunctionCallExpr &expr) {
-    throw std::runtime_error("Function call expr not implemented");
+    std::vector<Value> args;
+    args.reserve(expr.args.size());
+    for (const auto &arg : expr.args) {
+        args.push_back(evaluate(arg));
+    }
+
+    const auto callable = std::get<std::shared_ptr<Callable>>(local_env->get(expr.name));
+    return callable->call(*this, args);
 }
 
 Value Interpreter::visit_nil_expr(const NilExpr &expr) {
@@ -187,7 +206,7 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
 
     indices.push_front(evaluate(parent->index).as_number());
     const auto identifier = dynamic_cast<IdentifierExpr*>(parent->array.get());
-    Value* array = &local_env->get(identifier->name);
+    Value* array = &std::get<Value>(local_env->get(identifier->name));
 
     for (size_t i = 1; i < indices.size(); ++i) {
         array = &array->as_array()[indices.front()];
@@ -198,7 +217,7 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
 }
 
 void Interpreter::visit_return_stmnt(const ReturnStmnt &stmnt) {
-
+    throw ReturnException(evaluate(stmnt.value));
 }
 
 void Interpreter::visit_if_stmnt(const IfStmnt &stmnt) {
@@ -214,7 +233,7 @@ void Interpreter::visit_print_stmnt(const PrintStmnt &stmnt) {
 }
 
 void Interpreter::visit_function_decl(const FunctionDecl &func) {
-
+    local_env.get()->define(func.name, std::make_shared<UserFunction>(local_env, func));
 }
 
 void Interpreter::visit_program(const ProgramDecl &program) {
@@ -222,8 +241,12 @@ void Interpreter::visit_program(const ProgramDecl &program) {
         func_decl->accept(*this);
     }
 
-    for (const auto& stmnt : program.body) {
-        execute(stmnt);
+    try {
+        for (const auto& stmnt : program.body) {
+            execute(stmnt);
+        }
+    }catch (ReturnException& return_exception) {
+        // TODO: Handle return in main
     }
 }
 

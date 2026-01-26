@@ -1,15 +1,13 @@
 #include "Env.h"
-
 #include <stdexcept>
-#include <utility>
 
-void Env::define(const std::string &name, Value value) {
-    values[name] = std::move(value);
+void Env::define(const std::string& name, Binding value) {
+    bindings[name] = std::move(value);
 }
 
-void Env::assign(const std::string &name, Value value) {
-    if (values.count(name)) {
-        values[name] = std::move(value);
+void Env::assign(const std::string& name, Binding value) {
+    if (bindings.count(name)) {
+        bindings[name] = std::move(value);
         return;
     }
 
@@ -18,18 +16,17 @@ void Env::assign(const std::string &name, Value value) {
         return;
     }
 
-    throw std::runtime_error("Undefined variable: " + name);
+    throw std::runtime_error("Undefined variable '" + name + "'");
 }
 
-
-Value& Env::get(const std::string &name) {
-    if (values.count(name)) {
-        return values[name];
+Binding& Env::get(const std::string& name) {
+    if (bindings.count(name)) {
+        return bindings.at(name);
     }
 
     if (enclosing) {
         return enclosing->get(name);
     }
 
-    throw std::runtime_error("Undefined variable: " + name);
+    throw std::runtime_error("Undefined variable '" + name + "'");
 }

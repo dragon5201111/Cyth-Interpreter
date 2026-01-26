@@ -3,6 +3,12 @@
 #include "Prog.h"
 #include "Stmnt.h"
 
+class ReturnException : public std::exception {
+public:
+    Value value;
+    explicit ReturnException(Value v) : value(std::move(v)) {}
+};
+
 class Interpreter :
         public ExprVisitor,
         public StmntVisitor,
@@ -17,6 +23,7 @@ public:
 
     Value evaluate(const std::unique_ptr<Expr> &expr);
     void execute(const std::unique_ptr<Stmnt> &stmnt);
+    void execute_in_new_env(const std::vector<std::unique_ptr<Stmnt>>& stmnts, const std::shared_ptr<Env>& new_env);
 
     Value visit_array_literal_expr(const ArrayLiteralExpr &expr) override;
     Value visit_array_access_expr(const ArrayAccessExpr &expr) override;

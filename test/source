@@ -1,5 +1,13 @@
-main {
-    decl mya = [[1,2,3,4]]
-    mya[0][1] = true
-    print(mya)
+func ret21(){
+    return call ret22()
+}
+
+func ret22(){
+    return 22
+}
+
+main{
+    decl x = call ret21()
+    print(x)
+    return 0
 }

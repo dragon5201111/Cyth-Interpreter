@@ -25,7 +25,7 @@ public:
     std::vector<std::string> parameters;
     std::vector<std::unique_ptr<Stmnt>> body;
 
-    FunctionDecl(std::string name, std::vector<std::string> parameters, std::vector<std::unique_ptr<Stmnt>> body)
+    explicit FunctionDecl(std::string name, std::vector<std::string> parameters = {}, std::vector<std::unique_ptr<Stmnt>> body = {})
         : name(std::move(name)),
           parameters(std::move(parameters)),
           body(std::move(body)) {}
