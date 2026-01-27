@@ -1,9 +1,18 @@
 #include "Interpreter.h"
-
 #include <iostream>
 #include <stack>
 #include <stdexcept>
 #include "Call.h"
+
+void Interpreter::define_primitives() const {
+    for (const auto& [name, function] : Builtins::primitive_functions) {
+        local_env->define(name, function);
+    }
+
+    for (const auto& [name, value] : Builtins::primitive_values) {
+        local_env->define(name, value);
+    }
+}
 
 Value Interpreter::evaluate(const std::unique_ptr<Expr>& expr) {
     return expr->accept(*this);
@@ -249,10 +258,14 @@ void Interpreter::visit_program(const ProgramDecl &program) {
             execute(stmnt);
         }
     }catch (ReturnException& return_exception) {
-        // TODO: Handle return in main
+        if (!return_exception.value.is_number()) {
+            throw std::runtime_error("Attempt to return from main with non-number.");
+        }
+
+        exit(static_cast<int>(return_exception.value.as_number()));
     }
 
-    // TODO: Handle default return
+    exit(EXIT_SUCCESS);
 }
 
 

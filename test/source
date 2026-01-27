@@ -1,5 +1,3 @@
 main{
-    decl x = [1,2,3,4]
-    x[1] = -43
-    call print((x[1] + 43))
+
 }

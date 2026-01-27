@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 
+#include "Builtin.h"
 #include "Env.h"
 #include "Prog.h"
 #include "Stmnt.h"
@@ -21,11 +22,10 @@ public:
     explicit Interpreter() {
         global_env = std::make_shared<Env>();
         local_env = global_env;
-
-        for (const auto& [name, function] : PrimitiveFunctions::primitive_functions) {
-            local_env->define(name, function);
-        }
+        define_primitives();
     }
+
+    void define_primitives() const;
 
     Value evaluate(const std::unique_ptr<Expr> &expr);
     void execute(const std::unique_ptr<Stmnt> &stmnt);
