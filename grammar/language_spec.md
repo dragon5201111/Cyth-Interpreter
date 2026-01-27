@@ -18,7 +18,7 @@
 <number> := <digit>+
 <string> := "\"" <char>* "\""
 <char> := any printable character except '"'
-<op> := "+" | "-" | "*" | "/"  | "==" | "!=" | "%" | "<=" | "<" | ">=" | ">" | "&" | "&&" | "|" | "||"
+<op> := "+" | "-" | "*" | "/"  | "==" | "!=" | "%" | "<=" | "<" | ">=" | ">" | "&" | "&&" | "|" | "||" | "<<" | ">>"
 <function-call> := "call" <identifier> "(" <expression-list>? ")"
 <expression-list> := <expression> ("," <expression>)*
 ```

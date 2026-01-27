@@ -69,6 +69,10 @@ Value Interpreter::visit_unary_expr(const UnaryExpr &expr) {
         return Value(-evaluate(expr.rhs).as_number());
     }
 
+    if (expr.op == "~") {
+        return Value(~evaluate(expr.rhs).as_number());
+    }
+
     throw std::runtime_error("Unsupported unary operator");
 }
 
@@ -112,8 +116,16 @@ Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
         return Value(lhs.as_number() > rhs.as_number());
     }
 
+    if (expr.op == ">>") {
+        return Value(lhs.as_number() >> rhs.as_number());
+    }
+
     if (expr.op == "<") {
         return Value(lhs.as_number() < rhs.as_number());
+    }
+
+    if (expr.op == "<<") {
+        return Value(lhs.as_number() << rhs.as_number());
     }
 
     if (expr.op == "<=") {
@@ -130,6 +142,10 @@ Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
 
     if (expr.op == "+") {
         return evaluate_addition(expr);
+    }
+
+    if (expr.op == "^") {
+        return Value(evaluate(expr.lhs).as_number() ^ evaluate(expr.rhs).as_number());
     }
 
     throw std::runtime_error("Unsupported binary operator");

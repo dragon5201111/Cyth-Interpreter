@@ -48,22 +48,24 @@ Token Tokenizer::advance_current() {
         case ']': current++; return Token(TokenType::RIGHT_BRACKET, current_line);
         case ',': current++; return Token(TokenType::COMMA, current_line);
         case '+': current++; return Token(TokenType::OPERATOR,"+", current_line);
+        case '~': current++; return Token(TokenType::OPERATOR,"~", current_line);
         case '-': current++; return Token(TokenType::OPERATOR, "-", current_line);
         case '*': current++; return Token(TokenType::OPERATOR, "*", current_line);
         case '/': current++; return Token(TokenType::OPERATOR, "/", current_line);
         case '%': current++; return Token(TokenType::OPERATOR, "%", current_line);
+        case '^': current++; return Token(TokenType::OPERATOR, "^", current_line);
         case '<':
-            return match_operator('<', '=', "<=");
+            return match_operator("<", {'=', '<'}, {"<=", "<<"});
         case '>':
-            return match_operator('>', '=', ">=");
+            return match_operator(">", {'=', '>'}, {">=", ">>"});
         case '!':
-            return match_operator('!', '=', "!=");
+            return match_operator("!", {'='}, {"!="});
         case '=':
-            return match_operator('=', '=', "==");
+            return match_operator("=", {'='}, {"=="});
         case '&':
-            return match_operator('&', '&', "&&");
+            return match_operator("&", {'&'}, {"&&"});
         case '|':
-            return match_operator('|', '|', "||");
+            return match_operator("|", {'|'}, {"||"});
         case '\"':
             return get_string();
         default:
@@ -110,6 +112,8 @@ Token Tokenizer::get_string() {
     while (current < input_size && input[current] != '\"') {
         if (input[current] == '\\' && current + 1 < input_size) {
             switch (input[current + 1]) {
+                case 'b': string += '\b'; break;
+                case 'r': string += '\r'; break;
                 case 't': string += '\t'; break;
                 case 'n': string += '\n'; break;
                 case '"': string += '"'; break;
@@ -132,15 +136,26 @@ Token Tokenizer::get_string() {
     return Token(TokenType::STRING, string, current_line);
 }
 
-
-Token Tokenizer::match_operator(const char current_char, const char expected, const std::string& two_char) {
-    if (current + 1 < input_size && input[current + 1] == expected) {
-        current += 2;
-        return Token(TokenType::OPERATOR, two_char, current_line);
+Token Tokenizer::match_operator(const std::string& current_char, const std::vector<char> &expected, const std::vector<std::string> &match) {
+    const size_t expected_size = expected.size();
+    for (int i = 0; i < expected_size; i++) {
+        if (match_next(expected[i])) {
+            current += static_cast<int>(match[i].size());
+            return Token(TokenType::OPERATOR, match[i], current_line);
+        }
     }
+
     current++;
-    return Token(TokenType::OPERATOR, std::string(1, current_char), current_line);
+    return Token(TokenType::OPERATOR, current_char, current_line);
 }
+
+bool Tokenizer::match_next(const char expected) const {
+    if (current + 1 < input_size && input[current + 1] == expected) {
+        return true;
+    }
+    return false;
+}
+
 
 Token Tokenizer::get_number() {
     const int sub_start = current++;

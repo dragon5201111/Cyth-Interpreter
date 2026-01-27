@@ -1,4 +1,4 @@
 
 main{
-    call print("foo\tf")
+    call print((0 ^ 1))
 }

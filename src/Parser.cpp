@@ -193,7 +193,7 @@ std::unique_ptr<Expr> Parser::parse_identifier(const Token &token) {
 }
 
 std::unique_ptr<Expr> Parser::parse_unary_expr(const Token& token) {
-    if (std::string op = token.get_value(); op == "!"  || op == "-") {
+    if (std::string op = token.get_value(); op == "!"  || op == "-" || op == "~") {
         return std::make_unique<UnaryExpr>(op, parse_expr());
     }
 

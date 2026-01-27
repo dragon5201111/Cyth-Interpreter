@@ -34,7 +34,8 @@ class Tokenizer {
     Token get_string();
     Token get_number();
     Token get_identifier();
-    Token match_operator(char current_char, char expected, const std::string &two_char);
+    Token match_operator(const std::string& current_char, const std::vector<char> &expected, const std::vector<std::string> &match);
+    bool match_next(char expected) const;
 public:
     explicit Tokenizer(std::string input) {
         this->input = std::move(input);
