@@ -1,7 +1,4 @@
-func love(){
-    return "steph"
-}
-
 main{
-
+    decl x = ---(-12 * 5)
+    call print(x)
 }

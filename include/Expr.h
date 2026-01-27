@@ -8,14 +8,14 @@
 #include "Print.h"
 
 class Value;
-using ValueVariant = std::variant<std::monostate, bool, uint64_t, std::string, std::vector<Value>>;
+using ValueVariant = std::variant<std::monostate, bool, int64_t, std::string, std::vector<Value>>;
 
 class Value final : public Printable {
     ValueVariant value;
 
     [[nodiscard]] std::string to_string_impl(const std::monostate&) const { return "nil"; }
     [[nodiscard]] std::string to_string_impl(const bool b) const { return b ? "true" : "false"; }
-    [[nodiscard]] std::string to_string_impl(const uint64_t n) const { return std::to_string(n); }
+    [[nodiscard]] std::string to_string_impl(const int64_t n) const { return std::to_string(n); }
     [[nodiscard]] std::string to_string_impl(const std::string& s) const { return "\"" + s + "\""; }
     [[nodiscard]] std::string to_string_impl(const std::vector<Value>& arr) const {
         std::string result = "[";
@@ -32,7 +32,7 @@ class Value final : public Printable {
 public:
     explicit Value() : value(std::monostate{}) {}
     explicit Value(bool b) : value(b) {}
-    explicit Value(uint64_t n) : value(n) {}
+    explicit Value(int64_t n) : value(n) {}
     explicit Value(std::string s) : value(std::move(s)) {}
     explicit Value(std::vector<Value> v) : value(std::move(v)) {}
 
@@ -66,8 +66,8 @@ public:
     [[nodiscard]] bool is_bool() const { return std::holds_alternative<bool>(value); }
     [[nodiscard]] bool as_bool() const { return std::get<bool>(value); }
 
-    [[nodiscard]] bool is_number() const { return std::holds_alternative<uint64_t>(value); }
-    [[nodiscard]] uint64_t as_number() const { return std::get<uint64_t>(value); }
+    [[nodiscard]] bool is_number() const { return std::holds_alternative<int64_t>(value); }
+    [[nodiscard]] int64_t as_number() const { return std::get<int64_t>(value); }
 
     [[nodiscard]] bool is_string() const { return std::holds_alternative<std::string>(value); }
     [[nodiscard]] std::string as_string() const { return std::get<std::string>(value); }
@@ -236,9 +236,8 @@ public:
 
 class ConstantExpr final : public Expr {
 public:
-    // TODO: Change to int64_t
-    uint64_t value;
-    explicit ConstantExpr(const uint64_t value) : value(value) {}
+    int64_t value;
+    explicit ConstantExpr(const int64_t value) : value(value) {}
 
     Value accept(ExprVisitor& visitor) const override {
         return visitor.visit_constant_expr(*this);

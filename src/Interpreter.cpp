@@ -53,11 +53,15 @@ Value Interpreter::visit_identifier_expr(const IdentifierExpr &expr) {
 }
 
 Value Interpreter::visit_unary_expr(const UnaryExpr &expr) {
-    if (expr.op != "!") {
-        throw std::runtime_error("Unsupported unary operator");
+    if (expr.op == "!") {
+        return Value(!evaluate(expr.rhs).is_truthy());
     }
 
-    return Value(!evaluate(expr.rhs).is_truthy());
+    if (expr.op == "-") {
+        return Value(-evaluate(expr.rhs).as_number());
+    }
+
+    throw std::runtime_error("Unsupported unary operator");
 }
 
 Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
@@ -248,6 +252,8 @@ void Interpreter::visit_program(const ProgramDecl &program) {
     }catch (ReturnException& return_exception) {
         // TODO: Handle return in main
     }
+
+    // TODO: Handle default return
 }
 
 

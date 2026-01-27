@@ -29,23 +29,6 @@ public:
             }
             return Value();
         }));
-
-        local_env->define("len", std::make_shared<PrimitiveFunction>([](const std::vector<Value>& args) {
-            if (args.size() != 1) {
-                throw std::runtime_error("len expects one argument.");
-            }
-
-            const Value& value = args[0];
-            if (value.is_array()) {
-                return Value(value.as_array().size());
-            }
-
-            if (value.is_string()) {
-                return Value(value.as_string().size());
-            }
-
-            throw std::runtime_error("Argument must be an array or string.");
-        }));
     }
 
     Value evaluate(const std::unique_ptr<Expr> &expr);
