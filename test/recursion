@@ -1,0 +1,24 @@
+func ack(m, n) {
+    if ((m == 0)) {
+        return (n + 1)
+    }
+
+    if ((n == 0)) {
+        return call ack((m - 1), 1)
+    }
+
+    return call ack((m - 1), call ack(m, (n - 1)))
+}
+
+func pow(n, x){
+    if ((x == 0)){
+        return 1
+    }
+
+    return (n * call pow(n, (x - 1)))
+}
+
+main {
+    # call print("ack(3,5) =", call ack(3,5)) -> 253
+    call print("6^7 =", call pow(6,7))
+}

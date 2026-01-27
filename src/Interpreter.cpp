@@ -22,14 +22,21 @@ void Interpreter::execute(const std::unique_ptr<Stmnt> &stmnt) {
     stmnt->accept(*this);
 }
 
-void Interpreter::execute_in_new_env(const std::vector<std::unique_ptr<Stmnt> > &stmnts, const std::shared_ptr<Env>& new_env) {
-    const std::shared_ptr<Env> previous_env = local_env;
-    local_env = new_env;
-
+void Interpreter::execute_stmnts(const std::vector<std::unique_ptr<Stmnt>>& stmnts) {
     for (const auto& stmnt : stmnts) {
         execute(stmnt);
     }
+}
 
+void Interpreter::execute_in_new_env(const std::vector<std::unique_ptr<Stmnt> > &stmnts, const std::shared_ptr<Env>& new_env) {
+    const std::shared_ptr<Env> previous_env = local_env;
+    local_env = new_env;
+    try {
+        execute_stmnts(stmnts);
+    }catch (ReturnException& _) {
+        local_env = previous_env;
+        throw;
+    }
     local_env = previous_env;
 }
 
@@ -77,65 +84,6 @@ Value Interpreter::visit_unary_expr(const UnaryExpr &expr) {
 }
 
 Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
-    const Value lhs = evaluate(expr.lhs);
-    const Value rhs = evaluate(expr.rhs);
-
-    if (expr.op == "*") {
-        return Value(lhs.as_number() * rhs.as_number());
-    }
-
-    if (expr.op == "/"){
-        return Value(lhs.as_number() / rhs.as_number());
-    }
-
-    if (expr.op == "-") {
-        return Value(lhs.as_number() - rhs.as_number());
-    }
-
-    if (expr.op == "&") {
-        return Value(lhs.as_number() & rhs.as_number());
-    }
-
-    if (expr.op == "|") {
-        return Value(lhs.as_number() | rhs.as_number());
-    }
-
-    if (expr.op == "%") {
-        return Value(lhs.as_number() % rhs.as_number());
-    }
-
-    if (expr.op == "==") {
-        return Value(lhs == rhs);
-    }
-
-    if (expr.op == "!=") {
-        return Value(lhs != rhs);
-    }
-
-    if (expr.op == ">") {
-        return Value(lhs.as_number() > rhs.as_number());
-    }
-
-    if (expr.op == ">>") {
-        return Value(lhs.as_number() >> rhs.as_number());
-    }
-
-    if (expr.op == "<") {
-        return Value(lhs.as_number() < rhs.as_number());
-    }
-
-    if (expr.op == "<<") {
-        return Value(lhs.as_number() << rhs.as_number());
-    }
-
-    if (expr.op == "<=") {
-        return Value(lhs.as_number() <= rhs.as_number());
-    }
-
-    if (expr.op == ">=") {
-        return Value(lhs.as_number() >= rhs.as_number());
-    }
-
     if (expr.op == "&&" || expr.op == "||") {
         return evaluate_logical_expr(expr);
     }
@@ -144,9 +92,24 @@ Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
         return evaluate_addition(expr);
     }
 
-    if (expr.op == "^") {
-        return Value(evaluate(expr.lhs).as_number() ^ evaluate(expr.rhs).as_number());
-    }
+    const Value lhs = evaluate(expr.lhs);
+    const Value rhs = evaluate(expr.rhs);
+
+    if (expr.op == "*") {return Value(lhs.as_number() * rhs.as_number());}
+    if (expr.op == "/") return Value(lhs.as_number() / rhs.as_number());
+    if (expr.op == "-") return Value(lhs.as_number() - rhs.as_number());
+    if (expr.op == "%") return Value(lhs.as_number() % rhs.as_number());
+    if (expr.op == "==") return Value(lhs == rhs);
+    if (expr.op == "!=") return Value(lhs != rhs);
+    if (expr.op == "<")  return Value(lhs.as_number() < rhs.as_number());
+    if (expr.op == "<=") return Value(lhs.as_number() <= rhs.as_number());
+    if (expr.op == ">")  return Value(lhs.as_number() > rhs.as_number());
+    if (expr.op == ">=") return Value(lhs.as_number() >= rhs.as_number());
+    if (expr.op == "&")  return Value(lhs.as_number() & rhs.as_number());
+    if (expr.op == "|")  return Value(lhs.as_number() | rhs.as_number());
+    if (expr.op == "^")  return Value(lhs.as_number() ^ rhs.as_number());
+    if (expr.op == "<<") return Value(lhs.as_number() << rhs.as_number());
+    if (expr.op == ">>") return Value(lhs.as_number() >> rhs.as_number());
 
     throw std::runtime_error("Unsupported binary operator");
 }
@@ -249,15 +212,21 @@ void Interpreter::visit_return_stmnt(const ReturnStmnt &stmnt) {
 }
 
 void Interpreter::visit_if_stmnt(const IfStmnt &stmnt) {
-
+    if (evaluate(stmnt.condition).is_truthy()) {
+        execute_stmnts(stmnt.then_branch);
+    }else {
+        execute_stmnts(stmnt.else_branch);
+    }
 }
 
 void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
-
+    while (evaluate(stmnt.condition).is_truthy()) {
+        execute_stmnts(stmnt.body);
+    }
 }
 
 void Interpreter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
-    stmnt.function_call_expr->accept(*this);
+    evaluate(stmnt.function_call_expr);
 }
 
 void Interpreter::visit_function_decl(const FunctionDecl &func) {
@@ -270,9 +239,7 @@ void Interpreter::visit_program(const ProgramDecl &program) {
     }
 
     try {
-        for (const auto& stmnt : program.body) {
-            execute(stmnt);
-        }
+        execute_stmnts(program.body);
     }catch (ReturnException& return_exception) {
         if (!return_exception.value.is_number()) {
             throw std::runtime_error("Attempt to return from main with non-number.");
