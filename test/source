@@ -1,5 +1,4 @@
 
 main{
-    decl myfoo = "foo\\nf"
-    call print(myfoo)
+    call print("foo\tf")
 }

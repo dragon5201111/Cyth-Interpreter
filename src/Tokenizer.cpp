@@ -1,5 +1,7 @@
 #include "Tokenizer.h"
 
+#include <iostream>
+#include <ostream>
 #include <stdexcept>
 
 Token Tokenizer::last() {
@@ -101,14 +103,35 @@ void Tokenizer::skip_whitespace() {
     }
 }
 
-// TODO: fix to handle escape characters
 Token Tokenizer::get_string() {
-    const int sub_start = ++current;
+    current++; // skip opening quote
+    std::string string;
+
     while (current < input_size && input[current] != '\"') {
-        current++;
+        if (input[current] == '\\' && current + 1 < input_size) {
+            switch (input[current + 1]) {
+                case 't': string += '\t'; break;
+                case 'n': string += '\n'; break;
+                case '"': string += '"'; break;
+                case '\'': string += '\''; break;
+                case '\\': string += '\\'; break;
+                default: throw std::runtime_error("Invalid escape sequence");
+            }
+            current += 2;
+        }else {
+            string += input[current];
+            current++;
+        }
     }
-    return Token(TokenType::STRING, input.substr(sub_start, current++ - sub_start), current_line);
+
+    if (current >= input_size) {
+        throw std::runtime_error("Unterminated string literal");
+    }
+
+    current++; // skip closing quote
+    return Token(TokenType::STRING, string, current_line);
 }
+
 
 Token Tokenizer::match_operator(const char current_char, const char expected, const std::string& two_char) {
     if (current + 1 < input_size && input[current + 1] == expected) {
