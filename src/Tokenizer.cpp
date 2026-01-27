@@ -101,6 +101,7 @@ void Tokenizer::skip_whitespace() {
     }
 }
 
+// TODO: fix to handle escape characters
 Token Tokenizer::get_string() {
     const int sub_start = ++current;
     while (current < input_size && input[current] != '\"') {

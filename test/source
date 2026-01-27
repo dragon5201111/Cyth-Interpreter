@@ -1,9 +1,5 @@
-func mod(x){
-    x = x
-}
 
 main{
-    decl x = 5
-    call mod(25)
-    return x
+    decl myfoo = "foo\\nf"
+    call print(myfoo)
 }

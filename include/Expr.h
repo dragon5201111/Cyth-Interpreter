@@ -16,7 +16,7 @@ class Value final : public Printable {
     [[nodiscard]] std::string to_string_impl(const std::monostate&) const { return "nil"; }
     [[nodiscard]] std::string to_string_impl(const bool b) const { return b ? "true" : "false"; }
     [[nodiscard]] std::string to_string_impl(const int64_t n) const { return std::to_string(n); }
-    [[nodiscard]] std::string to_string_impl(const std::string& s) const { return "\"" + s + "\""; }
+    [[nodiscard]] std::string to_string_impl(const std::string& s) const { return s; }
     [[nodiscard]] std::string to_string_impl(const std::deque<Value>& arr) const {
         std::string result = "[";
         for (size_t i = 0; i < arr.size(); ++i) {
