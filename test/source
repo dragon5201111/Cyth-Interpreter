@@ -1,4 +1,3 @@
-
-main{
-    call print((1 == 1))
+main {
+    return -234
 }
