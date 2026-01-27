@@ -22,13 +22,9 @@ public:
         global_env = std::make_shared<Env>();
         local_env = global_env;
 
-        // TODO: Move primitives into another file
-        local_env->define("print", std::make_shared<PrimitiveFunction>([](const std::vector<Value>& args) {
-            for (const auto& arg : args) {
-                std::cout << arg << " ";
-            }
-            return Value();
-        }));
+        for (const auto& [name, function] : PrimitiveFunctions::primitive_functions) {
+            local_env->define(name, function);
+        }
     }
 
     Value evaluate(const std::unique_ptr<Expr> &expr);
