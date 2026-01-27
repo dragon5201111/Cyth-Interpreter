@@ -25,8 +25,7 @@ void Interpreter::execute_in_new_env(const std::vector<std::unique_ptr<Stmnt> > 
 }
 
 Value Interpreter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
-    std::vector<Value> values;
-    values.reserve(expr.elements.size());
+    std::deque<Value> values;
 
     for (const auto& e : expr.elements) {
         values.push_back(evaluate(e));

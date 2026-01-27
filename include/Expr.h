@@ -1,14 +1,14 @@
 #pragma once
+#include <deque>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <variant>
 #include <vector>
-
 #include "Print.h"
 
 class Value;
-using ValueVariant = std::variant<std::monostate, bool, int64_t, std::string, std::vector<Value>>;
+using ValueVariant = std::variant<std::monostate, bool, int64_t, std::string, std::deque<Value>>;
 
 class Value final : public Printable {
     ValueVariant value;
@@ -17,7 +17,7 @@ class Value final : public Printable {
     [[nodiscard]] std::string to_string_impl(const bool b) const { return b ? "true" : "false"; }
     [[nodiscard]] std::string to_string_impl(const int64_t n) const { return std::to_string(n); }
     [[nodiscard]] std::string to_string_impl(const std::string& s) const { return "\"" + s + "\""; }
-    [[nodiscard]] std::string to_string_impl(const std::vector<Value>& arr) const {
+    [[nodiscard]] std::string to_string_impl(const std::deque<Value>& arr) const {
         std::string result = "[";
         for (size_t i = 0; i < arr.size(); ++i) {
             result += arr[i].to_string();
@@ -34,7 +34,7 @@ public:
     explicit Value(bool b) : value(b) {}
     explicit Value(int64_t n) : value(n) {}
     explicit Value(std::string s) : value(std::move(s)) {}
-    explicit Value(std::vector<Value> v) : value(std::move(v)) {}
+    explicit Value(std::deque<Value> v) : value(std::move(v)) {}
 
     [[nodiscard]] bool is_truthy() const {
         if (is_nil()) {
@@ -72,9 +72,9 @@ public:
     [[nodiscard]] bool is_string() const { return std::holds_alternative<std::string>(value); }
     [[nodiscard]] std::string as_string() const { return std::get<std::string>(value); }
 
-    [[nodiscard]] bool is_array() const { return std::holds_alternative<std::vector<Value>>(value); }
-    [[nodiscard]] const std::vector<Value>& as_array() const { return std::get<std::vector<Value>>(value); }
-    [[nodiscard]] std::vector<Value>& as_array() { return std::get<std::vector<Value>>(value);}
+    [[nodiscard]] bool is_array() const { return std::holds_alternative<std::deque<Value>>(value); }
+    [[nodiscard]] const std::deque<Value>& as_array() const { return std::get<std::deque<Value>>(value); }
+    [[nodiscard]] std::deque<Value>& as_array() { return std::get<std::deque<Value>>(value);}
 
     bool operator==(const Value& other) const {
         if (this->is_number() && other.is_number()) {
