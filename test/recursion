@@ -11,6 +11,11 @@ func ack(m, n) {
 }
 
 func pow(n, x){
+    if ((x < 0)){
+        call print("pow expects non-negative number.")
+        call exit(-1)
+    }
+
     if ((x == 0)){
         return 1
     }
