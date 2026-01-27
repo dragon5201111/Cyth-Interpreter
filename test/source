@@ -1,4 +1,4 @@
 
 main{
-    call print((0 ^ 1))
+    call print((1 == 1))
 }

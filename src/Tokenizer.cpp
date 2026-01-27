@@ -1,7 +1,7 @@
 #include "Tokenizer.h"
 
 #include <iostream>
-#include <ostream>
+#include <algorithm>
 #include <stdexcept>
 
 Token Tokenizer::last() {
@@ -55,17 +55,17 @@ Token Tokenizer::advance_current() {
         case '%': current++; return Token(TokenType::OPERATOR, "%", current_line);
         case '^': current++; return Token(TokenType::OPERATOR, "^", current_line);
         case '<':
-            return match_operator("<", {'=', '<'}, {"<=", "<<"});
+            return match_operator("<", {"=", "<"}, {"<=", "<<"});
         case '>':
-            return match_operator(">", {'=', '>'}, {">=", ">>"});
+            return match_operator(">", {"=", ">"}, {">=", ">>"});
         case '!':
-            return match_operator("!", {'='}, {"!="});
+            return match_operator("!", {"="}, {"!="});
         case '=':
-            return match_operator("=", {'='}, {"=="});
+            return match_operator("=", {"="}, {"=="});
         case '&':
-            return match_operator("&", {'&'}, {"&&"});
+            return match_operator("&", {"&"}, {"&&"});
         case '|':
-            return match_operator("|", {'|'}, {"||"});
+            return match_operator("|", {"|"}, {"||"});
         case '\"':
             return get_string();
         default:
@@ -136,21 +136,33 @@ Token Tokenizer::get_string() {
     return Token(TokenType::STRING, string, current_line);
 }
 
-Token Tokenizer::match_operator(const std::string& current_char, const std::vector<char> &expected, const std::vector<std::string> &match) {
+Token Tokenizer::match_operator(const std::string& current_char, const std::vector<std::string> &expected, const std::vector<std::string> &match) {
     const size_t expected_size = expected.size();
+    std::vector<std::pair<std::string, int>> matches;
+
     for (int i = 0; i < expected_size; i++) {
         if (match_next(expected[i])) {
-            current += static_cast<int>(match[i].size());
-            return Token(TokenType::OPERATOR, match[i], current_line);
+            matches.emplace_back(match[i], static_cast<int>(match[i].size()));
         }
+    }
+
+    // Could be multiple matches, find one with the biggest size
+    if (!matches.empty()) {
+        const auto max_token = max_element(matches.begin(), matches.end(), [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) {
+            return a.second < b.second;
+        });
+
+        current += max_token->second;
+        return Token(TokenType::OPERATOR, max_token->first, current_line);
     }
 
     current++;
     return Token(TokenType::OPERATOR, current_char, current_line);
 }
 
-bool Tokenizer::match_next(const char expected) const {
-    if (current + 1 < input_size && input[current + 1] == expected) {
+bool Tokenizer::match_next(const std::string& expected) const {
+    const auto expected_size = expected.size();
+    if (current + expected_size < input_size && input.substr(current + 1, expected_size) == expected) {
         return true;
     }
     return false;
