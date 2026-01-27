@@ -11,9 +11,9 @@ func ack(m, n) {
 }
 
 func pow(n, x){
-    if ((x < 0)){
-        call print("pow expects non-negative number.")
-        call exit(-1)
+    if (((x < 0) || (n < 0))){
+        call print("pow expects non-negative numbers.")
+        call exit(-1) # Primitive function
     }
 
     if ((x == 0)){
@@ -25,5 +25,5 @@ func pow(n, x){
 
 main {
     # call print("ack(3,5) =", call ack(3,5)) -> 253
-    call print("6^7 =", call pow(6,7))
+    call print("6^7 =", call pow(6, 7))
 }
