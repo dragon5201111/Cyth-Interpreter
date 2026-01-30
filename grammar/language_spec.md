@@ -9,7 +9,16 @@
 ## Expressions
 ```
 <expression> := <binary> | <unary> | <primary>
-<primary> := <bool> | <number> | <string> | <identifier> | <function-call> | <array-literal> | <array-access> | "(" <expression> ")" | "nil"
+<primary> := <bool> 
+    | <number> 
+    | <string> 
+    | <identifier> 
+    | <function-call> 
+    | <array-literal> 
+    | <array-access> 
+    | "(" <expression> ")" 
+    | "nil"
+    
 <array-literal> := "[" <expression-list>? "]"
 <array-access> := (<identifier> | <array-access>) "[" <expression> "]"
 <unary> := "!" <expression>
@@ -18,13 +27,38 @@
 <number> := <digit>+
 <string> := "\"" <char>* "\""
 <char> := any printable character except '"'
-<op> := "+" | "-" | "*" | "/"  | "==" | "!=" | "%" | "<=" | "<" | ">=" | ">" | "&" | "&&" | "|" | "||" | "<<" | ">>"
+<op> := "+" 
+    | "-" 
+    | "*" 
+    | "/"  
+    | "==" 
+    | "!=" 
+    | "%" 
+    | "<=" 
+    | "<" 
+    | ">=" 
+    | ">" 
+    | "&" 
+    | "&&" 
+    | "|" 
+    | "||" 
+    | "<<" 
+    | ">>"
+
 <function-call> := "call" <identifier> "(" <expression-list>? ")"
 <expression-list> := <expression> ("," <expression>)*
 ```
 ## Statements
 ```
-<statement> := <variable-declaration> | <variable-assignment> | <return> | <print> | <while> | <if> | <function-call-stmnt>
+<statement> := <variable-declaration> 
+    | <variable-assignment> 
+    | <return> 
+    | <print> 
+    | <while> 
+    | <if> 
+    | <function-call-stmnt> 
+    | <break>
+    
 <variable-declaration> := decl <identifier> ("=" <expression>)?
 <variable-assignment> := (<identifier> | <array-access>) "=" <expression>
 <while> := while (<expression>) { <statement>+ }
@@ -32,6 +66,7 @@
 <return> := return <expression>
 <print> := print(<expression>)
 <function-call-stmnt> := "call" <identifier> "(" <expression-list>? ")"
+<break> := break
 ```
 
 ## Declarations

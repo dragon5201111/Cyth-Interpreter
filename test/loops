@@ -1,6 +1,6 @@
 func myrec(n){
     if ((n == 0)){
-        return 1
+        return nil
     }
 
     while ((true == true)){
@@ -13,6 +13,5 @@ func myrec(n){
 }
 
 main {
-
     call myrec(5)
 }
