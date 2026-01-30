@@ -53,6 +53,7 @@ std::unique_ptr<Stmnt> Parser::parse_stmnt() {
         case TokenType::RETURN: return parse_return();
         case TokenType::IF: return parse_if();
         case TokenType::WHILE: return parse_while();
+        case TokenType::BREAK: return std::make_unique<BreakStmnt>();
         case TokenType::CALL: return std::make_unique<FunctionCallStmnt>(parse_function_call_expr());
         default: throw std::runtime_error("Token " + token.to_string() + " is not a valid start of a statement.");
     }

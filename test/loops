@@ -1,0 +1,18 @@
+func myrec(n){
+    if ((n == 0)){
+        return 1
+    }
+
+    while ((true == true)){
+        call print(n)
+        break
+        call print("this shouldn't be executed!")
+    }
+
+    call myrec((n - 1))
+}
+
+main {
+
+    call myrec(5)
+}

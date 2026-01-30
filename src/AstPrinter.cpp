@@ -69,6 +69,10 @@ Value AstPrinter::visit_nil_expr(const NilExpr &expr) {
     return Value();
 }
 
+void AstPrinter::visit_break_stmnt(const BreakStmnt &stmnt) {
+    writer->write("break");
+}
+
 void AstPrinter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
     writer->write("decl " + stmnt.name);
     if (stmnt.initializer) {

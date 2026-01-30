@@ -4,6 +4,7 @@
 #include <utility>
 #include "Expr.h"
 
+class BreakStmnt;
 class VariableDeclStmnt;
 class AssignStmnt;
 class ReturnStmnt;
@@ -14,6 +15,7 @@ class FunctionCallStmnt;
 class StmntVisitor {
 public:
     virtual ~StmntVisitor() = default;
+    virtual void visit_break_stmnt(const BreakStmnt& stmnt) = 0;
     virtual void visit_variable_decl_stmnt(const VariableDeclStmnt& stmnt) = 0;
     virtual void visit_variable_assign_stmnt(const AssignStmnt& stmnt) = 0;
     virtual void visit_return_stmnt(const ReturnStmnt& stmnt) = 0;
@@ -26,6 +28,15 @@ class Stmnt {
 public:
     virtual ~Stmnt() = default;
     virtual void accept(StmntVisitor& visitor) const = 0;
+};
+
+class BreakStmnt final : public Stmnt {
+public:
+    explicit BreakStmnt() = default;
+
+    void accept(StmntVisitor& visitor) const override {
+        visitor.visit_break_stmnt(*this);
+    }
 };
 
 class VariableDeclStmnt final : public Stmnt {

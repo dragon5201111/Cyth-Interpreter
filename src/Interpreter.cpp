@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stack>
 #include <stdexcept>
+#include "Builtin.h"
 #include "Call.h"
 
 void Interpreter::define_primitives() const {
@@ -175,6 +176,10 @@ Value Interpreter::visit_nil_expr(const NilExpr &expr) {
     return Value();
 }
 
+void Interpreter::visit_break_stmnt(const BreakStmnt &stmnt) {
+    throw BreakException();
+}
+
 void Interpreter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
     Value value = stmnt.initializer ? evaluate(stmnt.initializer) : Value();
     local_env->define(stmnt.name, std::move(value));
@@ -221,7 +226,11 @@ void Interpreter::visit_if_stmnt(const IfStmnt &stmnt) {
 
 void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
     while (evaluate(stmnt.condition).is_truthy()) {
-        execute_stmnts(stmnt.body);
+        try {
+            execute_stmnts(stmnt.body);
+        }catch (BreakException& _) {
+            break;
+        }
     }
 }
 

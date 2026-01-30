@@ -11,6 +11,8 @@ class Tokenizer {
         {"if", TokenType::IF},
         {"else", TokenType::ELSE},
         {"while", TokenType::WHILE},
+        {"for", TokenType::FOR},
+        {"break", TokenType::BREAK},
         {"return", TokenType::RETURN},
         {"decl", TokenType::DECL},
         {"call", TokenType::CALL},

@@ -5,6 +5,8 @@ enum class TokenType {
     IF,
     ELSE,
     WHILE,
+    FOR,
+    BREAK,
     RETURN,
     DECL,
     CALL,

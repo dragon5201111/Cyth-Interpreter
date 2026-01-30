@@ -24,6 +24,7 @@ public:
     Value visit_function_call_expr(const FunctionCallExpr &expr) override;
     Value visit_nil_expr(const NilExpr &expr) override;
 
+    void visit_break_stmnt(const BreakStmnt &stmnt) override;
     void visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) override;
     void visit_variable_assign_stmnt(const AssignStmnt &stmnt) override;
     void visit_return_stmnt(const ReturnStmnt &stmnt) override;

@@ -23,6 +23,8 @@ public:
             case TokenType::IF: string_rep = "IF"; break;
             case TokenType::ELSE: string_rep = "ELSE"; break;
             case TokenType::WHILE: string_rep = "WHILE"; break;
+            case TokenType::FOR: string_rep = "FOR"; break;
+            case TokenType::BREAK: string_rep = "BREAK"; break;
             case TokenType::RETURN: string_rep = "RETURN"; break;
             case TokenType::DECL: string_rep = "DECL"; break;
             case TokenType::CALL: string_rep = "CALL"; break;
