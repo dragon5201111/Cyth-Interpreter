@@ -29,7 +29,7 @@ void Interpreter::execute_stmnts(const std::vector<std::unique_ptr<Stmnt>>& stmn
     }
 }
 
-void Interpreter::execute_in_new_env(const std::vector<std::unique_ptr<Stmnt> > &stmnts, const std::shared_ptr<Env>& new_env) {
+void Interpreter::execute_in_new_env(const std::vector<std::unique_ptr<Stmnt>> &stmnts, const std::shared_ptr<Env>& new_env) {
     const std::shared_ptr<Env> previous_env = local_env;
     local_env = new_env;
     try {
@@ -189,7 +189,7 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
     Value value = evaluate(stmnt.rhs);
 
     if (const auto identifier = dynamic_cast<const IdentifierExpr*>(stmnt.lhs.get())) {
-        local_env->assign(identifier->name, std::move(value));
+        local_env->bind(identifier->name, std::move(value));
         return;
     }
 
@@ -236,6 +236,8 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
 
 void Interpreter::visit_for_stmnt(const ForStmnt &stmnt) {
     // TODO
+    // Execute for loop in new env (bind initializer) if has initializer
+
 }
 
 

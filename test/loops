@@ -13,8 +13,12 @@ func myrec(n){
 }
 
 main {
-    for (,,i = 0){
+    for (x=[1,2,34],,i = 0){
         break
     }
+    # decl i = 0
+    # while (true){
+    #   return 21
+    # }
     call myrec(5)
 }

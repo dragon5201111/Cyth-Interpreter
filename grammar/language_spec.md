@@ -61,7 +61,7 @@
     
 <variable-declaration> := decl <identifier> ("=" <expression>)?
 <variable-assignment> := (<identifier> | <array-access>) "=" <expression>
-<for> := for (<variable-declaration>?,<expression>?,<variable-assignment>?) { <statement>+ }
+<for> := for ((<variable-declaration> | <variable-assignment>)?,<expression>?,<variable-assignment>?) { <statement>+ }
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ } (else { <statement>+ })?
 <return> := return <expression>

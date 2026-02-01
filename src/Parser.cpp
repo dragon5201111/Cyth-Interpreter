@@ -112,12 +112,17 @@ std::unique_ptr<Stmnt> Parser::parse_for() {
 
     std::unique_ptr<Stmnt> initializer = {};
     if (tokenizer.peek().get_type() != TokenType::COMMA) {
-        check_token_type(tokenizer.next(), TokenType::DECL, "decl");
-        initializer = parse_variable_decl();
+        const TokenType next_token_type = tokenizer.peek().get_type();
+        tokenizer.next();
+        if (next_token_type == TokenType::DECL) {
+            initializer = parse_variable_decl(); // decl _ = _
+        }else {
+            initializer = parse_assignment(); // _ = _
+        }
     }
     check_token_type(tokenizer.next(), TokenType::COMMA, "comma");
 
-    std::unique_ptr<Expr> condition = {};
+    std::unique_ptr<Expr> condition = std::make_unique<BoolExpr>(true);
     if (tokenizer.peek().get_type() != TokenType::COMMA) {
         condition = parse_expr();
     }

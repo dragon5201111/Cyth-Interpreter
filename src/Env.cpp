@@ -5,14 +5,14 @@ void Env::define(const std::string& name, Binding value) {
     bindings[name] = std::move(value);
 }
 
-void Env::assign(const std::string& name, Binding value) {
+void Env::bind(const std::string& name, Binding value) {
     if (bindings.count(name)) {
         bindings[name] = std::move(value);
         return;
     }
 
     if (enclosing) {
-        enclosing->assign(name, std::move(value));
+        enclosing->bind(name, std::move(value));
         return;
     }
 
