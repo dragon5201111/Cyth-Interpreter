@@ -106,12 +106,12 @@ public:
 
 class ForStmnt final : public Stmnt {
 public:
-    std::unique_ptr<VariableDeclStmnt> initializer;
+    std::unique_ptr<Stmnt> initializer;
     std::unique_ptr<Expr> condition;
-    std::unique_ptr<AssignStmnt> assignment;
+    std::unique_ptr<Stmnt> assignment;
     std::vector<std::unique_ptr<Stmnt>> body;
 
-    explicit ForStmnt(std::unique_ptr<VariableDeclStmnt> initializer, std::unique_ptr<Expr> condition, std::unique_ptr<AssignStmnt> assignment, std::vector<std::unique_ptr<Stmnt>> body) :
+    explicit ForStmnt(std::unique_ptr<Stmnt> initializer, std::unique_ptr<Expr> condition, std::unique_ptr<Stmnt> assignment, std::vector<std::unique_ptr<Stmnt>> body) :
         initializer(std::move(initializer)), condition(std::move(condition)), assignment(std::move(assignment)), body(std::move(body)) {}
 
     void accept(StmntVisitor& visitor) const override {

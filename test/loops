@@ -13,5 +13,8 @@ func myrec(n){
 }
 
 main {
+    for (,,i = 0){
+        break
+    }
     call myrec(5)
 }

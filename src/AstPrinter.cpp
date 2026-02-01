@@ -122,14 +122,22 @@ void AstPrinter::visit_while_stmnt(const WhileStmnt &stmnt) {
 
 void AstPrinter::visit_for_stmnt(const ForStmnt &stmnt) {
     writer->write("for (");
-    stmnt.initializer->accept(*this);
+    if (stmnt.initializer) {
+        stmnt.initializer->accept(*this);
+    }
     writer->write(",");
-    stmnt.condition->accept(*this);
+    if (stmnt.condition) {
+        stmnt.condition->accept(*this);
+    }
     writer->write(",");
-    stmnt.assignment->accept(*this);
-    writer->write("){");
+    if (stmnt.assignment) {
+        stmnt.assignment->accept(*this);
+
+    }
+    writer->write("){\n");
     for (const auto& s : stmnt.body) {
         s->accept(*this);
+        writer->write("\n");
     }
     writer->write("}");
 }

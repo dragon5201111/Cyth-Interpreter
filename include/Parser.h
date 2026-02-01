@@ -17,6 +17,7 @@ class Parser {
 
     std::unique_ptr<Stmnt> parse_if();
     std::unique_ptr<Stmnt> parse_while();
+    std::unique_ptr<Stmnt> parse_for();
     std::vector<std::unique_ptr<Stmnt>> parse_branch();
     std::vector<std::unique_ptr<Stmnt>> parse_stmnts(const std::function<bool()>& should_continue);
 

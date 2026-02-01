@@ -53,6 +53,7 @@ std::unique_ptr<Stmnt> Parser::parse_stmnt() {
         case TokenType::RETURN: return parse_return();
         case TokenType::IF: return parse_if();
         case TokenType::WHILE: return parse_while();
+        case TokenType::FOR: return parse_for();
         case TokenType::BREAK: return std::make_unique<BreakStmnt>();
         case TokenType::CALL: return std::make_unique<FunctionCallStmnt>(parse_function_call_expr());
         default: throw std::runtime_error("Token " + token.to_string() + " is not a valid start of a statement.");
@@ -104,6 +105,32 @@ std::unique_ptr<Stmnt> Parser::parse_while() {
     std::unique_ptr<Expr> condition = parse_expr();
     check_token_type(tokenizer.next(), TokenType::RIGHT_PAREN, "right parenthesis");
     return std::make_unique<WhileStmnt>(std::move(condition), std::move(parse_branch()));
+}
+
+std::unique_ptr<Stmnt> Parser::parse_for() {
+    check_token_type(tokenizer.next(), TokenType::LEFT_PAREN, "left parenthesis");
+
+    std::unique_ptr<Stmnt> initializer = {};
+    if (tokenizer.peek().get_type() != TokenType::COMMA) {
+        check_token_type(tokenizer.next(), TokenType::DECL, "decl");
+        initializer = parse_variable_decl();
+    }
+    check_token_type(tokenizer.next(), TokenType::COMMA, "comma");
+
+    std::unique_ptr<Expr> condition = {};
+    if (tokenizer.peek().get_type() != TokenType::COMMA) {
+        condition = parse_expr();
+    }
+    check_token_type(tokenizer.next(), TokenType::COMMA, "comma");
+
+    std::unique_ptr<Stmnt> assignment = {};
+    if (tokenizer.peek().get_type() != TokenType::RIGHT_PAREN) {
+        tokenizer.next(); // Parse assignment uses previous token, must advance to '='
+        assignment = parse_assignment();
+    }
+
+    check_token_type(tokenizer.next(), TokenType::RIGHT_PAREN, "right parenthesis");
+    return std::make_unique<ForStmnt>(std::move(initializer), std::move(condition), std::move(assignment), std::move(parse_branch()));
 }
 
 std::vector<std::string> Parser::parse_identifiers(
