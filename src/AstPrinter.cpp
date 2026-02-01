@@ -120,6 +120,20 @@ void AstPrinter::visit_while_stmnt(const WhileStmnt &stmnt) {
     writer->write("}");
 }
 
+void AstPrinter::visit_for_stmnt(const ForStmnt &stmnt) {
+    writer->write("for (");
+    stmnt.initializer->accept(*this);
+    writer->write(",");
+    stmnt.condition->accept(*this);
+    writer->write(",");
+    stmnt.assignment->accept(*this);
+    writer->write("){");
+    for (const auto& s : stmnt.body) {
+        s->accept(*this);
+    }
+    writer->write("}");
+}
+
 void AstPrinter::visit_function_decl(const FunctionDecl &func) {
     writer->write("func " + func.name + "(");
     for (const auto& param : func.parameters) {

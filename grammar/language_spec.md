@@ -61,11 +61,12 @@
     
 <variable-declaration> := decl <identifier> ("=" <expression>)?
 <variable-assignment> := (<identifier> | <array-access>) "=" <expression>
+<for> := for (<variable-declaration>?,<expression>?,<variable-assignment>?) { <statement>+ }
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ } (else { <statement>+ })?
 <return> := return <expression>
 <print> := print(<expression>)
-<function-call-stmnt> := "call" <identifier> "(" <expression-list>? ")"
+<function-call-stmnt> := <function-call>
 <break> := break
 ```
 

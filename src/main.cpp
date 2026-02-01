@@ -6,6 +6,7 @@
 
 int main(int argc, char ** argv) {
     std::string source;
+
     int opt;
     while ((opt = getopt_long(argc, argv, "s:", nullptr, nullptr)) != -1) {
         if (opt == 's') {

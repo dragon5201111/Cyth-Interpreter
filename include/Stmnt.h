@@ -10,6 +10,7 @@ class AssignStmnt;
 class ReturnStmnt;
 class IfStmnt;
 class WhileStmnt;
+class ForStmnt;
 class FunctionCallStmnt;
 
 class StmntVisitor {
@@ -21,6 +22,7 @@ public:
     virtual void visit_return_stmnt(const ReturnStmnt& stmnt) = 0;
     virtual void visit_if_stmnt(const IfStmnt& stmnt) = 0;
     virtual void visit_while_stmnt(const WhileStmnt& stmnt) = 0;
+    virtual void visit_for_stmnt(const ForStmnt& stmnt) = 0;
     virtual void visit_function_call_stmnt(const FunctionCallStmnt& stmnt) = 0;
 };
 
@@ -99,6 +101,21 @@ public:
 
     void accept(StmntVisitor& visitor) const override {
         visitor.visit_while_stmnt(*this);
+    }
+};
+
+class ForStmnt final : public Stmnt {
+public:
+    std::unique_ptr<VariableDeclStmnt> initializer;
+    std::unique_ptr<Expr> condition;
+    std::unique_ptr<AssignStmnt> assignment;
+    std::vector<std::unique_ptr<Stmnt>> body;
+
+    explicit ForStmnt(std::unique_ptr<VariableDeclStmnt> initializer, std::unique_ptr<Expr> condition, std::unique_ptr<AssignStmnt> assignment, std::vector<std::unique_ptr<Stmnt>> body) :
+        initializer(std::move(initializer)), condition(std::move(condition)), assignment(std::move(assignment)), body(std::move(body)) {}
+
+    void accept(StmntVisitor& visitor) const override {
+        visitor.visit_for_stmnt(*this);
     }
 };
 

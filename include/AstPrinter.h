@@ -30,6 +30,7 @@ public:
     void visit_return_stmnt(const ReturnStmnt &stmnt) override;
     void visit_if_stmnt(const IfStmnt &stmnt) override;
     void visit_while_stmnt(const WhileStmnt &stmnt) override;
+    void visit_for_stmnt(const ForStmnt &stmnt) override;
     void visit_function_call_stmnt(const FunctionCallStmnt &stmnt) override;
 
     void visit_function_decl(const FunctionDecl &func) override;

@@ -234,6 +234,11 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
     }
 }
 
+void Interpreter::visit_for_stmnt(const ForStmnt &stmnt) {
+
+}
+
+
 void Interpreter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
     evaluate(stmnt.function_call_expr);
 }
