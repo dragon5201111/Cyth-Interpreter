@@ -11,6 +11,7 @@ func foo(){
 }
 
 main {
+    # Demonstration of binding and loops
     decl i = 20
     call print("main i before for", i, "\n")
     for (,,){

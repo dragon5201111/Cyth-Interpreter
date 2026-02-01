@@ -1,0 +1,8 @@
+main {
+    decl i = 0
+    while ((i < 5)){
+        call print(i)
+        i = (i + 1)
+        decl i = 5
+    }
+}

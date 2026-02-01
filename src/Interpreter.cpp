@@ -231,7 +231,7 @@ void Interpreter::visit_if_stmnt(const IfStmnt &stmnt) {
 }
 
 void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
-    // TODO: Rethink solution
+    // TODO: Rethink solution ??
     while (evaluate(stmnt.condition).is_truthy()) {
         try {
             execute_stmnts_in_new_env(stmnt.body, std::make_shared<Env>(local_env));
@@ -243,31 +243,31 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
 
 void Interpreter::visit_for_stmnt(const ForStmnt &stmnt) {
     // TODO: Rethink solution, REALLY hacky
-    const auto new_env = std::make_shared<Env>(local_env);
-
-    // If declaration, bind to new environment. If assignment, bind local environment
-    const auto& initializer = stmnt.initializer;
-    execute_action_in_new_env([&initializer, this] {
-        if (initializer) {
-            execute(initializer);
-        }
-    }, new_env);
-
-    const auto& condition = stmnt.condition;
-    const auto& body = stmnt.body;
-    const auto& assignment = stmnt.assignment;
-    execute_action_in_new_env([&condition, &body, &assignment, this] {
-        while (evaluate(condition).is_truthy()) {
-            try {
-                execute_stmnts(body);
-                if (assignment) {
-                    execute(assignment);
-                }
-            }catch (BreakException& _) {
-                break;
-            }
-        }
-    }, new_env);
+    // const auto new_env = std::make_shared<Env>(local_env);
+    //
+    // // If declaration, bind to new environment. If assignment, bind local environment
+    // const auto& initializer = stmnt.initializer;
+    // execute_action_in_new_env([&initializer, this] {
+    //     if (initializer) {
+    //         execute(initializer);
+    //     }
+    // }, new_env);
+    //
+    // const auto& condition = stmnt.condition;
+    // const auto& body = stmnt.body;
+    // const auto& assignment = stmnt.assignment;
+    // execute_action_in_new_env([&condition, &body, &assignment, this] {
+    //     while (evaluate(condition).is_truthy()) {
+    //         try {
+    //             execute_stmnts(body);
+    //             if (assignment) {
+    //                 execute(assignment);
+    //             }
+    //         }catch (BreakException& _) {
+    //             break;
+    //         }
+    //     }
+    // }, new_env);
 }
 
 
