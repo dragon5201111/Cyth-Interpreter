@@ -16,9 +16,13 @@ main {
     for (x=[1,2,34],,i = 0){
         break
     }
-    # decl i = 0
-    # while (true){
-    #   return 21
-    # }
-    call myrec(5)
+    decl i = 0
+    call print(i)
+    while (true){
+        decl i = 5
+        call print(i)
+        break
+    }
+    call print(i)
+    # call myrec(5)
 }

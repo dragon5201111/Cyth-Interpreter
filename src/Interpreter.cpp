@@ -225,6 +225,7 @@ void Interpreter::visit_if_stmnt(const IfStmnt &stmnt) {
 }
 
 void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
+    // TODO: Execute in new environment
     while (evaluate(stmnt.condition).is_truthy()) {
         try {
             execute_stmnts(stmnt.body);
@@ -236,8 +237,6 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
 
 void Interpreter::visit_for_stmnt(const ForStmnt &stmnt) {
     // TODO
-    // Execute for loop in new env (bind initializer) if has initializer
-
 }
 
 
