@@ -34,7 +34,8 @@ public:
     void execute(const std::unique_ptr<Stmnt> &stmnt);
     void execute_stmnts(const std::vector<std::unique_ptr<Stmnt>>& stmnts);
 
-    void execute_in_new_env(const std::vector<std::unique_ptr<Stmnt>>& stmnts, const std::shared_ptr<Env>& new_env);
+    void execute_action_in_new_env(const std::function<void()> &action, const std::shared_ptr<Env> &new_env);
+    void execute_stmnts_in_new_env(const std::vector<std::unique_ptr<Stmnt>>& stmnts, const std::shared_ptr<Env>& new_env);
 
     Value visit_array_literal_expr(const ArrayLiteralExpr &expr) override;
     Value visit_array_access_expr(const ArrayAccessExpr &expr) override;

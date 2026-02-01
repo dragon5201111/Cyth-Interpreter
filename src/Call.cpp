@@ -9,7 +9,7 @@ Value UserFunction::call(Interpreter &interpreter, const std::vector<Value> &arg
         new_env->define(function_decl.parameters[i], args[i]);
     }
     try {
-        interpreter.execute_in_new_env(function_decl.body, new_env);
+        interpreter.execute_stmnts_in_new_env(function_decl.body, new_env);
     }catch (ReturnException& return_exception) {
         return return_exception.value;
     }

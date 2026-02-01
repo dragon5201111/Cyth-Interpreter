@@ -29,12 +29,18 @@ void Interpreter::execute_stmnts(const std::vector<std::unique_ptr<Stmnt>>& stmn
     }
 }
 
-void Interpreter::execute_in_new_env(const std::vector<std::unique_ptr<Stmnt>> &stmnts, const std::shared_ptr<Env>& new_env) {
+void Interpreter::execute_stmnts_in_new_env(const std::vector<std::unique_ptr<Stmnt>> &stmnts, const std::shared_ptr<Env>& new_env) {
+    execute_action_in_new_env([&stmnts, this] {
+        execute_stmnts(stmnts);
+    }, new_env);
+}
+
+void Interpreter::execute_action_in_new_env(const std::function<void()>& action, const std::shared_ptr<Env>& new_env) {
     const std::shared_ptr<Env> previous_env = local_env;
     local_env = new_env;
     try {
-        execute_stmnts(stmnts);
-    }catch (ReturnException& _) {
+        action();
+    }catch (...) {
         local_env = previous_env;
         throw;
     }
@@ -225,10 +231,10 @@ void Interpreter::visit_if_stmnt(const IfStmnt &stmnt) {
 }
 
 void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
-    // TODO: Execute in new environment
+    // TODO: Rethink solution
     while (evaluate(stmnt.condition).is_truthy()) {
         try {
-            execute_stmnts(stmnt.body);
+            execute_stmnts_in_new_env(stmnt.body, std::make_shared<Env>(local_env));
         }catch (BreakException& _) {
             break;
         }
@@ -236,7 +242,32 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
 }
 
 void Interpreter::visit_for_stmnt(const ForStmnt &stmnt) {
-    // TODO
+    // TODO: Rethink solution, REALLY hacky
+    const auto new_env = std::make_shared<Env>(local_env);
+
+    // If declaration, bind to new environment. If assignment, bind local environment
+    const auto& initializer = stmnt.initializer;
+    execute_action_in_new_env([&initializer, this] {
+        if (initializer) {
+            execute(initializer);
+        }
+    }, new_env);
+
+    const auto& condition = stmnt.condition;
+    const auto& body = stmnt.body;
+    const auto& assignment = stmnt.assignment;
+    execute_action_in_new_env([&condition, &body, &assignment, this] {
+        while (evaluate(condition).is_truthy()) {
+            try {
+                execute_stmnts(body);
+                if (assignment) {
+                    execute(assignment);
+                }
+            }catch (BreakException& _) {
+                break;
+            }
+        }
+    }, new_env);
 }
 
 
