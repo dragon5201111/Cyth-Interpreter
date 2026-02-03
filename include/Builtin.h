@@ -29,18 +29,5 @@ namespace Builtins {
             exit(static_cast<int>(args[0].as_number()));
             return Value(); // Dummy return value
         })},
-
-    {"length", std::make_shared<PrimitiveFunction>([](const std::vector<Value>& args) {
-            if (args.size() != 1) {
-                throw std::invalid_argument("Length function must have exactly 1 argument.");
-            }
-
-            const auto& array = args[0];
-            if (!array.is_array()) {
-                throw std::invalid_argument("Length expects an array.");
-            }
-
-            return Value(static_cast<int64_t>(array.as_array().size()));
-        })}
     };
 }
