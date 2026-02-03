@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <variant>
+#include <cstdint>
 #include "Expr.h"
 #include "Call.h"
 

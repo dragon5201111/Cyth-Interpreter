@@ -1,5 +1,6 @@
 #include "Env.h"
 #include <stdexcept>
+#include <cstdint>
 
 void Env::define(const std::string& name, Binding value) {
     bindings[name] = std::move(value);

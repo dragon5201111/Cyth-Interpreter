@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <string>
 #include <variant>
+#include <cstdint>
 #include <vector>
 #include "Print.h"
 
