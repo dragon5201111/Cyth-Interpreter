@@ -4,5 +4,8 @@
 - [Documentation](#documentation)
 - [Usage](#usage)
 # Build Instructions
+On Linux:
+
+On Windows:
 # Usage
 # Documentation
