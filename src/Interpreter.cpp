@@ -245,7 +245,27 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
 }
 
 void Interpreter::visit_for_stmnt(const ForStmnt &stmnt) {
+    const auto new_env = std::make_shared<Env>(local_env);
+    execute_action_in_new_env([&stmnt, this] {
+        if (stmnt.initializer) {
+            execute(stmnt.initializer);
+        }
+    }, new_env);
 
+    execute_action_in_new_env([&stmnt, &new_env, this] {
+        while (evaluate(stmnt.condition).is_truthy()) {
+            try {
+                execute_stmnts_in_new_env(stmnt.body, std::make_shared<Env>(new_env)); // Execute in new env because stmnt may try to declare a variable with same binding as initializer
+                execute_action_in_new_env([&stmnt, this] {
+                    if (stmnt.assignment) {
+                        execute(stmnt.assignment);
+                    }
+                }, new_env);  // Update initializer from new env
+            }catch (BreakException& _) {
+                break;
+            }
+        }
+    }, new_env);
 }
 
 void Interpreter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
