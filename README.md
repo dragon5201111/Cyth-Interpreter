@@ -8,6 +8,7 @@ Before building, make sure you have the following installed on your native machi
 
 - CMake (i.e., Version 3.22-4.1.2)
 - C/C++ Compiler (e.g., gcc, clang, etc.)
+- make package (i.e., if you are on a Unix based system)
 
 Navigate to the project root directory (e.g., where src lives) and run the following based on your
 OS.
