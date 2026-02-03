@@ -1,7 +1,7 @@
 #include <functional>
 #include <stdexcept>
 
-#include "parser.h"
+#include "Parser.h"
 #include "Prog.h"
 #include "Stmnt.h"
 #include "Token.h"
