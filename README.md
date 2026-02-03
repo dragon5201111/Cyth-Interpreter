@@ -1,22 +1,34 @@
-# (Unamed - For Now...) Interpreter
+# (Not named - For Now...) Interpreter
 # Contents
 - [Build Instructions](#build-instructions)
 - [Documentation](#documentation)
 - [Usage](#usage)
 # Build Instructions
-On Linux:
+Before building, make sure you have the following installed on your native machine:
+
+- CMake (i.e., Version 3.22-4.1.2)
+- C/C++ Compiler (e.g., gcc, clang, etc.)
+
+Navigate to the project root directory (e.g., where src lives) and run the following based on your
+OS.
+### Building On Linux:
 ```
 mkdir build
 cd build
 cmake ..
 make
 ```
-On Windows:
+### Building On Windows:
 ```
 mkdir build
 cd build
 cmake ..
 cmake --build .
 ```
+This will install as `Interpreter`.
+
+### Build Notes:
+- The build process above was tested on two machines. One Windows (i.e., 11 Home) 
+    and Linux (i.e., Version 5.15.0-164-generic, Ubuntu 22.04.5) machine.
 # Usage
 # Documentation
