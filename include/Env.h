@@ -18,6 +18,7 @@ public:
         : enclosing(std::move(enclosing)) {}
 
     void define(const std::string& name, Binding value);
+    bool is_bound(const std::string& name, uint64_t depth) const;
     void bind(const std::string& name, Binding value);
     Binding& get(const std::string& name);
 };

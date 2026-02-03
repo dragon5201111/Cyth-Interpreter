@@ -5,6 +5,18 @@ void Env::define(const std::string& name, Binding value) {
     bindings[name] = std::move(value);
 }
 
+bool Env::is_bound(const std::string &name, const uint64_t depth) const {
+    if (depth == 0) {
+        return bindings.count(name) == 1;
+    }
+
+    if (enclosing) {
+        return enclosing->is_bound(name, depth - 1);
+    }
+
+    return false;
+}
+
 void Env::bind(const std::string& name, Binding value) {
     if (bindings.count(name)) {
         bindings[name] = std::move(value);
