@@ -4,30 +4,18 @@ project(Interpreter2 CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(include)
-
-add_executable(Interpreter2
-        src/main.cpp
-        include/TokenType.h
-        include/Token.h
-        src/Writer.cpp
-        include/Writer.h
-        include/Tokenizer.h
-        src/Tokenizer.cpp
-        include/Reader.h
-        src/Reader.cpp
-        include/Expr.h
-        include/Stmnt.h
-        include/Parser.h
-        src/Parser.cpp
-        src/AstPrinter.cpp
-        include/AstPrinter.h
-        include/Prog.h
-        include/Env.h
-        src/Env.cpp
-        include/Interpreter.h
-        src/Interpreter.cpp
-        include/Call.h
-        src/Call.cpp
-        include/Builtin.h
+set(SOURCES
+    src/main.cpp
+    src/Writer.cpp
+    src/Tokenizer.cpp
+    src/Reader.cpp
+    src/Parser.cpp
+    src/AstPrinter.cpp
+    src/Env.cpp
+    src/Interpreter.cpp
+    src/Call.cpp
 )
+
+add_executable(${PROJECT_NAME}  ${SOURCES})
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
