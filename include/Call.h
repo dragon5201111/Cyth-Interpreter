@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <utility>
 #include "Expr.h"
 #include "Prog.h"
 
@@ -14,7 +15,7 @@ public:
 
 
 class UserFunction final : public Callable {
-    std::shared_ptr<Env> enclosing_env;
+    std::weak_ptr<Env> enclosing_env; // Avoid circular references
     const FunctionDecl& function_decl;
 
 public:
