@@ -25,10 +25,10 @@ class Tokenizer {
     };
 
     std::string input;
-    std::string::size_type input_size;
+    std::string::size_type input_size{};
 
-    int current;
-    int current_line;
+    int current{};
+    int current_line{};
     std::optional<Token> cached;
     std::optional<Token> previous;
 
@@ -40,13 +40,14 @@ class Tokenizer {
     Token match_operator(const std::string& current_char, const std::vector<std::string> &expected, const std::vector<std::string> &match);
     bool match_next(const std::string&) const;
 public:
-    explicit Tokenizer(std::string input = "") {
+    explicit Tokenizer(std::string input = {}) {
         reset(std::move(input));
     }
 
     Token last();
     Token peek();
     Token next();
+
     void reset(std::string source); // Initializes all fields
     std::string get_input();
 };

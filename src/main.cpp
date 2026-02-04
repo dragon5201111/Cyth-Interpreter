@@ -8,6 +8,7 @@
 void usage();
 void print_usage_option(const std::string& option, const std::string& description);
 void run_source(const std::string& source, bool print_ast);
+void run_prompt();
 
 int main(const int argc, char ** argv) {
     bool print_ast = false;
@@ -35,7 +36,7 @@ int main(const int argc, char ** argv) {
     if (!source.empty()) {
         run_source(source, print_ast);
     }else {
-        std::cerr << "TODO: Implement REPL" << std::endl;
+        run_prompt();
     }
 
     return EXIT_SUCCESS;
@@ -68,4 +69,8 @@ void run_source(const std::string& source, bool print_ast) {
     }
 
     program_decl->accept(interpreter);
+}
+
+void run_prompt() {
+    std::cout << "TODO: Implement REPL" << std::endl;
 }

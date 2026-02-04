@@ -25,7 +25,7 @@ public:
 };
 
 
-class PrimitiveFunction : public Callable {
+class PrimitiveFunction final : public Callable {
     std::function<Value(const std::vector<Value>&)> function;
 public:
     explicit PrimitiveFunction(std::function<Value(const std::vector<Value>&)> function) : function(std::move(function)) {}
