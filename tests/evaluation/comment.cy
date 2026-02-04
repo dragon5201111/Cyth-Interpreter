@@ -25,6 +25,8 @@ main {
     `prefix` return 22
 
     `return 23 # Unreachable`
+
+    `"bro"`
 }
 
 `

@@ -117,7 +117,7 @@ void Tokenizer::skip_whitespace() {
     }
 
     if (in_multi_line_comment) {
-        throw std::runtime_error("Unterminated multiline comment");
+        throw std::runtime_error("Unterminated multi-line comment");
     }
 }
 
