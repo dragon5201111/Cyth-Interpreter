@@ -8,7 +8,7 @@
 #include "Tokenizer.h"
 
 class Parser {
-    Tokenizer tokenizer;
+    Tokenizer& tokenizer;
     // Statements
     std::unique_ptr<Stmnt> parse_variable_decl();
     std::unique_ptr<Stmnt> parse_assignment();
@@ -40,5 +40,5 @@ public:
     std::unique_ptr<FunctionDecl> parse_function_decl();
     std::unique_ptr<Stmnt> parse_stmnt();
     std::unique_ptr<Expr> parse_expr();
-    explicit Parser(Tokenizer tokenizer) : tokenizer(std::move(tokenizer)) {}
+    explicit Parser(Tokenizer&  tokenizer) : tokenizer(tokenizer) {}
 };
