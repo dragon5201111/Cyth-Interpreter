@@ -42,7 +42,7 @@ void Interpreter::execute_action_in_new_env(const std::function<void()>& action,
         action();
     }catch (...) {
         local_env = previous_env;
-        throw;
+        std::rethrow_exception(std::current_exception());
     }
     local_env = previous_env;
 }
