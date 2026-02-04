@@ -8,7 +8,10 @@
 #include "./Token.h"
 
 class Tokenizer {
-    const std::unordered_map<std::string, TokenType> fragment_map = {
+    const char SINGLE_LINE_COMMENT = '#';
+    const char MULTI_LINE_COMMENT = '`';
+
+    const std::unordered_map<std::string, TokenType> FRAGMENT_MAP = {
         {"if", TokenType::IF},
         {"else", TokenType::ELSE},
         {"while", TokenType::WHILE},

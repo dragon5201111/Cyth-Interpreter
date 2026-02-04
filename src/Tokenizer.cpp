@@ -83,9 +83,16 @@ Token Tokenizer::advance_current() {
 
 
 void Tokenizer::skip_whitespace() {
+    bool in_multi_line_comment = false;
     while (current < input_size) {
         const char current_char = input[current];
-        if (current_char == '#') {
+        if (current_char == MULTI_LINE_COMMENT){
+            in_multi_line_comment = !in_multi_line_comment;
+            current++; // Skip multi-line comment character
+            continue;
+        }
+
+        if (current_char == SINGLE_LINE_COMMENT && !in_multi_line_comment) {
             while (current < input_size && input[current] != '\n') {
                 current++;
             }
@@ -96,12 +103,21 @@ void Tokenizer::skip_whitespace() {
             current_line++;
         }
 
+        if (in_multi_line_comment) {
+            current++;
+            continue;
+        }
+
         if (std::isspace(current_char)) {
             current++;
             continue;
         }
 
         break;
+    }
+
+    if (in_multi_line_comment) {
+        throw std::runtime_error("Unterminated multiline comment");
     }
 }
 
@@ -184,8 +200,8 @@ Token Tokenizer::get_identifier() {
     }
 
     const std::string fragment = input.substr(sub_start, current - sub_start);
-    if (fragment_map.count(fragment)) {
-        return Token(fragment_map.at(fragment), current_line);
+    if (FRAGMENT_MAP.count(fragment)) {
+        return Token(FRAGMENT_MAP.at(fragment), current_line);
     }
 
     return Token(TokenType::IDENTIFIER, fragment, current_line);
