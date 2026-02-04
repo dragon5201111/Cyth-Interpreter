@@ -17,8 +17,10 @@ main {
         return 22
    }
    `
-                call print(2, "\n") #foo `suffix` #foo
-    call print(4, "\\n")
+       ``````call print(2, "\n") #foo `suffix` #foo
+    call print(4, "\n")
+    `prefix` decl myX = 23 `suffix`
+    call print(`my x#### passed here`"myX:", myX, "\n"`comment in args`)
     `Multi-line comment on single line`
     `prefix` return 22
 
