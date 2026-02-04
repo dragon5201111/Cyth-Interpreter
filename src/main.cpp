@@ -7,8 +7,9 @@
 
 void usage();
 void print_usage_option(const std::string& option, const std::string& description);
+void run_source(const std::string& source, bool print_ast);
 
-int main(int argc, char ** argv) {
+int main(const int argc, char ** argv) {
     bool print_ast = false;
     std::string source;
 
@@ -27,27 +28,17 @@ int main(int argc, char ** argv) {
         }else if (opt == '?' || opt == 'h') {
             if (opt == '?') std::cout << "Unknown option: "<< argv[optind - 1] <<std::endl;
             usage();
-            return 0;
+            return EXIT_FAILURE;
         }
     }
 
-    if (source.empty()) {
-        throw std::runtime_error("Source is empty.");
+    if (!source.empty()) {
+        run_source(source, print_ast);
+    }else {
+        std::cerr << "TODO: Implement REPL" << std::endl;
     }
 
-    FileReader file_reader(source);
-    Tokenizer tokenizer(file_reader.read());
-    Parser parser(tokenizer);
-    Interpreter interpreter;
-
-    const auto program_decl = parser.parse_program_decl();
-    if (print_ast) {
-        AstPrinter ast_printer(std::make_shared<ConsoleWriter>());
-        program_decl->accept(ast_printer);
-    }
-
-    program_decl->accept(interpreter);
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void usage() {
@@ -62,4 +53,19 @@ void print_usage_option(const std::string& option, const std::string& descriptio
     std::cout.setf(std::ios::left);
     std::cout << option;
     std::cout << description << std::endl;
+}
+
+void run_source(const std::string& source, bool print_ast) {
+    FileReader file_reader(source);
+    Tokenizer tokenizer(file_reader.read());
+    Parser parser(tokenizer);
+    Interpreter interpreter;
+
+    const auto program_decl = parser.parse_program_decl();
+    if (print_ast) {
+        AstPrinter ast_printer(std::make_shared<ConsoleWriter>());
+        program_decl->accept(ast_printer);
+    }
+
+    program_decl->accept(interpreter);
 }
