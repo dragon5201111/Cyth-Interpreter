@@ -191,20 +191,19 @@ Token Tokenizer::get_identifier() {
     return Token(TokenType::IDENTIFIER, fragment, current_line);
 }
 
-std::vector<Token> Tokenizer::collect() {
-    std::vector<Token> tokens;
-    Token token = peek();
-    do {
-        token = next();
-        tokens.push_back(token);
-    } while (token.get_type() != TokenType::END_OF_FILE);
-    return tokens;
+void Tokenizer::reset(std::string source) {
+    input_size = source.size();
+    input = std::move(source);
+    current = 0;
+    current_line = 1;
+    cached.reset();
+    previous.reset();
 }
 
-void Tokenizer::reset() {
-    current = 0;
-    cached.reset();
+std::string Tokenizer::get_input() {
+    return input;
 }
+
 
 
 

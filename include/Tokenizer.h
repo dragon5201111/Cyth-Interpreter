@@ -2,6 +2,7 @@
 
 #include <optional>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "./Token.h"
@@ -39,16 +40,13 @@ class Tokenizer {
     Token match_operator(const std::string& current_char, const std::vector<std::string> &expected, const std::vector<std::string> &match);
     bool match_next(const std::string&) const;
 public:
-    explicit Tokenizer(std::string input) {
-        this->input = std::move(input);
-        input_size = this->input.size();
-        current = 0;
-        current_line = 1;
+    explicit Tokenizer(std::string input = "") {
+        reset(std::move(input));
     }
 
     Token last();
     Token peek();
     Token next();
-    std::vector<Token> collect();
-    void reset();
+    void reset(std::string source); // Initializes all fields
+    std::string get_input();
 };
