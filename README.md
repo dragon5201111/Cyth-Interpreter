@@ -1,4 +1,4 @@
-# (Not named - For Now...) Interpreter
+# Cyth Interpreter
 # Contents
 - [Build Instructions](#build-instructions)
 - [Documentation](#documentation)
@@ -26,7 +26,7 @@ cd build
 cmake ..
 cmake --build .
 ```
-This will install as `Interpreter`.
+This will install as `Cyth`.
 
 ### Build Notes:
 - The build process above was tested on two machines. One Windows (i.e., 11 Home) 
