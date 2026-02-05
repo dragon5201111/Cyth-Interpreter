@@ -273,7 +273,7 @@ void Interpreter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
 }
 
 void Interpreter::visit_function_decl(const FunctionDecl &func) {
-    local_env->define(func.name, std::make_shared<UserFunction>(local_env, func));
+    local_env->define(func.name, std::make_shared<UserFunction>(func.parameters.size(),local_env, func));
 }
 
 void Interpreter::visit_program(const ProgramDecl &program) {

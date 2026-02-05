@@ -3,6 +3,8 @@
 #include "Interpreter.h"
 
 Value UserFunction::call(Interpreter &interpreter, const std::vector<Value> &args) {
+    check_arity(args);
+
     if (const auto enclosing = enclosing_env.lock()) {
         const auto new_env = std::make_shared<Env>(enclosing);
 
