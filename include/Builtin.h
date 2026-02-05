@@ -46,7 +46,7 @@ namespace Builtins {
                 throw std::invalid_argument("Number expects a string");
             }
 
-            return Value(static_cast<int64_t>(std::stoul(args[0].as_string())));
+            return Value(std::stoll(args[0].as_string()));
         })},
     };
 }

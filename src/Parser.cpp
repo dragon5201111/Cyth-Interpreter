@@ -183,7 +183,7 @@ std::unique_ptr<Expr> Parser::parse_expr() {
         case TokenType::END_OF_FILE: throw std::runtime_error("No expression to parse, end of file.");
         case TokenType::LEFT_PAREN: return parse_binary_expr();
         case TokenType::LEFT_BRACKET: return parse_array_literal_expr();
-        case TokenType::NUMBER: return std::make_unique<ConstantExpr>(static_cast<int64_t>(std::stoul(token.get_value())));
+        case TokenType::NUMBER: return std::make_unique<ConstantExpr>(std::stoll(token.get_value()));
         case TokenType::TRUE: return std::make_unique<BoolExpr>(true);
         case TokenType::FALSE: return std::make_unique<BoolExpr>(false);
         case TokenType::STRING: return std::make_unique<StringExpr>(token.get_value());

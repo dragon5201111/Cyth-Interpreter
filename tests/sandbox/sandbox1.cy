@@ -1,9 +1,10 @@
 main {
-    decl myHex = call hex(call number("521"))
-    if ((myHex == "0x209")){
-        call print("Yay!", "\n")
+    decl age = call number(call input("Enter your age:"))
+    if ((age < 18)){
+        call print("Access denied, too young.")
+    }else{
+        call print("Access granted.")
     }
 
-    call print("Max number:", call hex(NUMBER_MAX), "\n")
-    call print("Min number:", call hex(NUMBER_MIN))
+    call exit(0)
 }
