@@ -8,7 +8,8 @@
 
 namespace Builtins {
     const static std::unordered_map<std::string, Value> primitive_values = {
-        // Add primitive values here
+        {"NUMBER_MAX", Value(INT64_MAX)},
+        {"NUMBER_MIN", Value(INT64_MIN)}
     };
 
     const static std::unordered_map<std::string, std::shared_ptr<PrimitiveFunction>> primitive_functions = {
