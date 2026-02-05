@@ -9,7 +9,7 @@ Value UserFunction::call(Interpreter &interpreter, const std::vector<Value> &arg
         const auto new_env = std::make_shared<Env>(enclosing);
 
         for (size_t i = 0; i < args.size(); ++i) {
-            new_env->define(function_decl.parameters[i], args[i]);
+            new_env->bind(function_decl.parameters[i], args[i]);
         }
         try {
             interpreter.execute_stmnts_in_new_env(function_decl.body, new_env);

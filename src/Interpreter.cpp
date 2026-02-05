@@ -7,11 +7,11 @@
 
 void Interpreter::define_primitives() const {
     for (const auto& [name, function] : Builtins::primitive_functions) {
-        local_env->define(name, function);
+        local_env->bind(name, function);
     }
 
     for (const auto& [name, value] : Builtins::primitive_values) {
-        local_env->define(name, value);
+        local_env->bind(name, value);
     }
 }
 
@@ -188,18 +188,18 @@ void Interpreter::visit_break_stmnt(const BreakStmnt &stmnt) {
 
 void Interpreter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
     if (local_env->is_bound(stmnt.name, 0)) {
-        throw std::runtime_error("Previous declaration of " + stmnt.name);
+        throw std::runtime_error("Cannot define bound variable " + stmnt.name + "; redefinition of previous declaration");
     }
 
     Value value = stmnt.initializer ? evaluate(stmnt.initializer) : Value();
-    local_env->define(stmnt.name, std::move(value));
+    local_env->bind(stmnt.name, std::move(value));
 }
 
 void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
     Value value = evaluate(stmnt.rhs);
 
     if (const auto identifier = dynamic_cast<const IdentifierExpr*>(stmnt.lhs.get())) {
-        local_env->bind(identifier->name, std::move(value));
+        local_env->rebind(identifier->name, std::move(value));
         return;
     }
 
@@ -273,7 +273,8 @@ void Interpreter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
 }
 
 void Interpreter::visit_function_decl(const FunctionDecl &func) {
-    local_env->define(func.name, std::make_shared<UserFunction>(func.parameters.size(),local_env, func));
+    // Overwrite any existing functions; bind to newest function declaration
+    local_env->bind(func.name, std::make_shared<UserFunction>(func.parameters.size(),local_env, func));
 }
 
 void Interpreter::visit_program(const ProgramDecl &program) {
