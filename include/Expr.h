@@ -61,7 +61,6 @@ public:
         throw std::runtime_error("Cannot evaluate is truthy");
     }
 
-
     [[nodiscard]] bool is_nil() const { return std::holds_alternative<std::monostate>(value); }
 
     [[nodiscard]] bool is_bool() const { return std::holds_alternative<bool>(value); }
