@@ -10,15 +10,15 @@ class Env;
 class Callable {
     size_t arity;
 public:
-    static constexpr size_t NONE_OR_VARIABLE_ARGS = 0;
+    static constexpr size_t VARIABLE_ARITY = 0;
 
     explicit Callable(const size_t arity) : arity(arity) {}
     virtual ~Callable() = default;
     virtual Value call(Interpreter& interpreter, const std::vector<Value>& args) = 0;
 
     void check_arity(const std::vector<Value>& args) const {
-        if (const auto args_size = args.size(); arity != NONE_OR_VARIABLE_ARGS && arity != args_size) {
-            throw std::runtime_error("Arity mismatch: expected " + std::to_string(arity) + " args got, " + std::to_string(args_size));
+        if (const auto args_size = args.size(); arity != VARIABLE_ARITY && arity != args_size) {
+            throw std::runtime_error("Arity mismatch. Expected " + std::to_string(arity) + " arg(s) got, " + std::to_string(args_size));
         }
     }
 };

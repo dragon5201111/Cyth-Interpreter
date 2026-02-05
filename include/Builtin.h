@@ -12,7 +12,7 @@ namespace Builtins {
     };
 
     const static std::unordered_map<std::string, std::shared_ptr<PrimitiveFunction>> primitive_functions = {
-        {"print", std::make_shared<PrimitiveFunction>(Callable::NONE_OR_VARIABLE_ARGS, [](const std::vector<Value>& args) {
+        {"print", std::make_shared<PrimitiveFunction>(Callable::VARIABLE_ARITY, [](const std::vector<Value>& args) {
             const auto args_size = args.size();
             for (int i = 0; i < args_size; ++i) {
                 std::cout << args[i];
@@ -27,7 +27,7 @@ namespace Builtins {
             exit(static_cast<int>(args[0].as_number()));
             return Value(); // Dummy return value
         })},
-        {"input", std::make_shared<PrimitiveFunction>(Callable::NONE_OR_VARIABLE_ARGS, [](const std::vector<Value>& args) {
+        {"input", std::make_shared<PrimitiveFunction>(Callable::VARIABLE_ARITY, [](const std::vector<Value>& args) {
             if (!args.empty()) {
                 std::cout << args[0].as_string();
             }
