@@ -15,13 +15,17 @@
     | <identifier> 
     | <function-call> 
     | <array-literal> 
-    | <array-access> 
+
+    **TODO: Fix indexing grammar**
+    
     | "(" <expression> ")" 
     | "nil"
     
 <array-literal> := "[" <expression-list>? "]"
-<array-access> := (<identifier> | <array-access>) "[" <expression> "]"
-<unary> := "!" <expression>
+
+**TODO: Fix indexing grammar**
+
+<unary> := ("!" | "-") <expression>
 <binary> := "(" <expression> <op> <expression> ")"
 <bool> := "true" | "false"
 <number> := <digit>+
@@ -53,19 +57,17 @@
 <statement> := <variable-declaration> 
     | <variable-assignment> 
     | <return> 
-    | <print> 
     | <while> 
     | <if> 
     | <function-call-stmnt> 
     | <break>
     
 <variable-declaration> := decl <identifier> ("=" <expression>)?
-<variable-assignment> := (<identifier> | <array-access>) "=" <expression>
+<variable-assignment> := (<identifier> |  **TODO: Fix indexing grammar**) "=" <expression>
 <for> := for ((<variable-declaration> | <variable-assignment>)?,<expression>?,<variable-assignment>?) { <statement>+ }
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ } (else { <statement>+ })?
 <return> := return <expression>
-<print> := print(<expression>)
 <function-call-stmnt> := <function-call>
 <break> := break
 ```
