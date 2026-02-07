@@ -1,4 +1,4 @@
-# Cyth Interpreter
+# Cyth Interpreter Version 0.1.0
 # Contents
 - [Build Instructions](#build-instructions)
 - [Documentation](#documentation)
@@ -33,3 +33,5 @@ This will install as `Cyth`.
     and Linux (i.e., Version 5.15.0-164-generic, Ubuntu 22.04.5) machine.
 # Usage
 # Documentation
+Documentation on Cyth is found at this [<u>**link**</u>](doc/cyth-documentation.md), and is updated regularly.
+
