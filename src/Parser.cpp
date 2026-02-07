@@ -214,16 +214,16 @@ std::unique_ptr<Expr> Parser::parse_array_literal_expr() {
 
 
 std::unique_ptr<Expr> Parser::parse_identifier(const Token &token) {
-    std::unique_ptr<Expr> expr = std::make_unique<IdentifierExpr>(token.get_value());
+    std::unique_ptr<Expr> lhs = std::make_unique<IdentifierExpr>(token.get_value());
 
     while (tokenizer.peek().get_type() == TokenType::LEFT_BRACKET) {
         tokenizer.next();
-        std::unique_ptr<Expr> index = parse_expr();
+        std::unique_ptr<Expr> rhs = parse_expr();
         check_token_type(tokenizer.next(), TokenType::RIGHT_BRACKET, "right bracket");
-        expr = std::make_unique<ArrayAccessExpr>(std::move(expr), std::move(index));
+        lhs = std::make_unique<PostfixExpr>(std::move(lhs), std::move(rhs));
     }
 
-    return expr;
+    return lhs;
 }
 
 std::unique_ptr<Expr> Parser::parse_unary_expr(const Token& token) {

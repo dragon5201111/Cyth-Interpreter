@@ -14,7 +14,7 @@ public:
     explicit AstPrinter(std::shared_ptr<Writer> writer) : writer(std::move(writer)) {}
 
     Value visit_array_literal_expr(const ArrayLiteralExpr &expr) override;
-    Value visit_array_access_expr(const ArrayAccessExpr &expr) override;
+    Value visit_postfix_expr(const PostfixExpr &expr) override;
     Value visit_identifier_expr(const IdentifierExpr &expr) override;
     Value visit_unary_expr(const UnaryExpr &expr) override;
     Value visit_binary_expr(const BinaryExpr &expr) override;

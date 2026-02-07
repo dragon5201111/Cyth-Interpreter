@@ -12,10 +12,10 @@ Value AstPrinter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
     return Value();
 }
 
-Value AstPrinter::visit_array_access_expr(const ArrayAccessExpr &expr) {
-    expr.array->accept(*this);
+Value AstPrinter::visit_postfix_expr(const PostfixExpr &expr) {
+    expr.lhs->accept(*this);
     writer->write("[");
-    expr.index->accept(*this);
+    expr.rhs->accept(*this);
     writer->write("]");
     return Value();
 }

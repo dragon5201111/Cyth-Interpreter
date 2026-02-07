@@ -1,129 +1,13 @@
 #pragma once
-#include <deque>
+
 #include <memory>
-#include <stdexcept>
 #include <string>
-#include <variant>
 #include <cstdint>
 #include <vector>
-#include "Print.h"
-
-class Value;
-using ValueVariant = std::variant<std::monostate, bool, int64_t, std::string, std::deque<Value>>;
-
-class Value final : public Printable {
-    ValueVariant value;
-
-    [[nodiscard]] std::string to_string_impl(const std::monostate&) const { return "nil"; }
-    [[nodiscard]] std::string to_string_impl(const bool b) const { return b ? "true" : "false"; }
-    [[nodiscard]] std::string to_string_impl(const int64_t n) const { return std::to_string(n); }
-    [[nodiscard]] std::string to_string_impl(const std::string& s) const { return s; }
-    [[nodiscard]] std::string to_string_impl(const std::deque<Value>& arr) const {
-        std::string result = "[";
-        for (size_t i = 0; i < arr.size(); ++i) {
-            result += arr[i].to_string();
-            if (i + 1 < arr.size()) {
-                result += ", ";
-            }
-        }
-        result += "]";
-        return result;
-    }
-
-public:
-    explicit Value() : value(std::monostate{}) {}
-    explicit Value(bool b) : value(b) {}
-    explicit Value(int64_t n) : value(n) {}
-    explicit Value(std::string s) : value(std::move(s)) {}
-    explicit Value(std::deque<Value> v) : value(std::move(v)) {}
-
-    [[nodiscard]] bool is_truthy() const {
-        if (is_nil()) {
-            return false;
-        }
-
-        if (is_bool()) {
-            return as_bool();
-        }
-
-        if (is_number()) {
-            return as_number() != 0;
-        }
-
-        if (is_string()) {
-            return !as_string().empty();
-        }
-
-        if (is_array()) {
-            return !as_array().empty();
-        }
-
-        throw std::runtime_error("Cannot evaluate is truthy");
-    }
-
-    [[nodiscard]] bool is_nil() const { return std::holds_alternative<std::monostate>(value); }
-
-    [[nodiscard]] bool is_bool() const { return std::holds_alternative<bool>(value); }
-    [[nodiscard]] bool as_bool() const { return std::get<bool>(value); }
-
-    [[nodiscard]] bool is_number() const { return std::holds_alternative<int64_t>(value); }
-    [[nodiscard]] int64_t as_number() const { return std::get<int64_t>(value); }
-
-    [[nodiscard]] bool is_string() const { return std::holds_alternative<std::string>(value); }
-    [[nodiscard]] std::string as_string() const { return std::get<std::string>(value); }
-
-    [[nodiscard]] bool is_array() const { return std::holds_alternative<std::deque<Value>>(value); }
-    [[nodiscard]] const std::deque<Value>& as_array() const { return std::get<std::deque<Value>>(value); }
-    [[nodiscard]] std::deque<Value>& as_array() { return std::get<std::deque<Value>>(value);}
-
-    bool operator==(const Value& other) const {
-        if (this->is_number() && other.is_number()) {
-            return this->as_number() == other.as_number();
-        }
-
-        if (this->is_bool() && other.is_bool()) {
-            return this->as_bool() == other.as_bool();
-        }
-
-        if (this->is_nil() && other.is_nil()) {
-            return true;
-        }
-
-        if (this->is_string() && other.is_string()) {
-            return this->as_string() == other.as_string();
-        }
-
-        if (this->is_array() && other.is_array()) {
-            const auto& lhs_array = this->as_array();
-            const auto& rhs_array = other.as_array();
-
-            const auto lhs_array_size = lhs_array.size();
-            if (lhs_array_size != rhs_array.size()) {
-                return false;
-            }
-
-            for (size_t i = 0; i < lhs_array_size; ++i) {
-                if (lhs_array[i] != rhs_array[i]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        return false;
-    }
-
-    bool operator!=(const Value& other) const {
-        return !(*this == other);
-    }
-
-    [[nodiscard]] std::string to_string() const override {
-        return std::visit([this](const auto& v) { return this->to_string_impl(v); }, value);
-    }
-};
+#include "Value.h"
 
 class ArrayLiteralExpr;
-class ArrayAccessExpr;
+class PostfixExpr;
 class IdentifierExpr;
 class UnaryExpr;
 class BinaryExpr;
@@ -137,7 +21,7 @@ class ExprVisitor {
 public:
     virtual ~ExprVisitor() = default;
     virtual Value visit_array_literal_expr(const ArrayLiteralExpr& expr) = 0;
-    virtual Value visit_array_access_expr(const ArrayAccessExpr& expr) = 0;
+    virtual Value visit_postfix_expr(const PostfixExpr& expr) = 0;
     virtual Value visit_identifier_expr(const IdentifierExpr& expr) = 0;
     virtual Value visit_unary_expr(const UnaryExpr& expr) = 0;
     virtual Value visit_binary_expr(const BinaryExpr& expr) = 0;
@@ -165,15 +49,15 @@ public:
     }
 };
 
-class ArrayAccessExpr final : public Expr {
+class PostfixExpr final : public Expr {
 public:
-    std::unique_ptr<Expr> array;
-    std::unique_ptr<Expr> index;
+    std::unique_ptr<Expr> lhs;
+    std::unique_ptr<Expr> rhs;
 
-    ArrayAccessExpr(std::unique_ptr<Expr> array, std::unique_ptr<Expr> index) : array(std::move(array)), index(std::move(index)) {}
+    PostfixExpr(std::unique_ptr<Expr> lhs, std::unique_ptr<Expr> rhs) : lhs(std::move(lhs)), rhs(std::move(rhs)) {}
 
     Value accept(ExprVisitor& visitor) const override {
-        return visitor.visit_array_access_expr(*this);
+        return visitor.visit_postfix_expr(*this);
     }
 };
 

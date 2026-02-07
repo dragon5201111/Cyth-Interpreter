@@ -8,23 +8,17 @@
 
 ## Expressions
 ```
-<expression> := <binary> | <unary> | <primary>
+<expression> := <binary> | <unary> | <primary> | <postfix>
 <primary> := <bool> 
     | <number> 
     | <string> 
     | <identifier> 
     | <function-call> 
-    | <array-literal> 
-
-    **TODO: Fix indexing grammar**
-    
+    | <array-literal>     
     | "(" <expression> ")" 
     | "nil"
-    
+<postfix> := <primary> | <postfix> [ <expression> ]
 <array-literal> := "[" <expression-list>? "]"
-
-**TODO: Fix indexing grammar**
-
 <unary> := ("!" | "-") <expression>
 <binary> := "(" <expression> <op> <expression> ")"
 <bool> := "true" | "false"
@@ -54,17 +48,17 @@
 ```
 ## Statements
 ```
-<statement> := <variable-declaration> 
-    | <variable-assignment> 
+<statement> := <declaration> 
+    | <assignment> 
     | <return> 
     | <while> 
     | <if> 
     | <function-call-stmnt> 
     | <break>
     
-<variable-declaration> := decl <identifier> ("=" <expression>)?
-<variable-assignment> := (<identifier> |  **TODO: Fix indexing grammar**) "=" <expression>
-<for> := for ((<variable-declaration> | <variable-assignment>)?,<expression>?,<variable-assignment>?) { <statement>+ }
+<declaration> := decl <identifier> ("=" <expression>)?
+<assignment> := (<identifier> |  <postfix>) "=" <expression>
+<for> := for ((<declaration> | <assignment>)?,<expression>?,<assignment>?) { <statement>+ }
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ } (else { <statement>+ })?
 <return> := return <expression>
@@ -76,4 +70,36 @@
 ```
 <function-declaration> := func <identifier>(<param-list>?) { <statement>+ }
 <param-list> := <identifier> ("," <identifier>)*
+```
+
+## C Syntax BNF For Assignment
+```
+<unary-expression> ::= <postfix-expression>
+                     | ++ <unary-expression>
+                     | -- <unary-expression>
+                     | <unary-operator> <cast-expression>
+                     | sizeof <unary-expression>
+                     | sizeof <type-name>
+
+<assignment-expression> ::= <unary-expression> <assignment-operator> <assignment-expression>
+<expression> ::= <assignment-expression>
+               | <expression> , <assignment-expression>
+<postfix-expression> ::= <primary-expression>
+                       | <postfix-expression> [ <expression> ]
+                       | <postfix-expression> ( {<assignment-expression>}* )
+                       | <postfix-expression> . <identifier>
+                       | <postfix-expression> -> <identifier>
+                       | <postfix-expression> ++
+                       | <postfix-expression> --
+
+<primary-expression> ::= <identifier>
+                       | <constant>
+                       | <string>
+                       | ( <expression> )
+
+<constant> ::= <integer-constant>
+             | <character-constant>
+             | <floating-constant>
+             | <enumeration-constant>
+
 ```

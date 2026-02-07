@@ -14,6 +14,7 @@ set(SOURCES
     src/Env.cpp
     src/Interpreter.cpp
     src/Call.cpp
+    src/Value.cpp
 )
 
 add_executable(${PROJECT_NAME}  ${SOURCES})

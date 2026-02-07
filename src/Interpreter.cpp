@@ -57,17 +57,19 @@ Value Interpreter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
     return Value(values);
 }
 
-Value Interpreter::visit_array_access_expr(const ArrayAccessExpr &expr) {
-    const Value base = evaluate(expr.array);
+Value Interpreter::visit_postfix_expr(const PostfixExpr &expr) {
+    Value lhs = evaluate(expr.lhs);
+    const int64_t rhs = evaluate(expr.rhs).as_number();
 
-    const auto& array = base.as_array();
-    const uint64_t index = evaluate(expr.index).as_number();
-
-    if (index >= array.size()) {
-        throw std::runtime_error("Index out of bounds");
+    if (lhs.is_array()) {
+        return lhs.as_array()[rhs];
     }
 
-    return array[index];
+    if (lhs.is_string()) {
+        return Value(std::string(1, lhs.as_string()[rhs]));
+    }
+
+    throw std::runtime_error("Unsupported postfix.");
 }
 
 Value Interpreter::visit_identifier_expr(const IdentifierExpr &expr) {
@@ -196,30 +198,14 @@ void Interpreter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
 }
 
 void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
-    Value value = evaluate(stmnt.rhs);
-
-    if (const auto identifier = dynamic_cast<const IdentifierExpr*>(stmnt.lhs.get())) {
-        local_env->rebind(identifier->name, std::move(value));
+    if (const auto identifier = dynamic_cast<IdentifierExpr*>(stmnt.lhs.get())) {
+        local_env->rebind(identifier->name, evaluate(stmnt.rhs));
         return;
     }
 
-    auto parent = dynamic_cast<ArrayAccessExpr*>(stmnt.lhs.get());
-    std::deque<uint64_t> indices;
-    while (const auto current = dynamic_cast<ArrayAccessExpr*>(parent->array.get())) {
-        indices.push_front(evaluate(parent->index).as_number());
-        parent = current;
+    if (const auto postfix = dynamic_cast<PostfixExpr*>(stmnt.lhs.get())) {
+
     }
-
-    indices.push_front(evaluate(parent->index).as_number());
-    const auto identifier = dynamic_cast<IdentifierExpr*>(parent->array.get());
-    Value* array = &std::get<Value>(local_env->get(identifier->name));
-
-    for (size_t i = 1; i < indices.size(); ++i) {
-        array = &array->as_array()[indices.front()];
-        indices.pop_front();
-    }
-
-    array->as_array()[indices.front()] = std::move(value);
 }
 
 void Interpreter::visit_return_stmnt(const ReturnStmnt &stmnt) {
