@@ -204,7 +204,15 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
     }
 
     if (const auto postfix = dynamic_cast<PostfixExpr*>(stmnt.lhs.get())) {
+        auto lhs = evaluate(postfix->lhs);
+        const auto rhs = evaluate(postfix->rhs).as_number();
+        if (lhs.is_string()) {
+            lhs.as_string()[rhs] = evaluate(stmnt.rhs).as_string()[0];
+        }
 
+        if (lhs.is_array()) {
+            lhs.as_array()[rhs] = evaluate(stmnt.rhs);
+        }
     }
 }
 

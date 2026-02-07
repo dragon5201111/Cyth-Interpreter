@@ -1,10 +1,12 @@
 #include "Value.h"
 
-std::string Value::to_string_impl(const std::deque<Value> &arr) const {
+std::string Value::to_string_impl(const std::shared_ptr<std::deque<Value>> &arr) const {
     std::string result = "[";
-    for (size_t i = 0; i < arr.size(); ++i) {
-        result += arr[i].to_string();
-        if (i + 1 < arr.size()) {
+
+    const auto arr_size = arr->size();
+    for (size_t i = 0; i < arr_size; ++i) {
+        result += arr->at(i).to_string();
+        if (i + 1 < arr_size) {
             result += ", ";
         }
     }
