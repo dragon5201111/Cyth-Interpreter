@@ -1,5 +1,13 @@
 main {
-    decl mymat = [[1,2],[3,4]]
-    mymat[0] = [3,3]
-    call print(mymat)
+    decl myStr = "12345"
+    for (decl i = 0, (i < 5), i = (i + 1)){
+        myStr[i] = "0"
+        for (,,){
+            # Scoping with indexing
+            decl myStr = "12345"
+            myStr[i] = "1"
+            break
+        }
+    }
+    call print(myStr)
 }
