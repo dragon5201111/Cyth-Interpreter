@@ -12,6 +12,19 @@ main {
         if ((i != 19)){
             continue
         }
+
+        if ((i == 6)){
+            call print("Broke at 6!", "\n")
+            break
+        }
+    }
+
+    decl str = "f_o bar"
+    for (decl j = 0, (j < 7), j = (j + 1)){
+        if ((j == 1)){
+            continue
+        }
+        call print(str[j][1])
     }
 
     return i

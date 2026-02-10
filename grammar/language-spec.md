@@ -14,11 +14,13 @@
     | <string> 
     | <identifier> 
     | <function-call> 
-    | <array-literal>     
+    | <array-literal>    
+    | <set-literal> 
     | "(" <expression> ")" 
     | "nil"
 <postfix> := <primary> | <postfix> [ <expression> ]
 <array-literal> := "[" <expression-list>? "]"
+<set-literal> := "{" <expression-list>? "}"
 <unary> := ("!" | "-") <expression>
 <binary> := "(" <expression> <op> <expression> ")"
 <bool> := "true" | "false"
