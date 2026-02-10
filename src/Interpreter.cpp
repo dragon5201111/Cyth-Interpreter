@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include "Builtin.h"
 #include "Call.h"
+#include "Except.h"
 
 void Interpreter::define_primitives() const {
     for (const auto& [name, function] : Builtins::primitive_functions) {
@@ -27,6 +28,14 @@ void Interpreter::execute_stmnts(const std::vector<std::unique_ptr<Stmnt>>& stmn
     for (const auto& stmnt : stmnts) {
         execute(stmnt);
     }
+}
+
+void Interpreter::execute_stmnt_in_new_env(const std::unique_ptr<Stmnt> &stmnt, const std::shared_ptr<Env>& new_env) {
+    execute_action_in_new_env([&stmnt, this] {
+       if (stmnt) {
+           execute(stmnt);
+       }
+   }, new_env);
 }
 
 void Interpreter::execute_stmnts_in_new_env(const std::vector<std::unique_ptr<Stmnt>> &stmnts, const std::shared_ptr<Env>& new_env) {
@@ -188,6 +197,10 @@ void Interpreter::visit_break_stmnt(const BreakStmnt &stmnt) {
     throw BreakException();
 }
 
+void Interpreter::visit_continue_stmnt(const ContinueStmnt &stmnt) {
+    throw ContinueException();
+}
+
 void Interpreter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
     if (local_env->is_bound(stmnt.name, 0)) {
         throw std::runtime_error("Cannot define bound variable " + stmnt.name + "; redefinition of previous declaration");
@@ -237,29 +250,25 @@ void Interpreter::visit_while_stmnt(const WhileStmnt &stmnt) {
             execute_stmnts_in_new_env(stmnt.body, std::make_shared<Env>(local_env));
         }catch (BreakException& _) {
             break;
+        }catch (ContinueException& _) {
+            // Do nothing
         }
     }
 }
 
 void Interpreter::visit_for_stmnt(const ForStmnt &stmnt) {
     const auto new_env = std::make_shared<Env>(local_env);
-    execute_action_in_new_env([&stmnt, this] {
-        if (stmnt.initializer) {
-            execute(stmnt.initializer);
-        }
-    }, new_env);
+    execute_stmnt_in_new_env(stmnt.initializer, new_env);
 
     execute_action_in_new_env([&stmnt, &new_env, this] {
         while (evaluate(stmnt.condition).is_truthy()) {
             try {
                 execute_stmnts_in_new_env(stmnt.body, std::make_shared<Env>(new_env)); // Execute in new env because a stmnt may try to declare a variable with same binding as initializer
-                execute_action_in_new_env([&stmnt, this] {
-                    if (stmnt.assignment) {
-                        execute(stmnt.assignment);
-                    }
-                }, new_env);  // Update initializer from new env
+                execute_stmnt_in_new_env(stmnt.assignment, new_env);
             }catch (BreakException& _) {
                 break;
+            }catch (ContinueException& _) {
+                execute_stmnt_in_new_env(stmnt.assignment, new_env);
             }
         }
     }, new_env);
@@ -270,7 +279,7 @@ void Interpreter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {
 }
 
 void Interpreter::visit_function_decl(const FunctionDecl &func) {
-    // Overwrite any existing functions; bind to newest function declaration
+    // Overwrite any existing functions; bind to the newest function declaration
     local_env->bind(func.name, std::make_shared<UserFunction>(func.parameters.size(),local_env, func));
 }
 

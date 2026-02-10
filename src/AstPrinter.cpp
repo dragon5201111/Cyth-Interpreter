@@ -73,6 +73,10 @@ void AstPrinter::visit_break_stmnt(const BreakStmnt &stmnt) {
     writer->write("break");
 }
 
+void AstPrinter::visit_continue_stmnt(const ContinueStmnt &stmnt) {
+    writer->write("continue");
+}
+
 void AstPrinter::visit_variable_decl_stmnt(const VariableDeclStmnt &stmnt) {
     writer->write("decl " + stmnt.name);
     if (stmnt.initializer) {

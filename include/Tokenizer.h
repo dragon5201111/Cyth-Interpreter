@@ -17,6 +17,7 @@ class Tokenizer {
         {"while", TokenType::WHILE},
         {"for", TokenType::FOR},
         {"break", TokenType::BREAK},
+        {"continue", TokenType::CONTINUE},
         {"return", TokenType::RETURN},
         {"decl", TokenType::DECL},
         {"call", TokenType::CALL},

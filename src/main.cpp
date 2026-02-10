@@ -1,4 +1,5 @@
 #include <getopt.h>
+#include <iostream>
 #include "Interpreter.h"
 #include "Parser.h"
 #include "../include/Reader.h"

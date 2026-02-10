@@ -7,6 +7,7 @@ enum class TokenType {
     WHILE,
     FOR,
     BREAK,
+    CONTINUE,
     RETURN,
     DECL,
     CALL,

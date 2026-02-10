@@ -15,6 +15,7 @@ set(SOURCES
     src/Interpreter.cpp
     src/Call.cpp
     src/Value.cpp
+        include/Except.h
 )
 
 add_executable(${PROJECT_NAME}  ${SOURCES})

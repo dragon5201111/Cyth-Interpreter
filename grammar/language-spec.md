@@ -54,7 +54,8 @@
     | <while> 
     | <if> 
     | <function-call-stmnt> 
-    | <break>
+    | break
+    | continue
     
 <declaration> := decl <identifier> ("=" <expression>)?
 <assignment> := (<identifier> |  <postfix>) "=" <expression>
@@ -64,42 +65,11 @@
 <return> := return <expression>
 <function-call-stmnt> := <function-call>
 <break> := break
+<continue> := break
 ```
 
 ## Declarations
 ```
 <function-declaration> := func <identifier>(<param-list>?) { <statement>+ }
 <param-list> := <identifier> ("," <identifier>)*
-```
-
-## C Syntax BNF For Assignment
-```
-<unary-expression> ::= <postfix-expression>
-                     | ++ <unary-expression>
-                     | -- <unary-expression>
-                     | <unary-operator> <cast-expression>
-                     | sizeof <unary-expression>
-                     | sizeof <type-name>
-
-<assignment-expression> ::= <unary-expression> <assignment-operator> <assignment-expression>
-<expression> ::= <assignment-expression>
-               | <expression> , <assignment-expression>
-<postfix-expression> ::= <primary-expression>
-                       | <postfix-expression> [ <expression> ]
-                       | <postfix-expression> ( {<assignment-expression>}* )
-                       | <postfix-expression> . <identifier>
-                       | <postfix-expression> -> <identifier>
-                       | <postfix-expression> ++
-                       | <postfix-expression> --
-
-<primary-expression> ::= <identifier>
-                       | <constant>
-                       | <string>
-                       | ( <expression> )
-
-<constant> ::= <integer-constant>
-             | <character-constant>
-             | <floating-constant>
-             | <enumeration-constant>
-
 ```

@@ -1,5 +1,6 @@
 #include "Call.h"
 #include "Env.h"
+#include "Except.h"
 #include "Interpreter.h"
 
 Value UserFunction::call(Interpreter &interpreter, const std::vector<Value> &args) {
