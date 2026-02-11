@@ -243,6 +243,8 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
         if (lhs.is_set()) {
             throw std::runtime_error("Set is not subscriptable");
         }
+
+        throw std::runtime_error("Not subscriptable");
     }
 }
 

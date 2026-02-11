@@ -1,10 +1,10 @@
+// TODO: Refactor Value class
 #pragma once
 #include <deque>
 #include <memory>
 #include <set>
 #include <string>
 #include <variant>
-
 #include "Print.h"
 
 class Value;
@@ -16,7 +16,6 @@ using ValueVariant = std::variant<
     std::shared_ptr<std::deque<Value>>,
     std::shared_ptr<std::set<Value>>
 >;
-
 
 class Value final : public Printable {
     ValueVariant value;

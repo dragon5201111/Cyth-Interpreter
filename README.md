@@ -1,4 +1,4 @@
-# Cyth Interpreter Version 0.1.1
+# Cyth Interpreter Version 0.1.2
 # Contents
 - [Build Instructions](#build-instructions)
 - [Documentation](#documentation)
