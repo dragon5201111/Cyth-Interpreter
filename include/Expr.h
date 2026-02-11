@@ -7,6 +7,7 @@
 #include "Value.h"
 
 class ArrayLiteralExpr;
+class SetLiteralExpr;
 class PostfixExpr;
 class IdentifierExpr;
 class UnaryExpr;
@@ -21,6 +22,7 @@ class ExprVisitor {
 public:
     virtual ~ExprVisitor() = default;
     virtual Value visit_array_literal_expr(const ArrayLiteralExpr& expr) = 0;
+    virtual Value visit_set_literal_expr(const SetLiteralExpr& expr) = 0;
     virtual Value visit_postfix_expr(const PostfixExpr& expr) = 0;
     virtual Value visit_identifier_expr(const IdentifierExpr& expr) = 0;
     virtual Value visit_unary_expr(const UnaryExpr& expr) = 0;
@@ -38,14 +40,26 @@ public:
     virtual Value accept(ExprVisitor& visitor) const = 0;
 };
 
-class ArrayLiteralExpr final : public Expr {
+class ContainerExpr : public Expr {
 public:
     std::vector<std::unique_ptr<Expr>> elements;
+    explicit ContainerExpr(std::vector<std::unique_ptr<Expr>> elements) : elements(std::move(elements)) {}
+    Value accept(ExprVisitor& visitor) const override = 0;
+};
 
-    explicit ArrayLiteralExpr(std::vector<std::unique_ptr<Expr>> elements) : elements(std::move(elements)) {}
-
-    Value accept(ExprVisitor& visitor) const override {
+class ArrayLiteralExpr final : public ContainerExpr {
+public:
+    using ContainerExpr::ContainerExpr;
+    Value accept(ExprVisitor &visitor) const override {
         return visitor.visit_array_literal_expr(*this);
+    }
+};
+
+class SetLiteralExpr final : public ContainerExpr {
+public:
+    using ContainerExpr::ContainerExpr;
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_set_literal_expr(*this);
     }
 };
 

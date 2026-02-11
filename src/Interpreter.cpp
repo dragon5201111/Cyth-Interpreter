@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stack>
 #include <stdexcept>
+#include <vector>
 #include "Builtin.h"
 #include "Call.h"
 #include "Except.h"
@@ -58,11 +59,17 @@ void Interpreter::execute_action_in_new_env(const std::function<void()>& action,
 
 Value Interpreter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
     std::deque<Value> values;
-
     for (const auto& e : expr.elements) {
         values.push_back(evaluate(e));
     }
+    return Value(values);
+}
 
+Value Interpreter::visit_set_literal_expr(const SetLiteralExpr &expr) {
+    std::set<Value> values;
+    for (const auto& e : expr.elements) {
+        values.insert(evaluate(e));
+    }
     return Value(values);
 }
 
@@ -76,6 +83,10 @@ Value Interpreter::visit_postfix_expr(const PostfixExpr &expr) {
 
     if (lhs.is_string()) {
         return Value(std::string(1, lhs.as_string()[rhs]));
+    }
+
+    if (lhs.is_set()) {
+        throw std::runtime_error("Set is not subscriptable");
     }
 
     throw std::runtime_error("Unsupported postfix.");
@@ -229,6 +240,9 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
             lhs.as_array()[rhs] = value;
         }
 
+        if (lhs.is_set()) {
+            throw std::runtime_error("Set is not subscriptable");
+        }
     }
 }
 

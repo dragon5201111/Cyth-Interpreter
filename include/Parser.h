@@ -26,6 +26,7 @@ class Parser {
     // Expressions
     std::unique_ptr<Expr> parse_binary_expr();
     std::unique_ptr<Expr> parse_array_literal_expr();
+    std::unique_ptr<Expr> parse_set_literal_expr();
     std::unique_ptr<Expr> parse_identifier(const Token& token);
     std::unique_ptr<Expr> parse_unary_expr(const Token& token);
     std::unique_ptr<Expr> parse_function_call_expr();

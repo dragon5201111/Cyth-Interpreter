@@ -184,6 +184,7 @@ std::unique_ptr<Expr> Parser::parse_expr() {
         case TokenType::END_OF_FILE: throw std::runtime_error("No expression to parse, end of file.");
         case TokenType::LEFT_PAREN: return parse_binary_expr();
         case TokenType::LEFT_BRACKET: return parse_array_literal_expr();
+        case TokenType::LEFT_BRACE: return parse_set_literal_expr();
         case TokenType::NUMBER: return std::make_unique<ConstantExpr>(std::stoll(token.get_value()));
         case TokenType::TRUE: return std::make_unique<BoolExpr>(true);
         case TokenType::FALSE: return std::make_unique<BoolExpr>(false);
@@ -211,6 +212,11 @@ std::unique_ptr<Expr> Parser::parse_binary_expr() {
 std::unique_ptr<Expr> Parser::parse_array_literal_expr() {
     std::vector<std::unique_ptr<Expr>> expr_list = parse_expression_list_and_consume(TokenType::RIGHT_BRACKET, "right parenthesis");
     return std::make_unique<ArrayLiteralExpr>(std::move(expr_list));
+}
+
+std::unique_ptr<Expr> Parser::parse_set_literal_expr() {
+    std::vector<std::unique_ptr<Expr>> expr_list = parse_expression_list_and_consume(TokenType::RIGHT_BRACE, "right brace");
+    return std::make_unique<SetLiteralExpr>(std::move(expr_list));
 }
 
 

@@ -27,6 +27,7 @@ public:
     void execute_action_in_new_env(const std::function<void()> &action, const std::shared_ptr<Env> &new_env);
 
     Value visit_array_literal_expr(const ArrayLiteralExpr &expr) override;
+    Value visit_set_literal_expr(const SetLiteralExpr &expr) override;
     Value visit_postfix_expr(const PostfixExpr &expr) override;
 
     Value visit_identifier_expr(const IdentifierExpr &expr) override;

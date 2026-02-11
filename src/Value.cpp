@@ -1,17 +1,12 @@
 #include "Value.h"
+#include <stdexcept>
 
 std::string Value::to_string_impl(const std::shared_ptr<std::deque<Value>> &arr) const {
-    std::string result = "[";
+    return container_to_string(*arr, "[", "]");
+}
 
-    const auto arr_size = arr->size();
-    for (size_t i = 0; i < arr_size; ++i) {
-        result += arr->at(i).to_string();
-        if (i + 1 < arr_size) {
-            result += ", ";
-        }
-    }
-    result += "]";
-    return result;
+std::string Value::to_string_impl(const std::shared_ptr<std::set<Value> > &arr) const {
+    return container_to_string(*arr, "{", "}");
 }
 
 bool Value::is_truthy() const {
@@ -31,8 +26,13 @@ bool Value::is_truthy() const {
         return !as_string().empty();
     }
 
+    // TODO: Handle stl container case generically
     if (is_array()) {
         return !as_array().empty();
+    }
+
+    if (is_set()) {
+        return !as_set().empty();
     }
 
     throw std::runtime_error("Cannot evaluate is truthy");
@@ -55,22 +55,23 @@ bool Value::operator==(const Value &other) const {
         return this->as_string() == other.as_string();
     }
 
+    // TODO: Handle stl container case generically
     if (this->is_array() && other.is_array()) {
-        const auto& lhs_array = this->as_array();
-        const auto& rhs_array = other.as_array();
+        return containers_are_equal(this->as_array(), other.as_array());
+    }
 
-        const auto lhs_array_size = lhs_array.size();
-        if (lhs_array_size != rhs_array.size()) {
-            return false;
-        }
-
-        for (size_t i = 0; i < lhs_array_size; ++i) {
-            if (lhs_array[i] != rhs_array[i]) {
-                return false;
-            }
-        }
-        return true;
+    if (this->is_set() && other.is_set()) {
+        return containers_are_equal(this->as_set(), other.as_set());
     }
 
     return false;
+}
+
+template<typename C1, typename C2>
+bool Value::containers_are_equal(const C1 &c1, const C2 &c2) const {
+    if (c1.size() != c2.size()) {
+        return false;
+    }
+
+    return std::equal(c1.begin(), c1.end(), c2.begin(), c2.end());
 }

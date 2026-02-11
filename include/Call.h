@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <stdexcept>
 #include <utility>
 #include "Expr.h"
 #include "Prog.h"
