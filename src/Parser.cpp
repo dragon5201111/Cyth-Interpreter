@@ -81,7 +81,6 @@ std::unique_ptr<Stmnt> Parser::parse_assignment() {
 }
 
 std::unique_ptr<ReturnStmnt> Parser::parse_return() {
-    // TODO: Add empty return statement
     return std::make_unique<ReturnStmnt>(parse_expr());
 }
 
