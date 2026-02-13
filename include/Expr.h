@@ -14,7 +14,8 @@ class UnaryExpr;
 class BinaryExpr;
 class StringExpr;
 class BoolExpr;
-class ConstantExpr;
+class IntegerExpr;
+class DoubleExpr;
 class FunctionCallExpr;
 class NilExpr;
 
@@ -29,7 +30,8 @@ public:
     virtual Value visit_binary_expr(const BinaryExpr& expr) = 0;
     virtual Value visit_string_expr(const StringExpr& expr) = 0;
     virtual Value visit_bool_expr(const BoolExpr& expr) = 0;
-    virtual Value visit_constant_expr(const ConstantExpr& expr) = 0;
+    virtual Value visit_integer_expr(const IntegerExpr& expr) = 0;
+    virtual Value visit_double_expr(const DoubleExpr& expr) = 0;
     virtual Value visit_function_call_expr(const FunctionCallExpr& expr) = 0;
     virtual Value visit_nil_expr(const NilExpr& expr) = 0;
 };
@@ -132,13 +134,23 @@ public:
     }
 };
 
-class ConstantExpr final : public Expr {
+class IntegerExpr final : public Expr {
 public:
     int64_t value;
-    explicit ConstantExpr(const int64_t value) : value(value) {}
+    explicit IntegerExpr(const int64_t value) : value(value) {}
 
     Value accept(ExprVisitor& visitor) const override {
-        return visitor.visit_constant_expr(*this);
+        return visitor.visit_integer_expr(*this);
+    }
+};
+
+class DoubleExpr final : public Expr {
+public:
+    double value;
+    explicit DoubleExpr(const double value) : value(value) {}
+
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_double_expr(*this);
     }
 };
 

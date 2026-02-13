@@ -18,7 +18,8 @@ enum class TokenType {
     MAIN,
 
     // Types
-    NUMBER,
+    INTEGER,
+    DOUBLE,
     STRING,
     IDENTIFIER,
 

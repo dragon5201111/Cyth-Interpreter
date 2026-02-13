@@ -39,7 +39,8 @@ public:
 
     Value visit_string_expr(const StringExpr &expr) override;
     Value visit_bool_expr(const BoolExpr &expr) override;
-    Value visit_constant_expr(const ConstantExpr &expr) override;
+    Value visit_integer_expr(const IntegerExpr &expr) override;
+    Value visit_double_expr(const DoubleExpr &expr) override;
     Value visit_function_call_expr(const FunctionCallExpr &expr) override;
     Value visit_nil_expr(const NilExpr &expr) override;
 

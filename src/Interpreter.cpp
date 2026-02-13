@@ -185,7 +185,11 @@ Value Interpreter::visit_bool_expr(const BoolExpr &expr) {
     return Value(expr.value);
 }
 
-Value Interpreter::visit_constant_expr(const ConstantExpr &expr) {
+Value Interpreter::visit_integer_expr(const IntegerExpr &expr) {
+    return Value(Number(expr.value));
+}
+
+Value Interpreter::visit_double_expr(const DoubleExpr &expr) {
     return Value(Number(expr.value));
 }
 

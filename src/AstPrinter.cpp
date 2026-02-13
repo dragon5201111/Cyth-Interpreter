@@ -59,7 +59,12 @@ Value AstPrinter::visit_bool_expr(const BoolExpr &expr) {
     return Value();
 }
 
-Value AstPrinter::visit_constant_expr(const ConstantExpr &expr) {
+Value AstPrinter::visit_integer_expr(const IntegerExpr &expr) {
+    writer->write(std::to_string(expr.value));
+    return Value();
+}
+
+Value AstPrinter::visit_double_expr(const DoubleExpr &expr) {
     writer->write(std::to_string(expr.value));
     return Value();
 }

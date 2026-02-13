@@ -33,7 +33,7 @@ public:
             case TokenType::TRUE: string_rep = "TRUE"; break;
             case TokenType::FALSE: string_rep = "FALSE"; break;
             case TokenType::NIL: string_rep = "NIL"; break;
-            case TokenType::NUMBER: string_rep = "NUMBER"; break;
+            case TokenType::INTEGER: string_rep = "NUMBER"; break;
             case TokenType::STRING: string_rep = "STRING"; break;
             case TokenType::IDENTIFIER: string_rep = "IDENTIFIER"; break;
             case TokenType::OPERATOR: string_rep = "OPERATOR"; break;
