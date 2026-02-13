@@ -186,12 +186,23 @@ bool Tokenizer::match_next(const std::string& expected) const {
 
 
 Token Tokenizer::get_number() {
-    // TODO: Parse Double
     const int sub_start = current++;
-    while (current < input_size && std::isdigit(input[current])) {
+
+    bool dot_seen = false;
+    while (current < input_size && (std::isdigit(input[current]) || (input[current] == '.' && !dot_seen))) {
+        if (input[current] == '.') {
+            dot_seen = true;
+        }
         current++;
     }
-    return Token(TokenType::INTEGER, input.substr(sub_start, current - sub_start), current_line);
+
+    const std::string number = input.substr(sub_start, current - sub_start);
+
+    if (dot_seen) {
+        return Token(TokenType::DOUBLE, number, current_line);
+    }
+
+    return Token(TokenType::INTEGER, number, current_line);
 }
 
 Token Tokenizer::get_identifier() {

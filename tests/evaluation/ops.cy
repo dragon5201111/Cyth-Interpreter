@@ -16,7 +16,6 @@ main {
     call print((i == j), "\n")
     call print((i != j), "\n")
     call print((i ^ j), "\n")
-    decl myA = [1,2,3,4]
-    myA[0] = 23
-    call print(myA[0], myA)
+    decl myDubs = {0.25, 0.25, 0.5}
+    call print(myDubs)
 }
