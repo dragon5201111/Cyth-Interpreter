@@ -5,6 +5,7 @@
 ## Cyth Version 0.1.2
 ### What's new:
 - Added set data type.
+- Added support for doubles.
 ### Optimizations / Improvements:
 - Refactored Value class. to_string_impl for container objects - container objects now
 delegate to a container_to_string method. Similarly, a containers_are_equal method was defined to
