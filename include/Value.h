@@ -8,18 +8,16 @@
 #include "Num.h"
 #include "Print.h"
 
-class Value;
-using ValueVariant = std::variant<
-    std::monostate,
-    bool,
-    Number,
-    std::shared_ptr<std::string>,
-    std::shared_ptr<std::deque<Value>>,
-    std::shared_ptr<std::set<Value>>
->;
-
 class Value final : public Printable {
-    ValueVariant value;
+    std::variant<
+        std::monostate,
+        bool,
+        Number,
+        std::shared_ptr<std::string>,
+        std::shared_ptr<std::deque<Value>>,
+        std::shared_ptr<std::set<Value>>
+    > value;
+
     [[nodiscard]] std::string to_string_impl(const std::monostate&) const { return "nil"; }
     [[nodiscard]] std::string to_string_impl(const bool b) const { return b ? "true" : "false"; }
     [[nodiscard]] std::string to_string_impl(const Number& n) const { return n.to_string(); }
