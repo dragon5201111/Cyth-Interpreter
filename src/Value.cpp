@@ -19,7 +19,7 @@ bool Value::is_truthy() const {
     }
 
     if (is_number()) {
-        return as_number() != 0;
+        return !as_number().is_zero();
     }
 
     if (is_string()) {

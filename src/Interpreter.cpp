@@ -75,7 +75,7 @@ Value Interpreter::visit_set_literal_expr(const SetLiteralExpr &expr) {
 
 Value Interpreter::visit_postfix_expr(const PostfixExpr &expr) {
     Value lhs = evaluate(expr.lhs);
-    const int64_t rhs = evaluate(expr.rhs).as_number();
+    const int64_t rhs = static_cast<int64_t>(evaluate(expr.rhs).as_number());
 
     if (lhs.is_array()) {
         return lhs.as_array()[rhs];
@@ -186,7 +186,7 @@ Value Interpreter::visit_bool_expr(const BoolExpr &expr) {
 }
 
 Value Interpreter::visit_constant_expr(const ConstantExpr &expr) {
-    return Value(expr.value);
+    return Value(Number(expr.value));
 }
 
 Value Interpreter::visit_function_call_expr(const FunctionCallExpr &expr) {
@@ -229,22 +229,20 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
 
     if (const auto postfix = dynamic_cast<PostfixExpr*>(stmnt.lhs.get())) {
         auto lhs = evaluate(postfix->lhs);
-        const auto rhs = evaluate(postfix->rhs).as_number();
+        const int64_t rhs = static_cast<int64_t>(evaluate(postfix->rhs).as_number());
 
         Value value = evaluate(stmnt.rhs);
         if (lhs.is_string()) {
             lhs.as_string()[rhs] = value.as_string()[0];
         }
-
-        if (lhs.is_array()) {
+        else if (lhs.is_array()) {
             lhs.as_array()[rhs] = value;
         }
-
-        if (lhs.is_set()) {
+        else if (lhs.is_set()) {
             throw std::runtime_error("Set is not subscriptable");
+        }else {
+            throw std::runtime_error("Value is not subscriptable");
         }
-
-        throw std::runtime_error("Not subscriptable");
     }
 }
 
