@@ -16,6 +16,6 @@ main {
     call print((i == j), "\n")
     call print((i != j), "\n")
     call print((i ^ j), "\n")
-    decl myDubs = {0.25, 0.25, 0.5}
+    decl myDubs = {0.25, 0.25, 10.5}
     call print(myDubs)
 }
