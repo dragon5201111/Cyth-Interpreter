@@ -6,6 +6,7 @@
 ### What's new:
 - Added set data type.
 - Added support for doubles.
+- Added support for floats.
 - Added support hex numbers.
 ### Optimizations / Improvements:
 - Refactored Value class. to_string_impl for container objects - container objects now
