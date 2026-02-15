@@ -66,7 +66,8 @@ void usage() {
     std::cout << "Usage: Interpreter [options]" << std::endl;
     std::cout << "Options:" << std::endl;
     print_usage_option("-s", "Specify source file to execute.");
-    print_usage_option("--print-ast", "Print the ast of the source file to stdout.");
+    print_usage_option("--print-ast", "Print the ast of the source file to console.");
+    print_usage_option("--print-x86-64-intel", "Print the x86-64 assembly (Intel syntax) presentation of the source file to the console.");
 }
 
 void print_usage_option(const std::string& option, const std::string& description){
