@@ -193,6 +193,10 @@ Value Interpreter::visit_double_expr(const DoubleExpr &expr) {
     return Value(Number(expr.value));
 }
 
+Value Interpreter::visit_float_expr(const FloatExpr &expr) {
+    return Value(Number(expr.value));
+}
+
 Value Interpreter::visit_function_call_expr(const FunctionCallExpr &expr) {
     std::vector<Value> args;
     args.reserve(expr.args.size());

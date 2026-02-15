@@ -12,9 +12,10 @@ class Tokenizer {
     const char SINGLE_LINE_COMMENT = '#';
     const char MULTI_LINE_COMMENT = '`';
 
-    std::regex INTEGER_PATTERN = std::regex("[0-9]+");
-    std::regex DOUBLE_PATTERN = std::regex("[0-9]+\\.[0-9]*");
-    std::regex HEX_PATTERN = std::regex("0[xX][0-9a-fA-F]*");
+    std::regex INTEGER_PATTERN = std::regex(R"([0-9]+)");
+    std::regex DOUBLE_PATTERN = std::regex(R"([0-9]+\.[0-9]*)");
+    std::regex FLOAT_PATTERN = std::regex(R"([0-9]+\.[0-9]*[fF])");
+    std::regex HEX_PATTERN = std::regex(R"(0[xX][0-9a-fA-F]*)");
 
     const std::unordered_map<std::string, TokenType> FRAGMENT_MAP = {
         {"if", TokenType::IF},

@@ -69,6 +69,11 @@ Value AstPrinter::visit_double_expr(const DoubleExpr &expr) {
     return Value();
 }
 
+Value AstPrinter::visit_float_expr(const FloatExpr &expr) {
+    writer->write(std::to_string(expr.value));
+    return Value();
+}
+
 Value AstPrinter::visit_function_call_expr(const FunctionCallExpr &expr) {
    writer->write("call " + expr.name + "(");
     for (const auto& e : expr.args) {

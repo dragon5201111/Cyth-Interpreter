@@ -35,6 +35,7 @@ public:
             case TokenType::NIL: string_rep = "NIL"; break;
             case TokenType::INTEGER: string_rep = "INTEGER"; break;
             case TokenType::DOUBLE: string_rep = "DOUBLE"; break;
+            case TokenType::FLOAT: string_rep = "FLOAT"; break;
             case TokenType::HEX: string_rep = "HEX"; break;
             case TokenType::STRING: string_rep = "STRING"; break;
             case TokenType::IDENTIFIER: string_rep = "IDENTIFIER"; break;

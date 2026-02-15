@@ -23,6 +23,7 @@ public:
     Value visit_bool_expr(const BoolExpr &expr) override;
     Value visit_integer_expr(const IntegerExpr &expr) override;
     Value visit_double_expr(const DoubleExpr &expr) override;
+    Value visit_float_expr(const FloatExpr &expr) override;
     Value visit_function_call_expr(const FunctionCallExpr &expr) override;
     Value visit_nil_expr(const NilExpr &expr) override;
 

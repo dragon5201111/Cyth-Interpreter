@@ -192,6 +192,11 @@ Token Tokenizer::get_number() {
         number += input[current++];
     }
 
+    // Double has similar pattern to float, must check for float first as it requires a suffix
+    if (std::regex_match(number, FLOAT_PATTERN)) {
+        return Token(TokenType::FLOAT, number, current_line);
+    }
+
     if (std::regex_match(number, DOUBLE_PATTERN)) {
         return Token(TokenType::DOUBLE, number, current_line);
     }
@@ -203,6 +208,7 @@ Token Tokenizer::get_number() {
     if (std::regex_match(number, HEX_PATTERN)) {
         return Token(TokenType::HEX, number, current_line);
     }
+
 
     throw std::runtime_error("Invalid number " + number + " on line: " + std::to_string(current_line));
 }

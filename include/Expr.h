@@ -16,6 +16,7 @@ class StringExpr;
 class BoolExpr;
 class IntegerExpr;
 class DoubleExpr;
+class FloatExpr;
 class FunctionCallExpr;
 class NilExpr;
 
@@ -32,6 +33,7 @@ public:
     virtual Value visit_bool_expr(const BoolExpr& expr) = 0;
     virtual Value visit_integer_expr(const IntegerExpr& expr) = 0;
     virtual Value visit_double_expr(const DoubleExpr& expr) = 0;
+    virtual Value visit_float_expr(const FloatExpr& expr) = 0;
     virtual Value visit_function_call_expr(const FunctionCallExpr& expr) = 0;
     virtual Value visit_nil_expr(const NilExpr& expr) = 0;
 };
@@ -151,6 +153,16 @@ public:
 
     Value accept(ExprVisitor& visitor) const override {
         return visitor.visit_double_expr(*this);
+    }
+};
+
+class FloatExpr final : public Expr {
+public:
+    float value;
+    explicit FloatExpr(const float value) : value(value) {}
+
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_float_expr(*this);
     }
 };
 
