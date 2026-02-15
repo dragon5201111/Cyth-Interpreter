@@ -6,6 +6,9 @@ class Writer {
 public:
     virtual ~Writer() = default;
     virtual void write(std::string message) = 0;
+    virtual void write_ln(const std::string message) {
+        write(message + "\n");
+    }
 };
 
 class ConsoleWriter final : public Writer {

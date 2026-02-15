@@ -1,5 +1,6 @@
 #include <getopt.h>
 #include <iostream>
+#include "Assembler.h"
 #include "Interpreter.h"
 #include "Parser.h"
 #include "../include/Reader.h"
@@ -12,10 +13,11 @@ void run_source(const std::string& source, bool print_ast);
 void run_prompt();
 
 int main(const int argc, char ** argv) {
-    bool print_ast = false;
+    bool print_ast = false, print_x86_64_intel = false;
     std::string source;
 
     constexpr option options[] = {
+        {"print-x86-64-intel", 0, nullptr, 'x'},
         {"print-ast", 0, nullptr, 'a'},
         {"help", 0, nullptr, 'h'},
         {nullptr, 0, nullptr, 0},
@@ -27,6 +29,8 @@ int main(const int argc, char ** argv) {
             source = std::string(optarg);
         }else if (opt == 'a') {
             print_ast = true;
+        }else if (opt == 'x') {
+            print_x86_64_intel = true;
         }else if (opt == '?' || opt == 'h') {
             if (opt == '?') std::cout << "Unknown option: "<< argv[optind - 1] <<std::endl;
             usage();
@@ -35,9 +39,24 @@ int main(const int argc, char ** argv) {
     }
 
     if (!source.empty()) {
-        run_source(source, print_ast);
-    }else {
-        run_prompt();
+        FileReader file_reader(source);
+        Tokenizer tokenizer(file_reader.read());
+        Parser parser(tokenizer);
+        Interpreter interpreter;
+
+        const auto program_decl = parser.parse_program_decl();
+        const auto console_writer = std::make_shared<ConsoleWriter>();
+        if (print_ast) {
+            AstPrinter ast_printer(console_writer);
+            program_decl->accept(ast_printer);
+        }
+
+        if (print_x86_64_intel) {
+            Assembler_x86_64_Intel assembler(console_writer);
+            program_decl->accept(assembler);
+        }
+
+        program_decl->accept(interpreter);
     }
 
     return EXIT_SUCCESS;
@@ -55,23 +74,4 @@ void print_usage_option(const std::string& option, const std::string& descriptio
     std::cout.setf(std::ios::left);
     std::cout << option;
     std::cout << description << std::endl;
-}
-
-void run_source(const std::string& source, bool print_ast) {
-    FileReader file_reader(source);
-    Tokenizer tokenizer(file_reader.read());
-    Parser parser(tokenizer);
-    Interpreter interpreter;
-
-    const auto program_decl = parser.parse_program_decl();
-    if (print_ast) {
-        AstPrinter ast_printer(std::make_shared<ConsoleWriter>());
-        program_decl->accept(ast_printer);
-    }
-
-    program_decl->accept(interpreter);
-}
-
-void run_prompt() {
-    std::cout << "TODO: Implement REPL" << std::endl;
 }

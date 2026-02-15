@@ -10,3 +10,4 @@ void FileWriter::write(const std::string message) {
     file << message;
 }
 
+
