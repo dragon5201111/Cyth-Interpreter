@@ -8,6 +8,7 @@
 - Added support for doubles.
 - Added support for floats.
 - Added support hex numbers.
+- Added assert primitive function.
 ### Optimizations / Improvements:
 - Refactored Value class. to_string_impl for container objects - container objects now
 delegate to a container_to_string method. Similarly, a containers_are_equal method was defined to
@@ -16,7 +17,6 @@ compare containers in is_truthy method.
 will serve as a simple and elegant way to integrate new number types in future versions.
 ### Bug Fixes
 - Added error handling for when trying to subscript a non-container or string.
-
 
 ## Cyth Version 0.1.1
 ### What's new:
