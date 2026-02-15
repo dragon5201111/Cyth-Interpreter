@@ -20,6 +20,7 @@ enum class TokenType {
     // Types
     INTEGER,
     DOUBLE,
+    HEX,
     STRING,
     IDENTIFIER,
 

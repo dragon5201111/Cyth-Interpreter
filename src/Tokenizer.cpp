@@ -186,23 +186,29 @@ bool Tokenizer::match_next(const std::string& expected) const {
 
 
 Token Tokenizer::get_number() {
-    const int sub_start = current++;
-
-    bool dot_seen = false;
-    while (current < input_size && (std::isdigit(input[current]) || (input[current] == '.' && !dot_seen))) {
-        if (input[current] == '.') {
-            dot_seen = true;
-        }
-        current++;
+    auto number = std::string(1, input[current++]);
+    // Loop until we encounter character not in the set of possible characters for a number
+    while (current < input_size && char_in_number(input[current])) {
+        number += input[current++];
     }
 
-    const std::string number = input.substr(sub_start, current - sub_start);
-
-    if (dot_seen) {
+    if (std::regex_match(number, DOUBLE_PATTERN)) {
         return Token(TokenType::DOUBLE, number, current_line);
     }
 
-    return Token(TokenType::INTEGER, number, current_line);
+    if (std::regex_match(number, INTEGER_PATTERN)) {
+        return Token(TokenType::INTEGER, number, current_line);
+    }
+
+    if (std::regex_match(number, HEX_PATTERN)) {
+        return Token(TokenType::HEX, number, current_line);
+    }
+
+    throw std::runtime_error("Invalid number " + number + " on line: " + std::to_string(current_line));
+}
+
+bool Tokenizer::char_in_number(const char c) {
+    return std::isdigit(c) || std::isxdigit(c) || c == '.' || std::tolower(c) == 'x';
 }
 
 Token Tokenizer::get_identifier() {
