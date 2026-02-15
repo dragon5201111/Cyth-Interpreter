@@ -24,7 +24,10 @@
 <unary> := ("!" | "-") <expression>
 <binary> := "(" <expression> <op> <expression> ")"
 <bool> := "true" | "false"
-<number> := <digit>+
+<number> := <integer> | <double> | <hex>
+<integer> := <digit>+
+<double> := <digit>+ "." <digit>*
+<hex> := "0" ("x" | "X") ("0-9" | "a-f" | "A-F")*
 <string> := "\"" <char>* "\""
 <char> := any printable character except '"'
 <op> := "+" 
