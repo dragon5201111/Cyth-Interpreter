@@ -186,6 +186,7 @@ std::unique_ptr<Expr> Parser::parse_expr() {
         case TokenType::LEFT_BRACE: return parse_set_literal_expr();
         case TokenType::INTEGER: return std::make_unique<IntegerExpr>(std::stoll(token.get_value()));
         case TokenType::DOUBLE: return std::make_unique<DoubleExpr>(std::stod(token.get_value()));
+        case TokenType::HEX: return std::make_unique<IntegerExpr>(std::stoll(token.get_value(), nullptr, 16));
         case TokenType::TRUE: return std::make_unique<BoolExpr>(true);
         case TokenType::FALSE: return std::make_unique<BoolExpr>(false);
         case TokenType::STRING: return std::make_unique<StringExpr>(token.get_value());
