@@ -16,7 +16,6 @@ set(SOURCES
     src/Call.cpp
     src/Value.cpp
     src/Num.cpp
-    src/Assembler.cpp
 )
 
 add_executable(${PROJECT_NAME}  ${SOURCES})
