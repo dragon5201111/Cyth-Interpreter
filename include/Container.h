@@ -75,6 +75,10 @@ public:
     Value& operator[](const std::size_t index) override {
         return container[index];
     }
+
+    Value& operator[](const Value& _) const {
+        throw std::out_of_range("Array Value index unimplemented.");
+    }
 };
 
 class SetContainer : public BaseContainer<std::set<Value>> {
@@ -83,5 +87,9 @@ public:
 
     Value& operator[](const std::size_t _) const {
         throw std::out_of_range("Cannot index a set");
+    }
+
+    Value& operator[](const Value& _) const {
+        throw std::out_of_range("Set Value index unimplemented.");
     }
 };
