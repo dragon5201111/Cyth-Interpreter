@@ -16,7 +16,7 @@ bool BaseContainer<C>::equals(const AbstractContainer &other) const {
         return false;
     }
 
-    const auto& other_container = static_cast<const BaseContainer<C>&>(other).container;
+    const auto& other_container = static_cast<const BaseContainer&>(other).container;
     return container == other_container;
 }
 
