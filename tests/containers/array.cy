@@ -14,5 +14,8 @@ main {
     call assert((mat[0][0] + mat[0][1]), 27, "2d Array addition")
     call assert(([[1,2]] == [[1,2]]), true, "2d Arrays are equal")
     call assert(([[1,2]] != [[1,2]]), false, "2d Arrays are equal")
+    call assert(([1,2] == 1), false, "Array comparison number")
+    decl my3d = [[[1]], [["foo"]]]
+    call assert(my3d[0][0][0], 1, "3d Array index")
     call print("All tests passed.")
 }

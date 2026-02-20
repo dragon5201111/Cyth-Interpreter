@@ -20,7 +20,6 @@ public:
     [[nodiscard]] virtual bool empty() const = 0;
     [[nodiscard]] virtual size_t size() const = 0;
 
-    [[nodiscard]] virtual Value& operator[](size_t index) = 0;
     [[nodiscard]] virtual Value& operator[](const Value& index) = 0;
 
     [[nodiscard]] virtual bool equals(const AbstractContainer& other) const = 0;
@@ -56,7 +55,9 @@ public:
             if (it != container.begin())
                 result += ", ";
 
-            result += it->to_string();
+            if constexpr (requires { it->to_string(); }) {
+                result += it->to_string();
+            }
         }
 
         result += right_closing;
@@ -69,8 +70,7 @@ public:
     explicit ArrayContainer() : BaseContainer({}, "[", "]") {}
     explicit ArrayContainer(const std::deque<Value> &array) : BaseContainer(array, "[", "]") {}
 
-    Value& operator[](const size_t index) override { return container[index]; }
-    Value& operator[](const Value&) override { throw std::out_of_range("Array Value index unimplemented."); }
+    Value& operator[](const Value& value) override { return container[static_cast<int64_t>(value.as_number())]; }
 };
 
 class SetContainer final : public BaseContainer<std::set<Value>> {
@@ -78,6 +78,5 @@ public:
     explicit SetContainer() : BaseContainer({}, "{", "}") {}
     explicit SetContainer(const std::set<Value> &set) : BaseContainer(set, "{", "}") {}
 
-    Value& operator[](const size_t index) override { throw std::out_of_range("Cannot index a set"); }
-    Value& operator[](const Value&) override { throw std::out_of_range("Set Value index unimplemented."); }
+    Value& operator[](const Value&) override { throw std::out_of_range("Cannot index a set."); }
 };

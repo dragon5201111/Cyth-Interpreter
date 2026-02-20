@@ -76,14 +76,14 @@ Value Interpreter::visit_set_literal_expr(const SetLiteralExpr &expr) {
 
 Value Interpreter::visit_postfix_expr(const PostfixExpr &expr) {
     Value lhs = evaluate(expr.lhs);
-    const int64_t rhs = static_cast<int64_t>(evaluate(expr.rhs).as_number());
+    const Value rhs = evaluate(expr.rhs);
 
     if (lhs.is_container()) {
         return (*lhs.as_container())[rhs];
     }
 
     if (lhs.is_string()) {
-        return Value(std::string(1, lhs.as_string()[rhs]));
+        return Value(std::string(1, lhs.as_string()[static_cast<int64_t>(rhs.as_number())]));
     }
 
     throw std::runtime_error("Unsupported postfix.");
@@ -234,11 +234,11 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
 
     if (const auto postfix = dynamic_cast<PostfixExpr*>(stmnt.lhs.get())) {
         auto lhs = evaluate(postfix->lhs);
-        const int64_t rhs = static_cast<int64_t>(evaluate(postfix->rhs).as_number());
+        const Value rhs = evaluate(postfix->rhs);
 
         Value value = evaluate(stmnt.rhs);
         if (lhs.is_string()) {
-            lhs.as_string()[rhs] = value.as_string()[0];
+            lhs.as_string()[static_cast<int64_t>(rhs.as_number())] = value.as_string()[0];
         }
         else if (lhs.is_container()) {
             (*lhs.as_container())[rhs] = value;
