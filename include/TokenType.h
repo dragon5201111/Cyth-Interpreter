@@ -35,5 +35,6 @@ enum class TokenType {
     LEFT_BRACKET,
     RIGHT_BRACKET,
     COMMA,
+    COLON,
     END_OF_FILE,
 };

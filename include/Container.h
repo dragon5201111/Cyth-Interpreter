@@ -20,12 +20,9 @@ public:
 
     [[nodiscard]] virtual bool empty() const = 0;
     [[nodiscard]] virtual size_t size() const = 0;
-
     [[nodiscard]] virtual Value& operator[](const Value& index) = 0;
-
-    [[nodiscard]] virtual bool equals(const AbstractContainer& other) const = 0;
-    [[nodiscard]] bool operator==(const AbstractContainer& other) const { return equals(other); }
-
+    [[nodiscard]] virtual bool operator==(const AbstractContainer& other) const = 0;
+    [[nodiscard]] virtual bool operator<(const AbstractContainer& other) const = 0;
     [[nodiscard]] std::string to_string() const override = 0;
 };
 
@@ -41,12 +38,25 @@ public:
     [[nodiscard]] bool empty() const override { return container.empty(); };
     [[nodiscard]] size_t size() const override { return container.size(); };
 
-    [[nodiscard]] bool equals(const AbstractContainer &other) const override {
-        if (typeid(*this) != typeid(other)) {
+    bool operator==(const AbstractContainer& other) const override {
+        if (!same_container_type(other)) {
             return false;
         }
         const auto& other_container = static_cast<const BaseContainer&>(other).container;
         return container == other_container;
+    }
+
+    bool operator<(const AbstractContainer& other) const override {
+        if (!same_container_type(other)) {
+            return false;
+        }
+
+        const auto& other_container = static_cast<const BaseContainer&>(other).container;
+        return container < other_container;
+    }
+
+    [[nodiscard]] bool same_container_type(const AbstractContainer& other) const {
+        return typeid(*this) == typeid(other);
     }
 
     [[nodiscard]] std::string to_string() const override {
@@ -56,7 +66,6 @@ public:
             if (it != container.begin())
                 result += ", ";
 
-            // TODO: fix this line
             if constexpr (requires { it->to_string(); }) {
                 result += it->to_string();
             }
@@ -85,13 +94,22 @@ public:
 
 class MapContainer final : public BaseContainer<std::map<Value, Value>> {
 public:
-    explicit MapContainer() : BaseContainer({}, "{", "}") {}
-    explicit MapContainer(const std::map<Value, Value> &map) : BaseContainer(map, "{", "}") {}
+    explicit MapContainer() : BaseContainer({}, "{{", "}}") {}
+    explicit MapContainer(const std::map<Value, Value> &map) : BaseContainer(map, "{{", "}}") {}
 
     Value& operator[](const Value& value) override { return container[value]; }
 
-    // TODO: implement to_string
     [[nodiscard]] std::string to_string() const override {
-        throw std::runtime_error("Unimplemented to_string for map");
+        std::string result = left_closing;
+
+        for (auto it = container.begin(); it != container.end(); ++it) {
+            if (it != container.begin())
+                result += ", ";
+
+            result += it->first.to_string() + " : " + it->second.to_string();
+        }
+
+        result += right_closing;
+        return result;
     }
 };

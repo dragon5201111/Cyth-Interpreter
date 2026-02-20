@@ -217,8 +217,37 @@ std::unique_ptr<Expr> Parser::parse_array_literal_expr() {
 }
 
 std::unique_ptr<Expr> Parser::parse_set_literal_expr() {
+    if (tokenizer.peek().get_type() == TokenType::LEFT_BRACE) {
+        return parse_map_literal_expr();
+    }
     std::vector<std::unique_ptr<Expr>> expr_list = parse_expression_list_and_consume(TokenType::RIGHT_BRACE, "right brace");
     return std::make_unique<SetLiteralExpr>(std::move(expr_list));
+}
+
+std::unique_ptr<Expr> Parser::parse_map_literal_expr() {
+    check_token_type(tokenizer.next(), TokenType::LEFT_BRACE, "left brace");
+    std::map<std::unique_ptr<Expr>, std::unique_ptr<Expr>> elements;
+
+    if (tokenizer.peek().get_type() == TokenType::RIGHT_BRACE) {
+        check_token_type(tokenizer.next(), TokenType::RIGHT_BRACE, "right brace");
+        check_token_type(tokenizer.next(), TokenType::RIGHT_BRACE, "right brace");
+        return std::make_unique<MapLiteralExpr>(std::move(elements));
+    }
+
+    std::unique_ptr<Expr> lhs = parse_expr();
+    check_token_type(tokenizer.next(), TokenType::COLON, "colon");
+    elements[std::move(lhs)] = parse_expr();
+
+    while (tokenizer.peek().get_type() == TokenType::COMMA) {
+        tokenizer.next();
+        lhs = parse_expr();
+        check_token_type(tokenizer.next(), TokenType::COLON, "colon");
+        elements[std::move(lhs)] = parse_expr();
+    }
+
+    check_token_type(tokenizer.next(), TokenType::RIGHT_BRACE, "right brace");
+    check_token_type(tokenizer.next(), TokenType::RIGHT_BRACE, "right brace");
+    return std::make_unique<MapLiteralExpr>(std::move(elements));
 }
 
 

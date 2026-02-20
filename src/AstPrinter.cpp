@@ -22,6 +22,18 @@ Value AstPrinter::visit_set_literal_expr(const SetLiteralExpr &expr) {
     return Value();
 }
 
+Value AstPrinter::visit_map_literal_expr(const MapLiteralExpr &expr) {
+    writer->write("{");
+    for (const auto& [e1, e2] : expr.elements) {
+        e1->accept(*this);
+        writer->write(":");
+        e2->accept(*this);
+        writer->write(",");
+    }
+    writer->write("}");
+    return Value();
+}
+
 Value AstPrinter::visit_postfix_expr(const PostfixExpr &expr) {
     expr.lhs->accept(*this);
     writer->write("[");

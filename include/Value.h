@@ -43,6 +43,7 @@ public:
     [[nodiscard]] bool is_container() const { return std::holds_alternative<std::shared_ptr<AbstractContainer>>(value); }
     [[nodiscard]] std::shared_ptr<AbstractContainer> as_container() const { return std::get<std::shared_ptr<AbstractContainer>>(value); }
 
+    // TODO: FIX OPERATORS
     bool operator==(const Value& other) const;
     bool operator!=(const Value& other) const { return !(*this == other); }
     bool operator<(const Value& other) const { return value < other.value; }

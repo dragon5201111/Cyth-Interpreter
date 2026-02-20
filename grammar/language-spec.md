@@ -16,11 +16,14 @@
     | <function-call> 
     | <array-literal>    
     | <set-literal> 
+    | <map-literal>
     | "(" <expression> ")" 
     | "nil"
 <postfix> := <primary> | <postfix> [ <expression> ]
 <array-literal> := "[" <expression-list>? "]"
 <set-literal> := "{" <expression-list>? "}"
+<map-literal> := "{{" <map-expression-list>? "}}"
+<map-expression-list> := <expression> ":" <expression> ("," <map-expression-list>)?
 <unary> := ("!" | "-") <expression>
 <binary> := "(" <expression> <op> <expression> ")"
 <bool> := "true" | "false"

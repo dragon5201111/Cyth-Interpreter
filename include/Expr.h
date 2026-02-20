@@ -3,11 +3,13 @@
 #include <memory>
 #include <string>
 #include <cstdint>
+#include <map>
 #include <vector>
 #include "Value.h"
 
 class ArrayLiteralExpr;
 class SetLiteralExpr;
+class MapLiteralExpr;
 class PostfixExpr;
 class IdentifierExpr;
 class UnaryExpr;
@@ -25,6 +27,7 @@ public:
     virtual ~ExprVisitor() = default;
     virtual Value visit_array_literal_expr(const ArrayLiteralExpr& expr) = 0;
     virtual Value visit_set_literal_expr(const SetLiteralExpr& expr) = 0;
+    virtual Value visit_map_literal_expr(const MapLiteralExpr& expr) = 0;
     virtual Value visit_postfix_expr(const PostfixExpr& expr) = 0;
     virtual Value visit_identifier_expr(const IdentifierExpr& expr) = 0;
     virtual Value visit_unary_expr(const UnaryExpr& expr) = 0;
@@ -64,6 +67,18 @@ public:
     using ContainerExpr::ContainerExpr;
     Value accept(ExprVisitor& visitor) const override {
         return visitor.visit_set_literal_expr(*this);
+    }
+};
+
+class MapLiteralExpr : public Expr {
+public:
+    std::map<std::unique_ptr<Expr>, std::unique_ptr<Expr>> elements;
+
+    explicit MapLiteralExpr(std::map<std::unique_ptr<Expr>, std::unique_ptr<Expr>> elements)
+        : elements(std::move(elements)) {}
+
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_map_literal_expr(*this);
     }
 };
 

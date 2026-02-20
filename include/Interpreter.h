@@ -28,6 +28,7 @@ public:
 
     Value visit_array_literal_expr(const ArrayLiteralExpr &expr) override;
     Value visit_set_literal_expr(const SetLiteralExpr &expr) override;
+    Value visit_map_literal_expr(const MapLiteralExpr &expr) override;
     Value visit_postfix_expr(const PostfixExpr &expr) override;
 
     Value visit_identifier_expr(const IdentifierExpr &expr) override;

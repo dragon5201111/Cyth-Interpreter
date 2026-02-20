@@ -74,6 +74,15 @@ Value Interpreter::visit_set_literal_expr(const SetLiteralExpr &expr) {
     return Value(std::make_shared<SetContainer>(values));
 }
 
+Value Interpreter::visit_map_literal_expr(const MapLiteralExpr &expr) {
+    std::map<Value, Value> values;
+    for (const auto& [e1, e2] : expr.elements) {
+        values[evaluate(e1)] = evaluate(e2);
+    }
+
+    return Value(std::make_shared<MapContainer>(values));
+}
+
 Value Interpreter::visit_postfix_expr(const PostfixExpr &expr) {
     Value lhs = evaluate(expr.lhs);
     const Value rhs = evaluate(expr.rhs);

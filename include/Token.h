@@ -45,6 +45,7 @@ public:
             case TokenType::LEFT_BRACE: string_rep = "LEFT_BRACE"; break;
             case TokenType::RIGHT_BRACE: string_rep = "RIGHT_BRACE"; break;
             case TokenType::COMMA: string_rep = "COMMA"; break;
+            case TokenType::COLON: string_rep = "COLON"; break;
             case TokenType::END_OF_FILE: string_rep = "END_OF_FILE"; break;
             default: string_rep = "UNKNOWN";
         }
