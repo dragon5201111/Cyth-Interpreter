@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <utility>
 #include <deque>
+#include <map>
 #include <set>
 #include "Value.h"
 #include "Print.h"
@@ -55,6 +56,7 @@ public:
             if (it != container.begin())
                 result += ", ";
 
+            // TODO: fix this line
             if constexpr (requires { it->to_string(); }) {
                 result += it->to_string();
             }
@@ -79,4 +81,17 @@ public:
     explicit SetContainer(const std::set<Value> &set) : BaseContainer(set, "{", "}") {}
 
     Value& operator[](const Value&) override { throw std::out_of_range("Cannot index a set."); }
+};
+
+class MapContainer final : public BaseContainer<std::map<Value, Value>> {
+public:
+    explicit MapContainer() : BaseContainer({}, "{", "}") {}
+    explicit MapContainer(const std::map<Value, Value> &map) : BaseContainer(map, "{", "}") {}
+
+    Value& operator[](const Value& value) override { return container[value]; }
+
+    // TODO: implement to_string
+    [[nodiscard]] std::string to_string() const override {
+        throw std::runtime_error("Unimplemented to_string for map");
+    }
 };

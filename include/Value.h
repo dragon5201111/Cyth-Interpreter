@@ -24,6 +24,7 @@ public:
     explicit Value(bool b) : value(b) {}
     explicit Value(Number n) : value(n) {}
     explicit Value(std::string s) : value(std::make_shared<std::string>(std::move(s))) {}
+    explicit Value(const char *s) : value(std::make_shared<std::string>(s)) {}
     explicit Value(std::shared_ptr<AbstractContainer> a) : value(std::move(a)) {}
 
     [[nodiscard]] bool is_truthy() const;
