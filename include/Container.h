@@ -13,7 +13,6 @@ protected:
     AbstractContainer(std::string left, std::string right)
         : left_closing(std::move(left)),
           right_closing(std::move(right)) {}
-
 public:
     ~AbstractContainer() override = default;
 
@@ -38,11 +37,31 @@ public:
         : AbstractContainer(std::move(left), std::move(right)),
           container(std::move(c)) {}
 
-    [[nodiscard]] bool empty() const override;
-    [[nodiscard]] size_t size() const override;
+    [[nodiscard]] bool empty() const override { return container.empty(); };
+    [[nodiscard]] size_t size() const override { return container.size(); };
 
-    [[nodiscard]] bool equals(const AbstractContainer &other) const override;
-    [[nodiscard]] std::string to_string() const override;
+    [[nodiscard]] bool equals(const AbstractContainer &other) const override {
+        if (typeid(*this) != typeid(other)) {
+            return false;
+        }
+
+        const auto& other_container = static_cast<const BaseContainer&>(other).container;
+        return container == other_container;
+    }
+
+    [[nodiscard]] std::string to_string() const override {
+        std::string result = left_closing;
+
+        for (auto it = container.begin(); it != container.end(); ++it) {
+            if (it != container.begin())
+                result += ", ";
+
+            result += it->to_string();
+        }
+
+        result += right_closing;
+        return result;
+    }
 };
 
 class ArrayContainer final : public BaseContainer<std::deque<Value>> {
@@ -59,6 +78,6 @@ public:
     explicit SetContainer() : BaseContainer({}, "{", "}") {}
     explicit SetContainer(const std::set<Value> &set) : BaseContainer(set, "{", "}") {}
 
-    Value& operator[](size_t) override { throw std::out_of_range("Cannot index a set"); }
+    Value& operator[](const size_t index) override { throw std::out_of_range("Cannot index a set"); }
     Value& operator[](const Value&) override { throw std::out_of_range("Set Value index unimplemented."); }
 };
