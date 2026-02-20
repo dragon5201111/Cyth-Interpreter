@@ -47,9 +47,9 @@ public:
     bool operator==(const Value& other) const;
     bool operator!=(const Value& other) const { return !(*this == other); }
     bool operator<(const Value& other) const;
-    bool operator<=(const Value &other) const { return (*this < other) || (*this == other);}
-    bool operator>(const Value &other) const { return !(this->operator<=(other));}
-    bool operator>=(const Value &other) const { return !(this->operator<(other));}
+    bool operator<=(const Value &other) const { return *this < other || *this == other;}
+    bool operator>(const Value &other) const { return !this->operator<=(other);}
+    bool operator>=(const Value &other) const { return !this->operator<(other);}
 
     [[nodiscard]] std::string to_string() const override {
         return std::visit([this](const auto& v) { return to_string_impl(v); }, value);
