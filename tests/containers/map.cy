@@ -1,8 +1,9 @@
 main {
     decl m = {{
-        "foo" : "bar"
+        "foo" : "bar",
+        1 : 2
     }}
 
     m["foo"] = "baz"
-    call print(m["foo"])
+    call print(m)
 }

@@ -31,24 +31,48 @@ bool Value::is_truthy() const {
 }
 
 bool Value::operator==(const Value &other) const {
-    if (is_number() && other.is_number()) {
+    if (value.index() != other.value.index()) {
+        return false;
+    }
+
+    if (is_number()) {
         return as_number() == other.as_number();
     }
 
-    if (is_bool() && other.is_bool()) {
+    if (is_bool()) {
         return as_bool() == other.as_bool();
     }
 
-    if (is_nil() && other.is_nil()) {
-        return true;
-    }
-
-    if (is_string() && other.is_string()) {
+    if (is_string()) {
         return as_string() == other.as_string();
     }
 
-    if (is_container() && other.is_container()) {
+    if (is_container()) {
         return *as_container() == *other.as_container();
+    }
+
+    return true;
+}
+
+bool Value::operator<(const Value &other) const {
+    if (value.index() != other.value.index()) {
+        return value.index() < other.value.index();
+    }
+
+    if (is_number()) {
+        return as_number() < other.as_number();
+    }
+
+    if (is_bool()) {
+        return as_bool() < other.as_bool();
+    }
+
+    if (is_string()) {
+        return as_string() < other.as_string();
+    }
+
+    if (is_container()) {
+        return *as_container() < *other.as_container();
     }
 
     return false;
