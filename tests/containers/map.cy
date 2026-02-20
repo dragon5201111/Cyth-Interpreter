@@ -4,5 +4,5 @@ main {
     }}
 
     m["foo"] = "baz"
-    call print(m)
+    call print(m["foo"])
 }
