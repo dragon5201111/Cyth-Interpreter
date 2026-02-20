@@ -4,6 +4,7 @@
 #include <deque>
 #include <set>
 #include "Value.h"
+#include "Print.h"
 
 class AbstractContainer : public Printable {
 protected:
@@ -44,7 +45,6 @@ public:
         if (typeid(*this) != typeid(other)) {
             return false;
         }
-
         const auto& other_container = static_cast<const BaseContainer&>(other).container;
         return container == other_container;
     }

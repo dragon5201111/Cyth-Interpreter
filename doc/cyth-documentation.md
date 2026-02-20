@@ -10,11 +10,11 @@
 - Added support hex numbers.
 - Added assert primitive function.
 ### Optimizations / Improvements:
-- Refactored Value class. to_string_impl for container objects - container objects now
-delegate to a container_to_string method. Similarly, a containers_are_equal method was defined to
-compare containers in is_truthy method.
-- Integrated a Number class to serve as a proxy for numbers (i.e., currently 64-bit integers). This class
-will serve as a simple and elegant way to integrate new number types in future versions.
+- Overhaul of Value class:
+  - Integrated a Number class to serve as a proxy for numbers (i.e., the previous Cyth version defined a number
+  as a 64-bit integer). This class
+  will serve as a simple and elegant way to integrate new number types in future versions.
+  - Integrated an AbstractContainer class to serve as a proxy for container objects (i.e., sets, arrays).
 ### Bug Fixes
 - Added error handling for when trying to subscript a non-container or string.
 

@@ -6,6 +6,7 @@
 #include "Builtin.h"
 #include "Call.h"
 #include "Except.h"
+#include "Container.h"
 
 void Interpreter::define_primitives() const {
     for (const auto& [name, function] : Builtins::primitive_functions) {
@@ -62,7 +63,7 @@ Value Interpreter::visit_array_literal_expr(const ArrayLiteralExpr &expr) {
     for (const auto& e : expr.elements) {
         values.push_back(evaluate(e));
     }
-    return Value(values);
+    return Value(std::make_shared<ArrayContainer>(values));
 }
 
 Value Interpreter::visit_set_literal_expr(const SetLiteralExpr &expr) {
@@ -70,23 +71,19 @@ Value Interpreter::visit_set_literal_expr(const SetLiteralExpr &expr) {
     for (const auto& e : expr.elements) {
         values.insert(evaluate(e));
     }
-    return Value(values);
+    return Value(std::make_shared<SetContainer>(values));
 }
 
 Value Interpreter::visit_postfix_expr(const PostfixExpr &expr) {
     Value lhs = evaluate(expr.lhs);
     const int64_t rhs = static_cast<int64_t>(evaluate(expr.rhs).as_number());
 
-    if (lhs.is_array()) {
-        return lhs.as_array()[rhs];
+    if (lhs.is_container()) {
+        return (*lhs.as_container())[rhs];
     }
 
     if (lhs.is_string()) {
         return Value(std::string(1, lhs.as_string()[rhs]));
-    }
-
-    if (lhs.is_set()) {
-        throw std::runtime_error("Set is not subscriptable");
     }
 
     throw std::runtime_error("Unsupported postfix.");
@@ -243,12 +240,10 @@ void Interpreter::visit_variable_assign_stmnt(const AssignStmnt &stmnt) {
         if (lhs.is_string()) {
             lhs.as_string()[rhs] = value.as_string()[0];
         }
-        else if (lhs.is_array()) {
-            lhs.as_array()[rhs] = value;
+        else if (lhs.is_container()) {
+            (*lhs.as_container())[rhs] = value;
         }
-        else if (lhs.is_set()) {
-            throw std::runtime_error("Set is not subscriptable");
-        }else {
+        else {
             throw std::runtime_error("Value is not subscriptable");
         }
     }
