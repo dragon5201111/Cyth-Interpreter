@@ -9,7 +9,7 @@
 - Added support for doubles.
 - Added support for floats.
 - Added support hex numbers.
-- Added assert primitive function.
+- Added assert, length, and split primitive functions.
 ### Optimizations / Improvements:
 - Overhaul of Value class:
   - Integrated a Number class to serve as a proxy for numbers (i.e., the previous Cyth version defined a number
