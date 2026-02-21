@@ -43,13 +43,15 @@ public:
     [[nodiscard]] bool is_container() const { return std::holds_alternative<std::shared_ptr<AbstractContainer>>(value); }
     [[nodiscard]] std::shared_ptr<AbstractContainer> as_container() const { return std::get<std::shared_ptr<AbstractContainer>>(value); }
 
-    // TODO: FIX / IMPROVE OPERATORS ==, !=, < for map support
     bool operator==(const Value& other) const;
-    bool operator!=(const Value& other) const { return !(*this == other); }
+    bool operator!=(const Value& other) const;
     bool operator<(const Value& other) const;
-    bool operator<=(const Value &other) const { return *this < other || *this == other;}
-    bool operator>(const Value &other) const { return !this->operator<=(other);}
-    bool operator>=(const Value &other) const { return !this->operator<(other);}
+
+    [[nodiscard]] bool other_is_same_type(const Value& other) const;
+
+    bool operator<=(const Value &other) const;
+    bool operator>(const Value &other) const;
+    bool operator>=(const Value &other) const;
 
     [[nodiscard]] std::string to_string() const override {
         return std::visit([this](const auto& v) { return to_string_impl(v); }, value);

@@ -130,21 +130,24 @@ Value Interpreter::visit_binary_expr(const BinaryExpr &expr) {
     const Value lhs = evaluate(expr.lhs);
     const Value rhs = evaluate(expr.rhs);
 
+    // Number operations
     if (expr.op == "*") {return Value(lhs.as_number() * rhs.as_number());}
     if (expr.op == "/") return Value(lhs.as_number() / rhs.as_number());
     if (expr.op == "-") return Value(lhs.as_number() - rhs.as_number());
     if (expr.op == "%") return Value(lhs.as_number() % rhs.as_number());
-    if (expr.op == "==") return Value(lhs == rhs);
-    if (expr.op == "!=") return Value(lhs != rhs);
-    if (expr.op == "<")  return Value(lhs.as_number() < rhs.as_number());
-    if (expr.op == "<=") return Value(lhs.as_number() <= rhs.as_number());
-    if (expr.op == ">")  return Value(lhs.as_number() > rhs.as_number());
-    if (expr.op == ">=") return Value(lhs.as_number() >= rhs.as_number());
     if (expr.op == "&")  return Value(lhs.as_number() & rhs.as_number());
     if (expr.op == "|")  return Value(lhs.as_number() | rhs.as_number());
     if (expr.op == "^")  return Value(lhs.as_number() ^ rhs.as_number());
     if (expr.op == "<<") return Value(lhs.as_number() << rhs.as_number());
     if (expr.op == ">>") return Value(lhs.as_number() >> rhs.as_number());
+
+    // General operations
+    if (expr.op == "==") return Value(lhs == rhs);
+    if (expr.op == "!=") return Value(lhs != rhs);
+    if (expr.op == "<")  return Value(lhs < rhs);
+    if (expr.op == "<=") return Value(lhs <= rhs);
+    if (expr.op == ">")  return Value(lhs > rhs);
+    if (expr.op == ">=") return Value(lhs >= rhs);
 
     throw std::runtime_error("Unsupported binary operator");
 }

@@ -5,6 +5,7 @@
 ## Cyth Version 0.1.2
 ### What's new:
 - Added set data type.
+- Added map data type.
 - Added support for doubles.
 - Added support for floats.
 - Added support hex numbers.
@@ -17,7 +18,7 @@
   - Integrated an AbstractContainer class to serve as a proxy for container objects (i.e., sets, arrays).
 ### Bug Fixes
 - Added error handling for when trying to subscript a non-container or string.
-
+- Fixed visit_binary_expr in Interpreter; separated number based operations from general operations. 
 ## Cyth Version 0.1.1
 ### What's new:
 - Added continue statement to while and for loops.
