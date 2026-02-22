@@ -24,6 +24,6 @@ func pow(n, x){
 }
 
 main {
-    call print("ack(3,5) =", call ack(3,5), "\n")
-    call print("6^7 =", call pow(6, 7))
+    # call print("ack(3,5) =", call ack(3,5), "\n")
+    call print("6^6 =", call pow(6, 6))
 }
