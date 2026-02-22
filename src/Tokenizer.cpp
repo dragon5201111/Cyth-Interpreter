@@ -87,13 +87,20 @@ void Tokenizer::skip_whitespace() {
     bool in_multi_line_comment = false;
     while (current < input_size) {
         const char current_char = input[current];
-        if (current_char == MULTI_LINE_COMMENT){
-            in_multi_line_comment = !in_multi_line_comment;
-            current++; // Skip multi-line comment character
+
+        if (input_has_substr(current, MULTI_LINE_COMMENT_BEGIN)) {
+            in_multi_line_comment = true;
+            current += static_cast<int>(MULTI_LINE_COMMENT_BEGIN.size());
             continue;
         }
 
-        if (current_char == SINGLE_LINE_COMMENT && !in_multi_line_comment) {
+        if (input_has_substr(current, MULTI_LINE_COMMENT_END)) {
+            in_multi_line_comment = false;
+            current += static_cast<int>(MULTI_LINE_COMMENT_END.size());
+            continue;
+        }
+
+        if (!in_multi_line_comment && input_has_substr(current, SINGLE_LINE_COMMENT)) {
             while (current < input_size && input[current] != '\n') {
                 current++;
             }
@@ -104,12 +111,7 @@ void Tokenizer::skip_whitespace() {
             current_line++;
         }
 
-        if (in_multi_line_comment) {
-            current++;
-            continue;
-        }
-
-        if (std::isspace(current_char)) {
+        if (std::isspace(current_char) || in_multi_line_comment) {
             current++;
             continue;
         }
@@ -120,6 +122,15 @@ void Tokenizer::skip_whitespace() {
     if (in_multi_line_comment) {
         throw std::runtime_error("Unterminated multi-line comment");
     }
+}
+
+// Checks from pos if pos + substr length is substr
+bool Tokenizer::input_has_substr(const int pos, const std::string& substr) const {
+    const auto substr_size = substr.size();
+    if (pos + (substr_size - 1) < input_size) {
+        return input.substr(pos, substr_size) == substr;
+    }
+    return false;
 }
 
 Token Tokenizer::get_string() {
@@ -225,7 +236,7 @@ Token Tokenizer::get_identifier() {
     }
 
     const std::string fragment = input.substr(sub_start, current - sub_start);
-    if (FRAGMENT_MAP.count(fragment)) {
+    if (FRAGMENT_MAP.contains(fragment)) {
         return Token(FRAGMENT_MAP.at(fragment), current_line);
     }
 

@@ -4,6 +4,13 @@
 The update-to-date grammar of Cyth can be found [<u>**here**</u>](language-spec.md).
 
 # Update History
+## Cyth Version 0.1.3
+### What's new:
+- Changed multi-line comments from back ticks to `/**/`.
+### Optimizations / Improvements:
+- Reworked whitespace handling in Tokenizer.
+### Bug Fixes
+- _
 
 ## Cyth Version 0.1.2
 ### What's new:

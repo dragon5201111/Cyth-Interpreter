@@ -9,8 +9,9 @@
 #include "./Token.h"
 
 class Tokenizer {
-    const char SINGLE_LINE_COMMENT = '#';
-    const char MULTI_LINE_COMMENT = '`';
+    const std::string SINGLE_LINE_COMMENT = "#";
+    const std::string MULTI_LINE_COMMENT_BEGIN = "/*";
+    const std::string MULTI_LINE_COMMENT_END = "*/";
 
     std::regex INTEGER_PATTERN = std::regex(R"([0-9]+)");
     std::regex DOUBLE_PATTERN = std::regex(R"([0-9]+\.[0-9]*)");
@@ -44,8 +45,8 @@ class Tokenizer {
 
     Token advance_current();
     void skip_whitespace();
+    bool input_has_substr(int pos, const std::string &substr) const;
     Token get_string();
-
     Token get_number();
     bool char_in_number(char c);
 

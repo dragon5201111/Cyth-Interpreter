@@ -1,9 +1,12 @@
 ## General
 ```
+<text> := any sequence of printable characters
 <program> := <function-declaration>* ("main" { <statement>+ })+
 <identifier> := <letter>(<letter>|<digit>)*
 <letter> := "a" | "b" | ... | "z" | "A" | "B" | ... | "Z"
 <digit> := "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<single-line-comment> := "#" <text> "\n"
+<multi-line-comment> := "/*" <text> "*/"
 ```
 
 ## Expressions
@@ -33,7 +36,7 @@
 <double> := <digit>+ "." <digit>*
 <hex> := "0" ("x" | "X") ("0-9" | "a-f" | "A-F")*
 <string> := "\"" <char>* "\""
-<char> := any printable character except '"'
+<char> := any printable character
 <op> := "+" 
     | "-" 
     | "*" 
