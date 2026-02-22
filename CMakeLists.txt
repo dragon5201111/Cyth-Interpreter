@@ -16,6 +16,7 @@ set(SOURCES
     src/Call.cpp
     src/Value.cpp
     src/Num.cpp
+    src/Preproc.cpp
 )
 
 add_executable(${PROJECT_NAME}  ${SOURCES})
