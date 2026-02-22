@@ -49,3 +49,35 @@ std::string Preprocessor::join(const std::vector<std::string> &tokens, const std
     }
     return joined_result;
 }
+
+std::string Preprocessor::preprocess() {
+    return preprocess_rec(file_reader.rread(in_path.string()));
+}
+
+std::string Preprocessor::preprocess_rec(const std::string& input) {
+    const auto tokens = strip_whitespace(input);
+    const auto tokens_size = tokens.size();
+    std::string input_result;
+
+    int i;
+    for (i = 0; i < tokens_size; i++) {
+        const auto& token = tokens[i];
+        if (token == "include") {
+            if (i + 1 > tokens_size) {
+                throw std::runtime_error("Missing path for include directive.");
+            }
+
+            input_result += preprocess_rec(file_reader.rread(next_path(tokens[i + 1]))) + '\n';
+            i ++;
+        }else {
+            break;
+        }
+    }
+
+    input_result += join(tokens, " ", i);
+    return input_result;
+}
+
+std::string Preprocessor::next_path(const std::string &relative_path) const {
+    return fs::canonical(in_path_parent / fs::path(relative_path)).string();
+}
