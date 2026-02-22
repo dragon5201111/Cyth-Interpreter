@@ -234,6 +234,7 @@ std::unique_ptr<Expr> Parser::parse_map_literal_expr() {
         return std::make_unique<MapLiteralExpr>(std::move(elements));
     }
 
+    // Add key-value pair
     std::unique_ptr<Expr> lhs = parse_expr();
     check_token_type(tokenizer.next(), TokenType::COLON, "colon");
     elements[std::move(lhs)] = parse_expr();

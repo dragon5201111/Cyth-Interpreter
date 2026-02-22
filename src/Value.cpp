@@ -54,10 +54,6 @@ bool Value::operator==(const Value &other) const {
     return true;
 }
 
-bool Value::other_is_same_type(const Value &other) const {
-    return value.index() == other.value.index();
-}
-
 bool Value::operator!=(const Value &other) const {
     return !(*this == other);
 }
@@ -85,6 +81,11 @@ bool Value::operator<(const Value &other) const {
 
     return false;
 }
+
+bool Value::other_is_same_type(const Value &other) const {
+    return value.index() == other.value.index();
+}
+
 
 bool Value::operator<=(const Value &other) const {
     return *this < other || *this == other;

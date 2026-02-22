@@ -7,7 +7,8 @@
 Before building, make sure you have the following installed on your native machine:
 
 - CMake (i.e., Version 3.22-4.1.2)
-- C/C++ Compiler (i.e., gcc, clang, etc. - using version 20 or higher.)
+- C/C++ Compiler (i.e., gcc, clang, etc.)
+- C++ Version 20 or higher
 - make package (i.e., if you are on a Unix based system)
 
 Navigate to the project root directory (e.g., where src lives) and run the following based on your

@@ -68,6 +68,8 @@ public:
 
             if constexpr (requires { it->to_string(); }) {
                 result += it->to_string();
+            }else {
+                result += it->first.to_string() + " : " + it->second.to_string();
             }
         }
 
@@ -98,18 +100,4 @@ public:
     explicit MapContainer(const std::map<Value, Value> &map) : BaseContainer(map, "{{", "}}") {}
 
     Value& operator[](const Value& value) override { return container[value]; }
-
-    [[nodiscard]] std::string to_string() const override {
-        std::string result = left_closing;
-
-        for (auto it = container.begin(); it != container.end(); ++it) {
-            if (it != container.begin())
-                result += ", ";
-
-            result += it->first.to_string() + " : " + it->second.to_string();
-        }
-
-        result += right_closing;
-        return result;
-    }
 };
