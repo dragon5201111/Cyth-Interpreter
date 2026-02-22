@@ -23,14 +23,14 @@ Value AstPrinter::visit_set_literal_expr(const SetLiteralExpr &expr) {
 }
 
 Value AstPrinter::visit_map_literal_expr(const MapLiteralExpr &expr) {
-    writer->write("{");
+    writer->write("{{");
     for (const auto& [e1, e2] : expr.elements) {
         e1->accept(*this);
         writer->write(":");
         e2->accept(*this);
         writer->write(",");
     }
-    writer->write("}");
+    writer->write("}}");
     return Value();
 }
 

@@ -1,4 +1,4 @@
-# Cyth Interpreter Version 0.1.2
+# Cyth Interpreter
 # Contents
 - [Build Instructions](#build-instructions)
 - [Documentation](#documentation)
@@ -33,6 +33,9 @@ This will install as `Cyth`.
 - The build process above was tested on two machines. One Windows (i.e., 11 Home) 
     and Linux (i.e., Version 5.15.0-164-generic, Ubuntu 22.04.5) machine.
 # Usage
+Cyth scripts are run as `Cyth -s [script absolute-path]`. Where Cyth scripts are post-fixed
+with a `.cy` extension. To run with more options, perform `Cyth -h` or `Cyth --help` to see a complete list
+of options.
 # Documentation
-Documentation on Cyth is found at this [<u>**link**</u>](doc/cyth-documentation.md), and is updated regularly.
+Documentation (currently in progress) on Cyth is found at this [<u>**link**</u>](doc/cyth-documentation.md), and is updated regularly.
 

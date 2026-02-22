@@ -1,4 +1,7 @@
-# Other Sections To Come ...
+# Other Sections In Progress...
+
+# Language Grammar
+The update-to-date grammar of Cyth can be found [<u>**here**</u>](language-spec.md).
 
 # Update History
 

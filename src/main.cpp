@@ -54,10 +54,10 @@ int main(const int argc, char ** argv) {
 }
 
 void usage() {
-    std::cout << "Usage: Interpreter [options]" << std::endl;
+    std::cout << "Usage: Cyth [options]" << std::endl;
     std::cout << "Options:" << std::endl;
-    print_usage_option("-s", "Specify source file to execute.");
-    print_usage_option("--print-ast", "Print the ast of the source file to console.");
+    print_usage_option("-s", "Specify source script to execute.");
+    print_usage_option("--print-ast", "Print the ast of the source script specified by -s to console.");
 }
 
 void print_usage_option(const std::string& option, const std::string& description){
