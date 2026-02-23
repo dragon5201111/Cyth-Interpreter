@@ -9,3 +9,16 @@ func print_mat(mat){
         call print("\n")
     }
 }
+
+func add_mat(a, b){
+    decl m = call length(a)
+    decl n = call length(b[0])
+
+    for (decl i = 0, (i < m), i = (i + 1)){
+        for (decl j = 0, (j < n), j = (j + 1)){
+            a[i][j] = (a[i][j] + b[i][j])
+        }
+    }
+
+    return a
+}

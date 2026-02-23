@@ -71,8 +71,8 @@ void usage() {
     std::cout << "Usage: Cyth [options]" << std::endl;
     std::cout << "Options:" << std::endl;
     print_usage_option("-s", "Specify source script to execute.");
-    print_usage_option("--print-ast", "Print the ast of the source script specified by -s to console.");
-    print_usage_option("--print-preprocessed", "Print the source specified by -s after preprocessing occurs.");
+    print_usage_option("--print-ast", "Print the ast of the source script specified by -s to the console.");
+    print_usage_option("--print-preprocessed", "Print the source specified by -s after preprocessing occurs to the console.");
 }
 
 void print_usage_option(const std::string& option, const std::string& description){

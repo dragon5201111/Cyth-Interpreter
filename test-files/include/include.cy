@@ -1,10 +1,15 @@
 include matrix.cy
 
 main {
-    decl myMat = [
+    decl a = [
         [0, 1],
         [3, 4]
     ]
 
-    call print_mat(myMat)
+    decl b = [
+        [1, 0],
+        [0, 0]
+    ]
+
+    call print_mat(call add_mat(a, b))
 }
