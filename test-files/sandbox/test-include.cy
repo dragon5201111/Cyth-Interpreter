@@ -1,5 +1,5 @@
 include math.cy
-
 main {
-    call add(1,2)
+    call print(call add(1,add_a))
+    return 0
 }

@@ -1,9 +1,11 @@
 #include "Preproc.h"
 #include <functional>
+#include <map>
+
 
 std::vector<std::string> Preprocessor::strip_whitespace(const std::string &input) {
     return strip(input, [](const char c) {
-       return std::isspace(c);
+       return c == ' ';
     });
 }
 
@@ -24,7 +26,9 @@ std::vector<std::string> Preprocessor::strip(const std::string &input, const std
                 strip_result.push_back(token);
                 token = "";
             }
-        }else{
+        }else if (input[current] == '\n'){
+            strip_result.emplace_back("\n");
+        }else {
             token += input[current];
         }
         current++;
@@ -55,6 +59,7 @@ std::string Preprocessor::preprocess() {
 }
 
 std::string Preprocessor::preprocess_rec(const std::string& input) {
+    std::map<std::string, std::string> define_map;
     const auto tokens = strip_whitespace(input);
     const auto tokens_size = tokens.size();
     std::string input_result;
@@ -62,20 +67,40 @@ std::string Preprocessor::preprocess_rec(const std::string& input) {
     int i;
     for (i = 0; i < tokens_size; i++) {
         const auto& token = tokens[i];
-        if (token == "include") {
+        if (token == INCLUDE) {
             if (i + 1 > tokens_size) {
                 throw std::runtime_error("Missing path for include directive.");
             }
 
             input_result += preprocess_rec(file_reader.rread(next_path(tokens[i + 1]))) + '\n';
             i ++;
+        }else if (token == DEFINE){
+            if (i + 2 > tokens_size) {
+                throw std::runtime_error("Directives must have an identifier and replacement.");
+            }
+            define_map.insert({tokens[i + 1], tokens[i + 2]});
+            i += 2;
         }else {
             break;
         }
     }
 
     input_result += join(tokens, " ", i);
+
+    for (const auto& [from, to] : define_map) {
+        replace_all(input_result, from, to);
+    }
+
     return input_result;
+}
+
+std::string Preprocessor::replace_all(std::string &input, const std::string &from, const std::string &to) {
+    auto pos = input.find(from);
+    while (pos != std::string::npos) {
+        input.replace(pos, from.length(), to);
+        pos = input.find(from, pos + to.length());
+    }
+    return input;
 }
 
 std::string Preprocessor::next_path(const std::string &relative_path) const {
