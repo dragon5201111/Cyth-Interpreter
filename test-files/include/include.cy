@@ -1,4 +1,4 @@
-include matrix.cy
+include "matrix.cy"
 
 main {
     decl a = [
@@ -8,8 +8,12 @@ main {
 
     decl b = [
         [1, 0],
-        [0, 0]
+        [0, 1]
     ]
 
+    /*
+        Adds b into a.
+    */
     call print_mat(call add_mat(a, b))
+    call print(a)
 }
