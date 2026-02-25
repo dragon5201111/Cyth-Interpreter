@@ -1,4 +1,3 @@
-include "C:\\Users\\drago\\CLionProjects\\Cyth-Interpreter\\test-files\\include\\include4.cy"
 include "../lib/math.cy"
 
 main {
@@ -17,4 +16,5 @@ main {
     */
     call print_mat(call add_mat(a, b))
     call print(a)
+    return 65
 }

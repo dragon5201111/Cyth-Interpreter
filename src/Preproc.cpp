@@ -5,12 +5,13 @@ std::string Preprocessor::preprocess() {
     return preprocess_rec(file_reader.rread(in_path.string()));
 }
 
+// TODO: Fix - handling comments
 std::string Preprocessor::preprocess_rec(const std::string& input) {
     std::string input_result;
     std::smatch match;
 
     auto search_start = input.cbegin();
-    while (std::regex_search(search_start, input.end(), match, INCLUDE_REGEX)) {
+    while (std::regex_search(search_start, input.end(), match, INCLUDE)) {
         search_start = match.suffix().first;
         input_result += preprocess_rec(file_reader.rread(next_path(match.str(1))));
     }

@@ -18,7 +18,7 @@ void FileReader::open(const std::string &in_file) {
 }
 
 std::string FileReader::rread(const std::string &in_file) {
-    open(in_file);
+    reopen(in_file);
     std::string read_result = read();
     file.close();
     return read_result;

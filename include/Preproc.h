@@ -8,10 +8,7 @@ namespace fs = std::filesystem;
 
 class Preprocessor {
     std::vector<fs::path> include_dirs;
-
-    const std::regex INCLUDE_REGEX = std::regex(R"(include\s+\"(.+)\")");
-    // TODO: Fix define regex
-    // const std::regex DEFINE_REGEX = std::regex(R"(define\s+(?:([^\s()]+)|\(([^)]+\))))");
+    const std::regex INCLUDE = std::regex(R"(include\s+\"(.+)\")");
 
     fs::path in_path;
     fs::path last_path_parent;
