@@ -1,4 +1,4 @@
-include "../matrix.cy"
+include "../lib/math.cy"
 
 main {
     decl a = [

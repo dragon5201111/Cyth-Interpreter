@@ -1,6 +1,6 @@
-include test.cy
-define MAX 25
-define foo (2123)
+include "matrix.cy"
+include "../include/include2.cy"
+
 func add(a, b){
     return ((a + b) * MAX)
 }
