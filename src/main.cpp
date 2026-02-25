@@ -15,6 +15,7 @@ void run_source(const std::string& source, bool print_ast);
 void run_prompt();
 
 int main(const int argc, char ** argv) {
+    std::vector<std::string> include_dirs;
     bool print_ast = false;
     bool print_preprocessed = false;
     std::string source;
@@ -26,14 +27,17 @@ int main(const int argc, char ** argv) {
         {nullptr, 0, nullptr, 0},
     };
 
+    // TODO: Add -I flag
     int opt;
-    while ((opt = getopt_long(argc, argv, "s:h", options, nullptr)) != -1) {
+    while ((opt = getopt_long(argc, argv, "s:hI:", options, nullptr)) != -1) {
         if (opt == 's') {
             source = std::string(optarg);
         }else if (opt == 'a') {
             print_ast = true;
         }else if (opt == 'r') {
             print_preprocessed = true;
+        }else if (opt == 'I'){
+            include_dirs.emplace_back(optarg);
         }else if (opt == '?' || opt == 'h') {
             if (opt == '?') std::cout << "Unknown option: "<< argv[optind - 1] <<std::endl;
             usage();
@@ -44,8 +48,8 @@ int main(const int argc, char ** argv) {
     if (!source.empty()) {
         const auto console_writer = std::make_shared<ConsoleWriter>();
 
-        Preprocessor preprocessor(source);
-        std::string preprocessed_source = preprocessor.preprocess();
+        Preprocessor preprocessor(source, include_dirs);
+        const std::string preprocessed_source = preprocessor.preprocess();
         if (print_preprocessed) {
             console_writer->write(preprocessed_source);
             console_writer->write_ln();
@@ -71,6 +75,7 @@ void usage() {
     std::cout << "Usage: Cyth [options]" << std::endl;
     std::cout << "Options:" << std::endl;
     print_usage_option("-s", "Specify source script to execute.");
+    print_usage_option("-I", "Specify a directory to search for files specified by the include directive.");
     print_usage_option("--print-ast", "Print the ast of the source script specified by -s to the console.");
     print_usage_option("--print-preprocessed", "Print the source specified by -s after preprocessing occurs to the console.");
 }

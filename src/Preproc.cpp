@@ -19,6 +19,19 @@ std::string Preprocessor::preprocess_rec(const std::string& input) {
     return input_result;
 }
 
-std::string Preprocessor::next_path(const std::string &relative_path) const {
-    return fs::canonical(in_path_parent / fs::path(relative_path)).string();
+std::string Preprocessor::next_path(const std::string &path) {
+    const auto relative_path = fs::path(path);
+    fs::path next_path;
+
+    for (const auto& dir : include_dirs) {
+        try {
+            next_path = fs::canonical(dir / relative_path);
+            last_path_parent = next_path.parent_path();
+            return next_path.string();
+        }catch (std::exception& _) {}
+    }
+
+    next_path = fs::canonical(last_path_parent / relative_path);
+    last_path_parent = next_path.parent_path();
+    return next_path.string();
 }

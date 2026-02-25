@@ -7,8 +7,11 @@ The update-to-date grammar of Cyth can be found [<u>**here**</u>](language-spec.
 ## Cyth Version 0.1.3
 ### What's new:
 - Changed multi-line comments from back ticks to `/**/`.
+- Added Preprocessor.
 ### Optimizations / Improvements:
 - Reworked whitespace handling in Tokenizer.
+- Added `I` flag. This flag when used will specify a directory to
+search for files using the `include` directive.
 ### Bug Fixes
 - _
 
