@@ -9,7 +9,7 @@ main {
 
     i = 25
     for (decl i = 0, (i < 20), i = (i + 1)){
-        if ((i != 19)){
+        if ((i == 19)){
             continue
         }
 
