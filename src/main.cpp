@@ -27,7 +27,6 @@ int main(const int argc, char ** argv) {
         {nullptr, 0, nullptr, 0},
     };
 
-    // TODO: Add -I flag
     int opt;
     while ((opt = getopt_long(argc, argv, "s:hI:", options, nullptr)) != -1) {
         if (opt == 's') {
