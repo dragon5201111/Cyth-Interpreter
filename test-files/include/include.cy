@@ -1,3 +1,4 @@
+include "C:\\Users\\drago\\CLionProjects\\Cyth-Interpreter\\test-files\\include\\include4.cy"
 include "../lib/math.cy"
 
 main {
