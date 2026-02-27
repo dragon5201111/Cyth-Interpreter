@@ -19,7 +19,7 @@ bool Env::is_bound(const std::string &name, const uint64_t depth) const {
 }
 
 void Env::rebind(const std::string& name, Binding value) {
-    if (bindings.count(name)) {
+    if (bindings.contains(name)) {
         bindings[name] = std::move(value);
         return;
     }
@@ -33,7 +33,7 @@ void Env::rebind(const std::string& name, Binding value) {
 }
 
 Binding& Env::get(const std::string& name) {
-    if (bindings.count(name)) {
+    if (bindings.contains(name)) {
         return bindings.at(name);
     }
 

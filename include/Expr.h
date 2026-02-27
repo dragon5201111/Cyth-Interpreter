@@ -87,7 +87,7 @@ public:
     std::unique_ptr<Expr> lhs;
     std::unique_ptr<Expr> rhs;
 
-    PostfixExpr(std::unique_ptr<Expr> lhs, std::unique_ptr<Expr> rhs) : lhs(std::move(lhs)), rhs(std::move(rhs)) {}
+    explicit PostfixExpr(std::unique_ptr<Expr> lhs, std::unique_ptr<Expr> rhs) : lhs(std::move(lhs)), rhs(std::move(rhs)) {}
 
     Value accept(ExprVisitor& visitor) const override {
         return visitor.visit_postfix_expr(*this);
