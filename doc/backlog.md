@@ -26,7 +26,7 @@ more granular support / project history to the changelog - which provides major 
 | Preprocessor Comment              | Fix      | High     | To Do  | -          | -         | Fix Preprocessor such that it can handle comments when processing include directives.             |
 | Tokenizer Line Count              | Fix      | Low      | To Do  | -          | -         | Ensure Tokenizer line count is correct after preprocessing.                                       |
 | REPL                              | Feature  | Medium   | To Do  | -          | -         | Add a REPL to command line.                                                                       |
-| Define Directive                  | Feature  | Low      | To Do  | -          |           | Add a define directive to Preprocessor.                                                           |
+| Define Directive                  | Feature  | Low      | To Do  | -          | -         | Add a define directive to Preprocessor.                                                           |
 | Test Suite                        | Addition | Medium   | To Do  | -          | -         | Add a test suite covering all aspects of Cyth.                                                    |
 | Language Documentation            | Addition | Medium   | To Do  | -          | -         | Add documenation covering usage of all aspects of Cyth (e.g., writing source).                    |
 | Test File Removal                 | Addition | Low      | To Do  | -          | -         | Remove unused or irrelevant test files.                                                           |
