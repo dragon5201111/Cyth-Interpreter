@@ -47,8 +47,8 @@ int main(const int argc, char ** argv) {
     if (!source.empty()) {
         const auto console_writer = std::make_shared<ConsoleWriter>();
 
-        Preprocessor preprocessor(source, include_dirs);
-        const std::string preprocessed_source = preprocessor.preprocess();
+        Preprocessor preprocessor(include_dirs);
+        const std::string preprocessed_source = preprocessor.preprocess(source);
         if (print_preprocessed) {
             console_writer->write(preprocessed_source);
             console_writer->write_ln();

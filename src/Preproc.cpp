@@ -1,41 +1,43 @@
 #include "Preproc.h"
 #include <map>
 
-std::string Preprocessor::preprocess() {
-    return preprocess_rec(file_reader.rread(in_path.string()));
+std::string Preprocessor::preprocess(const std::string& in_path) {
+    dir_stack.clear(); // Need to clear stack in case of multiple calls to preprocess
+    return process_include_directives(in_path);
 }
 
-std::string Preprocessor::preprocess_rec(const std::string& input) {
+std::string Preprocessor::process_include_directives(const std::string& in_path) {
     std::string input_result;
     std::smatch match;
 
+    dir_stack.push_back(fs::path(in_path).parent_path());
+
+    const std::string input = file_reader.rread(in_path);
     auto search_start = input.cbegin();
     while (std::regex_search(search_start, input.end(), match, INCLUDE)) {
         search_start = match.suffix().first;
-        input_result += preprocess_rec(file_reader.rread(next_path(match.str(1))));
+        input_result += process_include_directives(include_next_path(match.str(1)));
     }
 
+    dir_stack.pop_back();
     input_result += std::string(search_start, input.end());
     return input_result;
 }
 
-std::string Preprocessor::next_path(const std::string &path) {
+std::string Preprocessor::include_next_path(const std::string &path) const {
     const auto relative_path = fs::path(path);
-    // Is absolute path, no need to check or update last_path_parent
-    if (fs::exists(relative_path)) {
-        return relative_path.string();
-    }
 
-    fs::path next_path;
-    for (const auto& dir : include_dirs) {
+    for (const auto& dir : dir_stack) {
         try {
-            next_path = fs::canonical(dir / relative_path);
-            last_path_parent = next_path.parent_path();
-            return next_path.string();
+            return fs::canonical(dir / relative_path).string();
         }catch (std::exception& _) {}
     }
 
-    next_path = fs::canonical(last_path_parent / relative_path);
-    last_path_parent = next_path.parent_path();
-    return next_path.string();
+    for (const auto& dir : include_dirs) {
+        try {
+            return fs::canonical(dir / relative_path).string();
+        }catch (std::exception& _) {}
+    }
+
+    throw std::runtime_error("Cannot include:" + path + ", not found.");
 }
