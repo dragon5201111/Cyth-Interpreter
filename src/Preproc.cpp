@@ -5,7 +5,6 @@ std::string Preprocessor::preprocess() {
     return preprocess_rec(file_reader.rread(in_path.string()));
 }
 
-// TODO: Fix - handling comments
 std::string Preprocessor::preprocess_rec(const std::string& input) {
     std::string input_result;
     std::smatch match;

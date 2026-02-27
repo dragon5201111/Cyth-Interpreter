@@ -70,7 +70,7 @@ public:
     }
 };
 
-class MapLiteralExpr : public Expr {
+class MapLiteralExpr final : public Expr {
 public:
     std::map<std::unique_ptr<Expr>, std::unique_ptr<Expr>> elements;
 
