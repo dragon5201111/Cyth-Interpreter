@@ -1,3 +1,9 @@
+## Overview
+Here lies the Cyth grammar. I have tried my best to maintain the accuracy of the
+grammar as new features are added - however, a few errors 
+may be present or something is missing that does not reflect the current Cyth version. Nonetheless, this document is regularly updated and reflects the 
+Cyth language as best as possible.
+
 ## General
 ```
 <text> := any sequence of printable characters
@@ -21,7 +27,6 @@
     | <set-literal> 
     | <map-literal>
     | "(" <expression> ")" 
-    | "nil"
 <postfix> := <primary> | <postfix> [ <expression> ]
 <array-literal> := "[" <expression-list>? "]"
 <set-literal> := "{" <expression-list>? "}"
