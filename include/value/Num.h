@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <variant>
-#include "Print.h"
+#include "../io/Print.h"
 
 class Number : public Printable{
 public:

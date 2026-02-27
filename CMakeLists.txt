@@ -6,17 +6,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
     src/main.cpp
-    src/Writer.cpp
-    src/Tokenizer.cpp
-    src/Reader.cpp
-    src/Parser.cpp
-    src/AstPrinter.cpp
-    src/Env.cpp
-    src/Interpreter.cpp
-    src/Call.cpp
-    src/Value.cpp
-    src/Num.cpp
-    src/Preproc.cpp
+    src/io/Writer.cpp
+    src/token/Tokenizer.cpp
+    src/io/Reader.cpp
+    src/ast/Parser.cpp
+    src/ast/AstPrinter.cpp
+    src/interpreter/Env.cpp
+    src/interpreter/Interpreter.cpp
+    src/interpreter/Call.cpp
+    src/value/Value.cpp
+    src/value/Num.cpp
+    src/io/Preproc.cpp
 )
 
 add_executable(${PROJECT_NAME}  ${SOURCES})

@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "Stmnt.h"
+#include "./Stmnt.h"
 
 class FunctionDecl;
 class ProgramDecl;

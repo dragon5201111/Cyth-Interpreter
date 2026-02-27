@@ -1,7 +1,7 @@
-#include "Call.h"
-#include "Env.h"
-#include "Except.h"
-#include "Interpreter.h"
+#include "../../include/interpreter/Call.h"
+#include "../../include/interpreter/Env.h"
+#include "../../include/interpreter/Except.h"
+#include "../../include/interpreter/Interpreter.h"
 
 Value UserFunction::call(Interpreter &interpreter, const std::vector<Value> &args) {
     check_arity(args);

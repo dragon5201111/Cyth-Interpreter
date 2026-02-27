@@ -2,8 +2,8 @@
 #include <functional>
 #include <stdexcept>
 #include <utility>
-#include "Expr.h"
-#include "Prog.h"
+#include "../ast/Expr.h"
+#include "../ast/Prog.h"
 
 class Interpreter;
 class Env;

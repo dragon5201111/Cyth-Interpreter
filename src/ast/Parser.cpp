@@ -1,12 +1,11 @@
 #include <functional>
 #include <stdexcept>
 
-#include "Parser.h"
-#include "Prog.h"
-#include "Stmnt.h"
-#include "Token.h"
-#include "TokenType.h"
-#include "Tokenizer.h"
+#include "../../include/ast/Parser.h"
+#include "../../include/ast/Prog.h"
+#include "../../include/ast/Stmnt.h"
+#include "../../include/token/Token.h"
+#include "../../include/token/TokenType.h"
 
 std::unique_ptr<ProgramDecl> Parser::parse_program_decl() {
     std::vector<std::unique_ptr<FunctionDecl>> declarations;

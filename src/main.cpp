@@ -1,11 +1,11 @@
 #include <getopt.h>
 #include <iostream>
-#include "Interpreter.h"
-#include "Parser.h"
-#include "../include/Reader.h"
-#include "../include/Tokenizer.h"
-#include "AstPrinter.h"
-#include "Preproc.h"
+#include "../include/interpreter/Interpreter.h"
+#include "../include/ast/Parser.h"
+#include "../include/io/Reader.h"
+#include "../include/token/Tokenizer.h"
+#include "../include/ast/AstPrinter.h"
+#include "../include/io/Preproc.h"
 
 int USAGE_WIDTH = 25;
 

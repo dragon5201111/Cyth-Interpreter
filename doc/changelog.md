@@ -1,5 +1,5 @@
 # Changelog Overview
-Welcome to the Cyth changelog. Here you can find any updates regarding changes to the language,
+Welcome to the Cyth changelog. Here you can find any ***major*** updates regarding changes to the language, revisions
 bug fixes, and what's new. To see upcoming features, additions, removals, and extra details
 regarding changes, take a look at the Cyth [<u>**backlog**</u>](backlog.md).
 

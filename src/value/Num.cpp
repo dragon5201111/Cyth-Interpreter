@@ -1,4 +1,4 @@
-#include "Num.h"
+#include "../../include/value/Num.h"
 
 Number::operator int() const {
     return std::visit([](auto&& value) {

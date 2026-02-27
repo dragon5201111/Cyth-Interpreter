@@ -1,7 +1,8 @@
 # Cyth Backlog Overview
 Working repository as of ***2-27-2026*** for any and all key in-flight changes. Below you can find a
 change matrix and a summary of some of the key columns. The purpose of this document is to provide
-additional support / project history to the changelog.
+more granular support / project history to the changelog.
+
 ## Type Summary
 - Fix: A bug in the Cyth language or issue that needs to be resolved.
 - Feature: An addition to the Cyth language (e.g., set implementation, new operators).
@@ -29,4 +30,4 @@ additional support / project history to the changelog.
 | Move Changelog                    | Revision | Medium   | Done   | 2/27/2026  | 2/27/2026 | Move changelog out of cyth-documentation.md and move to a separate file                           | 
 | Main Args                         | Feature  | Low      | To Do  |            |           | Add a way to access optional args in main (e.g., main(args){})                                    |
 | Refactor Include Directive Search | Revision | Medium   | Done   | 2/27/2026  | 2/27/2026 | When searching for files when using the include directive, a stack should be maintained.          |
-| Refactor Project Layout           | Revision | Low      | To Do  |            |           | Group related source and header files into respective folders and update the CMakeLists.txt file. | |
+| Refactor Project Layout           | Revision | Low      | Done   | 2/27/2026  | 2/27/2026 | Group related source and header files into respective folders and update the CMakeLists.txt file. | |

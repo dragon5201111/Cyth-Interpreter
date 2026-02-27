@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Print.h"
+#include "../io/Print.h"
 #include "TokenType.h"
 
 class Token : public Printable {

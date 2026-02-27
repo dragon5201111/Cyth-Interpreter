@@ -1,12 +1,12 @@
-#include "Interpreter.h"
+#include "../../include/interpreter/Interpreter.h"
 #include <iostream>
 #include <stack>
 #include <stdexcept>
 #include <vector>
-#include "Builtin.h"
-#include "Call.h"
-#include "Except.h"
-#include "Container.h"
+#include "../../include/interpreter/Builtin.h"
+#include "../../include/interpreter/Call.h"
+#include "../../include/interpreter/Except.h"
+#include "../../include/value/Container.h"
 
 void Interpreter::define_primitives() const {
     for (const auto& [name, function] : Builtins::primitive_functions) {

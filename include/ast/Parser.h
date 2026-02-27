@@ -2,10 +2,10 @@
 #include <memory>
 #include <functional>
 #include "Expr.h"
-#include "Prog.h"
+#include "./Prog.h"
 #include "Stmnt.h"
-#include "Token.h"
-#include "Tokenizer.h"
+#include "../token/Token.h"
+#include "../token/Tokenizer.h"
 
 class Parser {
     Tokenizer& tokenizer;
