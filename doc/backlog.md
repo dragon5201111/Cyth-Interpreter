@@ -7,7 +7,7 @@
 ## Status Summary
 - To Do: Has not been started yet.
 - In Progress: Currently in progress.
-- Aborted: Change is not to be implemented.
+- Aborted: Change is not to be implemented or was decided against.
 - Done: Has been finished.
 ## Date Summary
 - Start Date: Marks the start date for a particular change.

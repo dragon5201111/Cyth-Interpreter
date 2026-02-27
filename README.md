@@ -37,5 +37,5 @@ Cyth scripts are run as `Cyth -s [script absolute-path]`. Where Cyth scripts are
 with a `.cy` extension. To run with more options, perform `Cyth -h` or `Cyth --help` to see a complete list
 of options.
 # Documentation
-Documentation on Cyth is found at this [<u>**link**</u>](doc/documentation.md), and is updated regularly.
+The main documentation hub on Cyth is found at this [<u>**link**</u>](doc/documentation.md), and is updated regularly.
 
