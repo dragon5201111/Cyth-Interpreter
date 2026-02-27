@@ -1,21 +1,25 @@
 # Cyth Backlog Overview
 Working repository as of ***2-27-2026*** for any and all key in-flight changes. Below you can find a
 change matrix and a summary of some of the key columns. The purpose of this document is to provide
-more granular support / project history to the changelog.
+more granular support / project history to the changelog - which provides major changes.
 
-## Type Summary
+### Type Summary
 - Fix: A bug in the Cyth language or issue that needs to be resolved.
 - Feature: An addition to the Cyth language (e.g., set implementation, new operators).
 - Addition: An addition external to the Cyth language or project (e.g., adding a new form of documentation).
 - Revision: A revision to be made to the Cyth project such as an optimization, project structure overhaul or code refactor.
-## Status Summary
+
+### Status Summary
 - To Do: Has not been started yet.
 - In Progress: Currently in progress.
 - Aborted: Change is not to be implemented or was decided against.
 - Done: Has been finished.
-## Date Summary
+
+### Date Summary
 - Start Date: Marks the start date for a particular change.
 - End Date: Marks the end date for a particular change.
+
+# Change Matrix
 
 | Change Name                       | Type     | Priority | Status | Start Date | End Date  | Description                                                                                       |
 |-----------------------------------|----------|----------|--------|------------|-----------|---------------------------------------------------------------------------------------------------|
