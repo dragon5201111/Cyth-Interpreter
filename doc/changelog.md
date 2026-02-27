@@ -1,9 +1,3 @@
-# Other Sections In Progress...
-
-# Language Grammar
-The update-to-date grammar of Cyth can be found [<u>**here**</u>](language-spec.md).
-
-# Update History
 ## Cyth Version 0.1.3
 ### What's new:
 - Changed multi-line comments from back ticks to `/**/`.
@@ -11,7 +5,7 @@ The update-to-date grammar of Cyth can be found [<u>**here**</u>](language-spec.
 ### Optimizations / Improvements:
 - Reworked whitespace handling in Tokenizer.
 - Added `I` flag. This flag when used will specify a directory to
-search for files using the `include` directive.
+  search for files using the `include` directive.
 ### Bug Fixes
 - _
 
@@ -25,13 +19,13 @@ search for files using the `include` directive.
 - Added assert, length, and split primitive functions.
 ### Optimizations / Improvements:
 - Overhaul of Value class:
-  - Integrated a Number class to serve as a proxy for numbers (i.e., the previous Cyth version defined a number
-  as a 64-bit integer). This class
-  will serve as a simple and elegant way to integrate new number types in future versions.
-  - Integrated an AbstractContainer class to serve as a proxy for container objects (i.e., sets, arrays, map).
+    - Integrated a Number class to serve as a proxy for numbers (i.e., the previous Cyth version defined a number
+      as a 64-bit integer). This class
+      will serve as a simple and elegant way to integrate new number types in future versions.
+    - Integrated an AbstractContainer class to serve as a proxy for container objects (i.e., sets, arrays, map).
 ### Bug Fixes
 - Added error handling for when trying to subscript a non-container or string.
-- Fixed visit_binary_expr in Interpreter; separated number based operations from general operations (i.e., on Value class). 
+- Fixed visit_binary_expr in Interpreter; separated number based operations from general operations (i.e., on Value class).
 ## Cyth Version 0.1.1
 ### What's new:
 - Added continue statement to while and for loops.
