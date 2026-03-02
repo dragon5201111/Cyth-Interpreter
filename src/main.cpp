@@ -8,6 +8,7 @@
 #include "../include/io/Preproc.h"
 
 int USAGE_WIDTH = 25;
+char ESCAPED_ARG_PREFIX = '\\';
 
 void usage();
 void print_usage_option(const std::string& option, const std::string& description);
@@ -28,6 +29,7 @@ int main(const int argc, char ** argv) {
     };
 
     int opt;
+    opterr = 0; // Avoid printing error for unknown option
     while ((opt = getopt_long(argc, argv, "s:hI:", options, nullptr)) != -1) {
         if (opt == 's') {
             source = std::string(optarg);
@@ -37,10 +39,9 @@ int main(const int argc, char ** argv) {
             print_preprocessed = true;
         }else if (opt == 'I'){
             include_dirs.emplace_back(optarg);
-        }else if (opt == '?' || opt == 'h') {
-            if (opt == '?') std::cout << "Unknown option: "<< argv[optind - 1] <<std::endl;
+        }else if (opt == 'h') {
             usage();
-            return EXIT_FAILURE;
+            return EXIT_SUCCESS;
         }
     }
 
@@ -59,6 +60,15 @@ int main(const int argc, char ** argv) {
         Interpreter interpreter;
 
         const auto program_decl = parser.parse_program_decl();
+        // Push unprocessed args into program
+        for (;optind < argc; optind++) {
+            std::string arg(argv[optind]);
+            if (arg.at(0) == ESCAPED_ARG_PREFIX) {
+                arg.erase(arg.begin());
+            }
+            program_decl->args.emplace_back(arg);
+        }
+
         if (print_ast) {
             AstPrinter ast_printer(console_writer);
             program_decl->accept(ast_printer);
@@ -77,6 +87,7 @@ void usage() {
     print_usage_option("-I", "Specify a directory to search for files specified by the include directive.");
     print_usage_option("--print-ast", "Print the ast of the source script specified by -s to the console.");
     print_usage_option("--print-preprocessed", "Print the source specified by -s after preprocessing occurs to the console.");
+    std::cout << "Additional arguments will be ignored unless a parenthesized identifier is specified in the file given by -s (e.g., main (args) {...}).";
 }
 
 void print_usage_option(const std::string& option, const std::string& description){

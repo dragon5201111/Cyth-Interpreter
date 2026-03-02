@@ -37,7 +37,7 @@ more granular support / project history to the changelog - which provides major 
 | Test File Removal                 | Addition | Low      | Low    | To Do  | -          | -         | Remove unused or irrelevant test files.                                                                 |
 | Pragma Directive                  | Feature  | Low      | Low    | To Do  | -          | -         | Add a pragma directive to only allow inclusion of files one.                                            |
 | Move Changelog                    | Revision | Medium   | Low    | Done   | 2/27/2026  | 2/27/2026 | Move changelog out of cyth-documentation.md and move to a separate file                                 | 
-| Main Args                         | Feature  | Low      | Medium | To Do  | -          | -         | Add a way to access optional args in main (e.g., main(args){})                                          |
+| Main Args                         | Feature  | Low      | Medium | Done   | 3/2/2026   | 3/2/2026  | Add a way to access optional args in main (e.g., main(args){})                                          |
 | Refactor Include Directive Search | Revision | Medium   | Low    | Done   | 2/27/2026  | 2/27/2026 | When searching for files when using the include directive, a stack should be maintained.                |
 | Refactor Project Layout           | Revision | Low      | Low    | Done   | 2/27/2026  | 2/27/2026 | Group related source and header files into respective folders and update the CMakeLists.txt file.       |
 | Basic Container Operations        | Feature  | Medium   | Medium | To Do  | -          | -         | Add primitive container operations such as append / insert, remove, etc.                                |

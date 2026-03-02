@@ -7,7 +7,7 @@ Cyth language as best as possible.
 ## General
 ```
 <text> := any sequence of printable characters
-<program> := <function-declaration>* ("main" { <statement>+ })
+<program> := <function-declaration>* ("main" | "main""(" <identifer> ")") { <statement>+ }
 <identifier> := <letter>(<letter>|<digit>)*
 <letter> := "a" | "b" | ... | "z" | "A" | "B" | ... | "Z"
 <digit> := "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"

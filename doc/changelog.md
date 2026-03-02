@@ -5,7 +5,10 @@ regarding changes, take a look at the Cyth [<u>**backlog**</u>](backlog.md).
 
 # Cyth Version 0.1.3 \[2-27-2026\]
 ### What's new:
-- _
+- Main now supports arguments. You can now enclose an identifier in parentheses after main to which command line
+arguments will be bound to (e.g., main(args){}); any arguments not processed by Cyth will be bound to
+the identifier specified in main contained as an array of strings, if provided. Command line arguments prefixed with a dash or double-dash
+shall be prefixed with a backward slash to be contained in the array of strings bound by the specified identifier - otherwise they will be ignored.
 ### Changes:
 - The Preprocessor now handles include directives using a stack. It is similar to the C Preprocessor
 in which it will search in the following manner: "In the directories of the currently opened include files, in the reverse order in which they were opened. The search begins in the directory of the 

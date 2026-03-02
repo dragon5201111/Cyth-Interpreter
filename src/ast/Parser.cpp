@@ -14,6 +14,15 @@ std::unique_ptr<ProgramDecl> Parser::parse_program_decl() {
     }
 
     check_token_type(tokenizer.next(), TokenType::MAIN, "main");
+    std::string args_name;
+    if (tokenizer.peek().get_type() == TokenType::LEFT_PAREN) {
+        tokenizer.next();
+        const Token identifier = tokenizer.next();
+        check_token_type(identifier, TokenType::IDENTIFIER, "identifier");
+        args_name = identifier.get_value();
+        check_token_type(tokenizer.next(), TokenType::RIGHT_PAREN, "right parenthesis");
+    }
+
     check_token_type(tokenizer.next(), TokenType::LEFT_BRACE, "left brace");
 
     std::vector<std::unique_ptr<Stmnt>> body = parse_stmnts([this] {
@@ -24,7 +33,7 @@ std::unique_ptr<ProgramDecl> Parser::parse_program_decl() {
     check_token_type(tokenizer.next(), TokenType::RIGHT_BRACE, "left brace");
     check_token_type(tokenizer.next(), TokenType::END_OF_FILE, "end of file");
 
-    return std::make_unique<ProgramDecl>(std::move(declarations), std::move(body));
+    return std::make_unique<ProgramDecl>(std::move(args_name), std::move(declarations), std::move(body));
 }
 
 std::unique_ptr<FunctionDecl> Parser::parse_function_decl() {

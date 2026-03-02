@@ -317,6 +317,14 @@ void Interpreter::visit_program(const ProgramDecl &program) {
         func_decl->accept(*this);
     }
 
+    if (!program.args_name.empty()) {
+        std::deque<Value> args;
+        for (const auto& arg : program.args) {
+            args.emplace_back(arg);
+        }
+        local_env->bind(program.args_name, Value(std::make_shared<ArrayContainer>(std::move(args))));
+    }
+
     try {
         execute_stmnts(program.body);
     }catch (ReturnException& return_exception) {

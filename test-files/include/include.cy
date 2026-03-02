@@ -1,6 +1,6 @@
 include "../lib/math.cy"
 
-main {
+main (args){
     decl a = [
         [0, 1],
         [3, 4]

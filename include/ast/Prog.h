@@ -37,11 +37,19 @@ public:
 
 class ProgramDecl final : public Decl {
 public:
+    std::string args_name;
+    std::vector<std::string> args;
     std::vector<std::unique_ptr<FunctionDecl>> declarations;
     std::vector<std::unique_ptr<Stmnt>> body;
 
-    explicit ProgramDecl(std::vector<std::unique_ptr<FunctionDecl>> declarations = {}, std::vector<std::unique_ptr<Stmnt>> body = {})
-        : declarations(std::move(declarations)), body(std::move(body)) {}
+    explicit ProgramDecl(
+        std::string args_name = "",
+        std::vector<std::unique_ptr<FunctionDecl>> declarations = {},
+        std::vector<std::unique_ptr<Stmnt>> body = {})
+        :
+            args_name(std::move(args_name)),
+            declarations(std::move(declarations)),
+            body(std::move(body)) {}
 
     void accept(DeclVisitor &visitor) const override {
         visitor.visit_program(*this);
