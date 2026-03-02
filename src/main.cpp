@@ -61,6 +61,7 @@ int main(const int argc, char ** argv) {
 
         const auto program_decl = parser.parse_program_decl();
         // Push unprocessed args into program
+        program_decl->args.emplace_back(argv[0]);
         for (;optind < argc; optind++) {
             std::string arg(argv[optind]);
             if (arg.at(0) == ESCAPED_ARG_PREFIX) {
