@@ -26,24 +26,24 @@ more granular support / project history to the changelog - which provides major 
 
 # Change Matrix
 
-| Change Name                       | Type     | Priority | Scale  | Status | Start Date | End Date  | Description                                                                                         |
-|-----------------------------------|----------|----------|--------|--------|------------|-----------|-----------------------------------------------------------------------------------------------------|
-| Preprocessor Comment              | Fix      | High     | Medium | To Do  | -          | -         | Fix Preprocessor such that it can handle comments when processing include directives.               |
-| Tokenizer Line Count              | Fix      | Low      | Medium | To Do  | -          | -         | Ensure Tokenizer line count is correct after preprocessing.                                         |
-| REPL                              | Feature  | Medium   | High   | To Do  | -          | -         | Add a REPL to command line.                                                                         |
-| Define Directive                  | Feature  | Low      | Low    | To Do  | -          | -         | Add a define directive to Preprocessor.                                                             |
-| Test Suite                        | Addition | Medium   | High   | To Do  | -          | -         | Add a test suite covering all aspects of Cyth.                                                      |
-| Language Documentation            | Addition | Medium   | High   | To Do  | -          | -         | Add documenation covering usage of all aspects of Cyth (e.g., writing source).                      |
-| Test File Removal                 | Addition | Low      | Low    | To Do  | -          | -         | Remove unused or irrelevant test files.                                                             |
-| Pragma Directive                  | Feature  | Low      | Low    | To Do  | -          | -         | Add a pragma directive to only allow inclusion of files one.                                        |
-| Move Changelog                    | Revision | Medium   | Low    | Done   | 2/27/2026  | 2/27/2026 | Move changelog out of cyth-documentation.md and move to a separate file                             | 
-| Main Args                         | Feature  | Low      | Medium | To Do  | -          | -         | Add a way to access optional args in main (e.g., main(args){})                                      |
-| Refactor Include Directive Search | Revision | Medium   | Low    | Done   | 2/27/2026  | 2/27/2026 | When searching for files when using the include directive, a stack should be maintained.            |
-| Refactor Project Layout           | Revision | Low      | Low    | Done   | 2/27/2026  | 2/27/2026 | Group related source and header files into respective folders and update the CMakeLists.txt file.   |
-| Basic Container Operations        | Feature  | Medium   | Medium | To Do  | -          | -         | Add primitive container operations such as append / insert, remove, etc.                            |
-| Assignment Operators              | Feature  | Low      | Medium | To Do  | -          | -         | Add assignment operators for all binary operators (e.g., +=, *=, etc.).                             |
-| Basic File Operations             | Feature  | High     | High   | To Do  | -          | -         | Expose file operations with primitive functions such as open, close, read, etc.                     |
-| ID Primitive Function             | Feature  | Low      | Low    | To Do  | -          | -         | Expose a unique identifer for each Value (e.g., present the virtual address) object.                |
-| Heap Container                    | Feature  | Low      | Medium | To Do  | -          | -         | Add the heap datastructure.                                                                         |
-| Array Size Initializer            | Feature  | Medium   | Low    | To Do  | -          | -         | Allow arrays to be initialized with a specific number of elements (e.g., (\[0\] * 3) -> \[0,0,0\]). |
-| Pointers                          | Feature  | Low      | Medium | To Do  | -          | -         | Add a pointer type to Value.                                                                        |
+| Change Name                       | Type     | Priority | Scale  | Status | Start Date | End Date  | Description                                                                                             |
+|-----------------------------------|----------|----------|--------|--------|------------|-----------|---------------------------------------------------------------------------------------------------------|
+| Preprocessor Comment              | Fix      | High     | Medium | To Do  | -          | -         | Fix Preprocessor such that it can handle comments when processing include directives.                   |
+| Tokenizer Line Count              | Fix      | Low      | Medium | To Do  | -          | -         | Ensure Tokenizer line count is correct after preprocessing.                                             |
+| REPL                              | Feature  | Medium   | High   | To Do  | -          | -         | Add a REPL to command line.                                                                             |
+| Define Directive                  | Feature  | Low      | Low    | To Do  | -          | -         | Add a define directive to Preprocessor.                                                                 |
+| Test Suite                        | Addition | Medium   | High   | To Do  | -          | -         | Add a test suite covering all aspects of Cyth.                                                          |
+| Language Documentation            | Addition | Medium   | High   | To Do  | -          | -         | Add documenation covering usage of all aspects of Cyth (e.g., writing source).                          |
+| Test File Removal                 | Addition | Low      | Low    | To Do  | -          | -         | Remove unused or irrelevant test files.                                                                 |
+| Pragma Directive                  | Feature  | Low      | Low    | To Do  | -          | -         | Add a pragma directive to only allow inclusion of files one.                                            |
+| Move Changelog                    | Revision | Medium   | Low    | Done   | 2/27/2026  | 2/27/2026 | Move changelog out of cyth-documentation.md and move to a separate file                                 | 
+| Main Args                         | Feature  | Low      | Medium | To Do  | -          | -         | Add a way to access optional args in main (e.g., main(args){})                                          |
+| Refactor Include Directive Search | Revision | Medium   | Low    | Done   | 2/27/2026  | 2/27/2026 | When searching for files when using the include directive, a stack should be maintained.                |
+| Refactor Project Layout           | Revision | Low      | Low    | Done   | 2/27/2026  | 2/27/2026 | Group related source and header files into respective folders and update the CMakeLists.txt file.       |
+| Basic Container Operations        | Feature  | Medium   | Medium | To Do  | -          | -         | Add primitive container operations such as append / insert, remove, etc.                                |
+| Assignment Operators              | Feature  | Low      | Medium | To Do  | -          | -         | Add assignment operators for all binary operators (e.g., +=, *=, etc.).                                 |
+| Basic File Operations             | Feature  | High     | High   | To Do  | -          | -         | Expose file operations with primitive functions such as open, close, read, etc.                         |
+| ID Primitive Function             | Feature  | Low      | Low    | To Do  | -          | -         | Expose a unique identifer for each Value (e.g., present the virtual address) object.                    |
+| Heap Container                    | Feature  | Low      | Medium | To Do  | -          | -         | Add the heap datastructure.                                                                             |
+| Container Initializer             | Feature  | Medium   | Low    | To Do  | -          | -         | Allow containers to be initialized with a specific number of elements (e.g., (\[0\] * 3) -> \[0,0,0\]). |
+| Pointers                          | Feature  | Low      | Medium | To Do  | -          | -         | Add a pointer type to Value.                                                                            |
