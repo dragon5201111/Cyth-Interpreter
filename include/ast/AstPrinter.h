@@ -39,5 +39,5 @@ public:
     void visit_function_call_stmnt(const FunctionCallStmnt &stmnt) override;
 
     void visit_function_decl(const FunctionDecl &func) override;
-    void visit_program(const ProgramDecl &program) override;
+    int64_t visit_program(const ProgramDecl &program) override;
 };

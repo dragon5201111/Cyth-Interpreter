@@ -15,7 +15,8 @@ shall be prefixed with a backward slash to be contained in the array of strings 
 in which it will search in the following manner: "In the directories of the currently opened include files, in the reverse order in which they were opened. The search begins in the directory of the 
 parent include file and continues upward through the directories of any grandparent include files".
 ### Bug Fixes
-- _
+- Interpreter visitor method visit_program now properly returns and propagates a return value. Before, it would simply
+  call exit, causing a memory leak.
 
 # Cyth Version 0.1.2 \[2-23-2026\]
 ### What's new:

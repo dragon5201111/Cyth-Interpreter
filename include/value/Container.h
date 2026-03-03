@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <utility>
 #include <deque>
+#include <fstream>
 #include <map>
 #include <set>
 #include "./Container.h"
@@ -25,6 +26,84 @@ public:
     [[nodiscard]] virtual bool operator<(const AbstractContainer& other) const = 0;
     [[nodiscard]] std::string to_string() const override = 0;
 };
+
+class FileContainer final : public AbstractContainer {
+    std::fstream f_stream;
+    std::string file_name;
+
+    std::ios_base::openmode get_openmode(const std::string& openmode) {
+        std::ios_base::openmode mode = {};
+        for (const char c : openmode) {
+            switch (c) {
+                case 'a':
+                    mode |= std::ios_base::ate;
+                    break;
+                case 'b':
+                    mode |= std::ios_base::binary;
+                    break;
+                case 'r':
+                    mode |= std::ios_base::in;
+                    break;
+                case 'w':
+                    mode |= std::ios_base::out;
+                    break;
+                case 'x':
+                    mode |= std::ios_base::trunc;
+                    break;
+                default:
+                    throw std::invalid_argument("Invalid mode: " +  std::string(1, c) + ".");
+            }
+        }
+        return mode;
+    }
+
+public:
+    explicit FileContainer() : AbstractContainer("<file ", ">") {}
+
+    void open(const std::string& f_name, const std::string& openmode) {
+        if (!f_stream.is_open()) {
+            file_name = f_name;
+            f_stream.open(f_name, get_openmode(openmode));
+        }else {
+            throw std::ios_base::failure("Cannot open file " + f_name + ", already open.");
+        }
+    }
+
+    void close() {
+        if (f_stream.is_open()) {
+            f_stream.close();
+        }
+    }
+
+    ~FileContainer() override {
+        close();
+    }
+
+    bool empty() const override {
+        throw std::runtime_error("FileContainer::empty() called");
+    }
+
+    [[nodiscard]] size_t size() const override {
+        throw std::runtime_error("FileContainer::size() called");
+    }
+
+    [[nodiscard]] Value& operator[](const Value& index) override {
+        throw std::runtime_error("FileContainer::operator[]() called");
+    }
+
+    [[nodiscard]] bool operator==(const AbstractContainer& other) const override {
+        return this == &other;
+    }
+
+    [[nodiscard]] bool operator<(const AbstractContainer& other) const override {
+        return this < &other;
+    }
+
+    [[nodiscard]] std::string to_string() const override {
+        return left_closing + file_name + right_closing;
+    }
+};
+
 
 template<typename C>
 class BaseContainer : public AbstractContainer {

@@ -53,9 +53,22 @@ namespace Builtins {
             split.emplace_back(str.substr(start));
             return Value(std::make_shared<ArrayContainer>(split));
         })},
-
         {"length", std::make_shared<PrimitiveFunction>(1, [](const std::vector<Value>& args) {
             return Value(Number(static_cast<int64_t>(args[0].as_container()->size())));
+        })},
+        {"id", std::make_shared<PrimitiveFunction>(1, [](const std::vector<Value>& args) {
+            std::stringstream string_stream;
+            string_stream << &args[0];
+            return Value(string_stream.str());
+        })},
+        {"open", std::make_shared<PrimitiveFunction>(2, [](const std::vector<Value>& args) {
+            const auto file_container = std::make_shared<FileContainer>();
+            file_container->open(args[0].as_string(), args[1].as_string());
+            return Value(file_container);
+        })},
+        {"close", std::make_shared<PrimitiveFunction>(1, [](const std::vector<Value>& args) {
+            args[0].as_file_container()->close();
+            return Value();
         })}
     };
 }

@@ -45,6 +45,7 @@ int main(const int argc, char ** argv) {
         }
     }
 
+    int64_t program_exit_status = EXIT_FAILURE;
     if (!source.empty()) {
         const auto console_writer = std::make_shared<ConsoleWriter>();
 
@@ -75,10 +76,10 @@ int main(const int argc, char ** argv) {
             program_decl->accept(ast_printer);
         }
 
-        program_decl->accept(interpreter);
+        program_exit_status = program_decl->accept(interpreter);
     }
 
-    return EXIT_SUCCESS;
+    return static_cast<int>(program_exit_status);
 }
 
 void usage() {

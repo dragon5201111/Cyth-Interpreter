@@ -4,6 +4,7 @@
 #include <variant>
 #include "./Num.h"
 
+class FileContainer;
 class AbstractContainer;
 class Value final : public Printable {
     std::variant<
@@ -42,6 +43,7 @@ public:
 
     [[nodiscard]] bool is_container() const { return std::holds_alternative<std::shared_ptr<AbstractContainer>>(value); }
     [[nodiscard]] std::shared_ptr<AbstractContainer> as_container() const { return std::get<std::shared_ptr<AbstractContainer>>(value); }
+    [[nodiscard]] std::shared_ptr<FileContainer> as_file_container() const;
 
     bool operator==(const Value& other) const;
     bool operator!=(const Value& other) const;

@@ -312,7 +312,7 @@ void Interpreter::visit_function_decl(const FunctionDecl &func) {
     local_env->bind(func.name, std::make_shared<UserFunction>(func.parameters.size(),local_env, func));
 }
 
-void Interpreter::visit_program(const ProgramDecl &program) {
+int64_t Interpreter::visit_program(const ProgramDecl &program) {
     for (const auto& func_decl : program.declarations) {
         func_decl->accept(*this);
     }
@@ -332,10 +332,10 @@ void Interpreter::visit_program(const ProgramDecl &program) {
             throw std::runtime_error("Attempt to return from main with non-number.");
         }
 
-        exit(static_cast<int>(return_exception.value.as_number()));
+        return static_cast<int64_t>(return_exception.value.as_number());
     }
 
-    exit(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 

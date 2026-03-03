@@ -10,16 +10,17 @@ class DeclVisitor {
 public:
     virtual ~DeclVisitor() = default;
     virtual void visit_function_decl(const FunctionDecl& func) = 0;
-    virtual void visit_program(const ProgramDecl& program) = 0;
+    virtual int64_t visit_program(const ProgramDecl& program) = 0;
 };
 
+template <typename T>
 class Decl {
 public:
     virtual ~Decl() = default;
-    virtual void accept(DeclVisitor& visitor) const = 0;
+    virtual T accept(DeclVisitor& visitor) const = 0;
 };
 
-class FunctionDecl final : public Decl {
+class FunctionDecl final : public Decl<void> {
 public:
     std::string name;
     std::vector<std::string> parameters;
@@ -35,7 +36,7 @@ public:
     }
 };
 
-class ProgramDecl final : public Decl {
+class ProgramDecl final : public Decl<int64_t> {
 public:
     std::string args_name;
     std::vector<std::string> args;
@@ -51,8 +52,8 @@ public:
             declarations(std::move(declarations)),
             body(std::move(body)) {}
 
-    void accept(DeclVisitor &visitor) const override {
-        visitor.visit_program(*this);
+    int64_t accept(DeclVisitor &visitor) const override {
+        return visitor.visit_program(*this);
     }
 };
 

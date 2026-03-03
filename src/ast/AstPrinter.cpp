@@ -191,7 +191,7 @@ void AstPrinter::visit_function_decl(const FunctionDecl &func) {
     writer->write("}");
 }
 
-void AstPrinter::visit_program(const ProgramDecl &program) {
+int64_t AstPrinter::visit_program(const ProgramDecl &program) {
     for (const auto& func_decl : program.declarations) {
         func_decl->accept(*this);
         writer->write("\n");
@@ -203,6 +203,7 @@ void AstPrinter::visit_program(const ProgramDecl &program) {
         writer->write("\n");
     }
     writer->write("}\n");
+    return EXIT_SUCCESS;
 }
 
 void AstPrinter::visit_function_call_stmnt(const FunctionCallStmnt &stmnt) {

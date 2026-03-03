@@ -6,6 +6,14 @@ std::string Value::to_string_impl(const std::shared_ptr<AbstractContainer> &a) c
     return a->to_string();
 }
 
+std::shared_ptr<FileContainer> Value::as_file_container() const {
+    if (auto file_container = std::dynamic_pointer_cast<FileContainer>(as_container())) {
+        return file_container;
+    }
+
+    throw std::runtime_error("Value is not a FileContainer.");
+}
+
 bool Value::is_truthy() const {
     if (is_nil()) {
         return false;
