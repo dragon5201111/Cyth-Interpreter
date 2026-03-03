@@ -15,14 +15,12 @@ class Number : public Printable{
     template<typename F>
     Number unary_op(F&& f) const {
         return std::visit([&]<typename T0>(T0&& v){
-            return Number{ static_cast<std::decay_t<T0>>(f(v)) };
+            return Number{ static_cast<std::decay_t<T0>>(f(v))};
         }, value);
     }
 
 public:
-    std::string postfix;
     std::variant<int8_t, int64_t, double, float> value;
-    explicit Number(const auto value, std::string prefix) : postfix(std::move(prefix)), value(value) {}
     explicit Number(const int8_t value) : value(value) {}
     explicit Number(const int64_t value) : value(value) {}
     explicit Number(const double value) : value(value) {}

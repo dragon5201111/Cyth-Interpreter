@@ -3,6 +3,14 @@ Welcome to the Cyth changelog. Here you can find any ***major*** updates regardi
 bug fixes, and what's new. To see upcoming features, additions, removals, and extra details
 regarding changes, take a look at the Cyth [<u>**backlog**</u>](backlog.md).
 
+# Cyth Version 0.1.4 \[3-3-2026\]
+### What's new:
+- _
+### Changes:
+- _
+### Bug Fixes
+- _
+
 # Cyth Version 0.1.3 \[2-27-2026\]
 ### What's new:
 - Main now supports arguments. You can now enclose an identifier in parentheses after main to which command line
@@ -13,7 +21,6 @@ shall be prefixed with a backward slash to be contained in the array of strings 
 - Integrated a FileContainer and respective functions - open, close, and readLine.
 - Put, Length, and Remove operations are now supported on containers.
 - Added an 8-bit width Integers type.
-- Floats and 8-bit width Integers when called with the print primitive, output with a prefix.
 ### Changes:
 - The Preprocessor now handles include directives using a stack. It is similar to the C Preprocessor
 in which it will search in the following manner: "In the directories of the currently opened include files, in the reverse order in which they were opened. The search begins in the directory of the 

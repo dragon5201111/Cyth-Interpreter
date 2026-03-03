@@ -65,5 +65,5 @@ bool Number::operator>=(const Number& other) const { return std::visit([](auto&&
 bool Number::operator==(const Number& other) const { return std::visit([](auto&& a, auto&& b){ return a == b; }, value, other.value); }
 
 [[nodiscard]] std::string Number::to_string() const {
-    return std::visit([this](auto&& v){ return std::to_string(v) + postfix; }, value);
+    return std::visit([](auto&& v){ return std::to_string(v); }, value);
 }
