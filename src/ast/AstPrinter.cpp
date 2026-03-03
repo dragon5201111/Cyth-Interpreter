@@ -71,7 +71,12 @@ Value AstPrinter::visit_bool_expr(const BoolExpr &expr) {
     return Value();
 }
 
-Value AstPrinter::visit_integer_expr(const IntegerExpr &expr) {
+Value AstPrinter::visit_integer8_expr(const Integer8Expr &expr) {
+    writer->write(std::to_string(expr.value));
+    return Value();
+}
+
+Value AstPrinter::visit_integer64_expr(const Integer64Expr &expr) {
     writer->write(std::to_string(expr.value));
     return Value();
 }

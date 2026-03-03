@@ -194,7 +194,11 @@ Value Interpreter::visit_bool_expr(const BoolExpr &expr) {
     return Value(expr.value);
 }
 
-Value Interpreter::visit_integer_expr(const IntegerExpr &expr) {
+Value Interpreter::visit_integer8_expr(const Integer8Expr &expr) {
+    return Value(Number(expr.value, "b"));
+}
+
+Value Interpreter::visit_integer64_expr(const Integer64Expr &expr) {
     return Value(Number(expr.value));
 }
 
@@ -203,7 +207,7 @@ Value Interpreter::visit_double_expr(const DoubleExpr &expr) {
 }
 
 Value Interpreter::visit_float_expr(const FloatExpr &expr) {
-    return Value(Number(expr.value));
+    return Value(Number(expr.value, "f"));
 }
 
 Value Interpreter::visit_function_call_expr(const FunctionCallExpr &expr) {

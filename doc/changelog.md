@@ -12,14 +12,18 @@ shall be prefixed with a backward slash to be contained in the array of strings 
 - Added ID primitive function. A call to ID returns the memory address of its input as a string.
 - Integrated a FileContainer and respective functions - open, close, and readLine.
 - Put, Length, and Remove operations are now supported on containers.
+- Added an 8-bit width Integers type.
+- Floats and 8-bit width Integers when called with the print primitive, output with a prefix.
 ### Changes:
 - The Preprocessor now handles include directives using a stack. It is similar to the C Preprocessor
 in which it will search in the following manner: "In the directories of the currently opened include files, in the reverse order in which they were opened. The search begins in the directory of the 
 parent include file and continues upward through the directories of any grandparent include files".
 - Length built-in now works for strings.
+- Integers are now distinguished between 64-bit and 8-bit integers; this change is reflected in the tokenizer and respective AST Expr types.
 ### Bug Fixes
 - Interpreter visitor method visit_program now properly returns and propagates a return value. Before, it would simply
   call exit, causing a memory leak.
+- Fixed Number class casting issues.
 
 # Cyth Version 0.1.2 \[2-23-2026\]
 ### What's new:

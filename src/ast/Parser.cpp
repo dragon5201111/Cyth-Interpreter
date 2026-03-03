@@ -192,10 +192,11 @@ std::unique_ptr<Expr> Parser::parse_expr() {
         case TokenType::LEFT_PAREN: return parse_binary_expr();
         case TokenType::LEFT_BRACKET: return parse_array_literal_expr();
         case TokenType::LEFT_BRACE: return parse_set_literal_expr();
-        case TokenType::INTEGER: return std::make_unique<IntegerExpr>(std::stoll(token.get_value()));
+        case TokenType::INTEGER_8: return std::make_unique<Integer8Expr>(static_cast<int8_t>(std::stoi(token.get_value())));
+        case TokenType::INTEGER_64: return std::make_unique<Integer64Expr>(std::stoll(token.get_value()));
         case TokenType::DOUBLE: return std::make_unique<DoubleExpr>(std::stod(token.get_value()));
         case TokenType::FLOAT: return std::make_unique<FloatExpr>(std::stof(token.get_value()));
-        case TokenType::HEX: return std::make_unique<IntegerExpr>(std::stoll(token.get_value(), nullptr, 16));
+        case TokenType::HEX: return std::make_unique<Integer64Expr>(std::stoll(token.get_value(), nullptr, 16));
         case TokenType::TRUE: return std::make_unique<BoolExpr>(true);
         case TokenType::FALSE: return std::make_unique<BoolExpr>(false);
         case TokenType::STRING: return std::make_unique<StringExpr>(token.get_value());

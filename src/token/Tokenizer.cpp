@@ -206,15 +206,21 @@ Token Tokenizer::get_number() {
 
     // Double has similar pattern to float, must check for float first as it requires a suffix
     if (std::regex_match(number, FLOAT_PATTERN)) {
-        return Token(TokenType::FLOAT, number, current_line);
+        // Remove postfix
+        return Token(TokenType::FLOAT, number.substr(0, number.size() - 1), current_line);
     }
 
     if (std::regex_match(number, DOUBLE_PATTERN)) {
         return Token(TokenType::DOUBLE, number, current_line);
     }
 
-    if (std::regex_match(number, INTEGER_PATTERN)) {
-        return Token(TokenType::INTEGER, number, current_line);
+    if (std::regex_match(number, INTEGER_8_PATTERN)) {
+        // Remove postfix
+        return Token(TokenType::INTEGER_8, number.substr(0, number.size() - 1), current_line);
+    }
+
+    if (std::regex_match(number, INTEGER_64_PATTERN)) {
+        return Token(TokenType::INTEGER_64, number, current_line);
     }
 
     if (std::regex_match(number, HEX_PATTERN)) {

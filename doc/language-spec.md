@@ -35,10 +35,11 @@ Cyth language as best as possible.
 <unary> := ("!" | "-") <expression>
 <binary> := "(" <expression> <op> <expression> ")"
 <bool> := "true" | "false"
-<number> := <integer> | <double> | <float> | <hex>
-<integer> := <digit>+
+<number> := <integer-8> | <integer-64> | <double> | <float> | <hex>
+<integer-8> := <integer-64> ("b" | "B")
+<integer-64> := <digit>+
 <float> := <double> ("f" | "F")
-<double> := <digit>+ "." <digit>*
+<double> := <digit>+ "." <digit>* ("d" | "D")
 <hex> := "0" ("x" | "X") ("0-9" | "a-f" | "A-F")*
 <string> := "\"" <char>* "\""
 <char> := any printable character

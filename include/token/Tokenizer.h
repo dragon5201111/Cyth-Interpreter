@@ -13,7 +13,8 @@ class Tokenizer {
     const std::string MULTI_LINE_COMMENT_BEGIN = "/*";
     const std::string MULTI_LINE_COMMENT_END = "*/";
 
-    std::regex INTEGER_PATTERN = std::regex(R"([0-9]+)");
+    std::regex INTEGER_8_PATTERN = std::regex(R"([0-9]+[bB])");
+    std::regex INTEGER_64_PATTERN = std::regex(R"([0-9]+)");
     std::regex DOUBLE_PATTERN = std::regex(R"([0-9]+\.[0-9]*)");
     std::regex FLOAT_PATTERN = std::regex(R"([0-9]+\.[0-9]*[fF])");
     std::regex HEX_PATTERN = std::regex(R"(0[xX][0-9a-fA-F]*)");

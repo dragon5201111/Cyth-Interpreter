@@ -16,7 +16,8 @@ class UnaryExpr;
 class BinaryExpr;
 class StringExpr;
 class BoolExpr;
-class IntegerExpr;
+class Integer8Expr;
+class Integer64Expr;
 class DoubleExpr;
 class FloatExpr;
 class FunctionCallExpr;
@@ -34,7 +35,8 @@ public:
     virtual Value visit_binary_expr(const BinaryExpr& expr) = 0;
     virtual Value visit_string_expr(const StringExpr& expr) = 0;
     virtual Value visit_bool_expr(const BoolExpr& expr) = 0;
-    virtual Value visit_integer_expr(const IntegerExpr& expr) = 0;
+    virtual Value visit_integer8_expr(const Integer8Expr& expr) = 0;
+    virtual Value visit_integer64_expr(const Integer64Expr& expr) = 0;
     virtual Value visit_double_expr(const DoubleExpr& expr) = 0;
     virtual Value visit_float_expr(const FloatExpr& expr) = 0;
     virtual Value visit_function_call_expr(const FunctionCallExpr& expr) = 0;
@@ -151,13 +153,23 @@ public:
     }
 };
 
-class IntegerExpr final : public Expr {
+class Integer8Expr final : public Expr {
 public:
-    int64_t value;
-    explicit IntegerExpr(const int64_t value) : value(value) {}
+    int8_t value;
+    explicit Integer8Expr(const int8_t value) : value(value) {}
 
     Value accept(ExprVisitor& visitor) const override {
-        return visitor.visit_integer_expr(*this);
+        return visitor.visit_integer8_expr(*this);
+    }
+};
+
+class Integer64Expr final : public Expr {
+public:
+    int64_t value;
+    explicit Integer64Expr(const int64_t value) : value(value) {}
+
+    Value accept(ExprVisitor& visitor) const override {
+        return visitor.visit_integer64_expr(*this);
     }
 };
 

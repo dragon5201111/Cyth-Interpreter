@@ -18,7 +18,8 @@ enum class TokenType {
     MAIN,
 
     // Types
-    INTEGER,
+    INTEGER_8,
+    INTEGER_64,
     DOUBLE,
     FLOAT,
     HEX,
