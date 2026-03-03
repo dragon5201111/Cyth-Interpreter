@@ -5,8 +5,7 @@ main {
         if (!line){
             break
         }
-
-        call print(line, "\n")
+        call print(line)
     }
     return 22
 }
