@@ -18,7 +18,7 @@ arguments will be bound to (e.g., main(args){}); any arguments not processed by 
 the identifier specified in main contained as an array of strings, if provided. Command line arguments prefixed with a dash or double-dash
 shall be prefixed with a backward slash to be contained in the array of strings bound by the specified identifier - otherwise they will be ignored.
 - Added ID primitive function. A call to ID returns the memory address of its input as a string.
-- Integrated a FileContainer and respective functions - open, close, and readLine.
+- Integrated a FileContainer and respective functions - open and close.
 - Put, Length, and Remove operations are now supported on containers.
 - Added an 8-bit width Integers type.
 ### Changes:
