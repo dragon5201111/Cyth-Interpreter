@@ -1,11 +1,14 @@
 main {
-    decl myFile = call open("../test-files/containers/test.txt", "r")
-    while (true){
-        decl line = call readLine(myFile)
-        if (!line){
-            break
-        }
-        call print(line)
-    }
-    return 22
+    decl list = [1,2,3]
+    decl set = {1,2,3}
+    decl map = {{
+        "one" : 1,
+        "two" : 2
+    }}
+
+    call put(list, call length(list), 4)
+    call put(set, call length(set), 4)
+    call put(map, "three", 3)
+
+    call print(list, set, map)
 }

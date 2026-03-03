@@ -22,6 +22,8 @@ public:
     [[nodiscard]] virtual bool empty() const = 0;
     [[nodiscard]] virtual size_t size() const = 0;
     [[nodiscard]] virtual Value& operator[](const Value& index) = 0;
+    virtual void remove(const Value& index) = 0;
+    virtual void put(const Value& index, const Value& value) = 0;
     [[nodiscard]] virtual bool operator==(const AbstractContainer& other) const = 0;
     [[nodiscard]] virtual bool operator<(const AbstractContainer& other) const = 0;
     [[nodiscard]] std::string to_string() const override = 0;
@@ -79,19 +81,6 @@ public:
         }
     }
 
-    std::string next_line() {
-        if (!f_stream.is_open() || f_stream.eof()) {
-            return "";
-        }
-
-        std::string line;
-        if (std::getline(f_stream, line)) {
-            return line;
-        }
-
-        return "";
-    }
-
     ~FileContainer() override {
         close();
     }
@@ -110,6 +99,14 @@ public:
 
     [[nodiscard]] Value& operator[](const Value& index) override {
         throw std::runtime_error("FileContainer::operator[]() called");
+    }
+
+    void remove(const Value &index) override {
+        throw std::runtime_error("FileContainer::remove() called");
+    }
+
+    void put(const Value &index, const Value &value) override {
+        throw std::runtime_error("FileContainer::insert() called");
     }
 
     [[nodiscard]] bool operator==(const AbstractContainer& other) const override {
@@ -184,6 +181,8 @@ public:
     explicit ArrayContainer(const std::deque<Value> &array) : BaseContainer(array, "[", "]") {}
 
     Value& operator[](const Value& value) override { return container[static_cast<int64_t>(value.as_number())]; }
+    void remove(const Value &index) override{ container.erase(container.begin() + static_cast<int64_t>(index.as_number()));}
+    void put(const Value &index, const Value &value) override { container.insert(container.begin() + static_cast<int64_t>(index.as_number()), value); }
 };
 
 class SetContainer final : public BaseContainer<std::set<Value>> {
@@ -192,6 +191,15 @@ public:
     explicit SetContainer(const std::set<Value> &set) : BaseContainer(set, "{", "}") {}
 
     Value& operator[](const Value&) override { throw std::out_of_range("Cannot index a set."); }
+    void remove(const Value &index) override { container.erase(index); }
+    void put(const Value &index, const Value &value) override {
+        auto idx = container.begin();
+        const auto num_increments =  static_cast<int64_t>(value.as_number());
+        for (int64_t increments = 0; increments < num_increments; ++increments) {
+            ++idx;
+        }
+        container.insert(idx, value);
+    }
 };
 
 class MapContainer final : public BaseContainer<std::map<Value, Value>> {
@@ -200,4 +208,6 @@ public:
     explicit MapContainer(const std::map<Value, Value> &map) : BaseContainer(map, "{{", "}}") {}
 
     Value& operator[](const Value& value) override { return container[value]; }
+    void remove(const Value &index) override { container.erase(index); }
+    void put(const Value &index, const Value &value) override { container.insert({index, value}); }
 };
