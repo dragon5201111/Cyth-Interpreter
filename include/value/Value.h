@@ -43,7 +43,7 @@ public:
 
     [[nodiscard]] bool is_container() const { return std::holds_alternative<std::shared_ptr<AbstractContainer>>(value); }
     [[nodiscard]] std::shared_ptr<AbstractContainer> as_container() const { return std::get<std::shared_ptr<AbstractContainer>>(value); }
-    [[nodiscard]] std::shared_ptr<FileContainer> as_file_container() const;
+    template <typename T> [[nodiscard]] std::shared_ptr<T> as_container() const { return std::dynamic_pointer_cast<T>(std::get<std::shared_ptr<AbstractContainer>>(value)); }
 
     bool operator==(const Value& other) const;
     bool operator!=(const Value& other) const;

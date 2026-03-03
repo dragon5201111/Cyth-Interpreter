@@ -61,11 +61,15 @@ public:
     explicit FileContainer() : AbstractContainer("<file ", ">") {}
 
     void open(const std::string& f_name, const std::string& openmode) {
+        if (f_stream.is_open()) {
+            throw std::ios_base::failure("File already open: " + file_name + ".");
+        }
+
+        file_name = f_name;
+        f_stream.open(f_name, get_openmode(openmode));
+
         if (!f_stream.is_open()) {
-            file_name = f_name;
-            f_stream.open(f_name, get_openmode(openmode));
-        }else {
-            throw std::ios_base::failure("Cannot open file " + f_name + ", already open.");
+            throw std::ios_base::failure("Failed to open file: " + f_name + ".");
         }
     }
 
@@ -75,8 +79,25 @@ public:
         }
     }
 
+    std::string next_line() {
+        if (!f_stream.is_open() || f_stream.eof()) {
+            return "";
+        }
+
+        std::string line;
+        if (std::getline(f_stream, line)) {
+            return line;
+        }
+
+        return "";
+    }
+
     ~FileContainer() override {
         close();
+    }
+
+    bool is_open() {
+        return f_stream.is_open();
     }
 
     bool empty() const override {

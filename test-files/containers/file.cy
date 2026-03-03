@@ -1,9 +1,12 @@
 main {
-    decl myFile = call open("./test.txt", "r")
-    call close(myFile)
-    decl i = 0
-    call print(call id(myFile))
-    call print(call id(myFile))
+    decl myFile = call open("../test-files/containers/test.txt", "r")
+    while (true){
+        decl line = call readLine(myFile)
+        if (!line){
+            break
+        }
 
+        call print(line, "\n")
+    }
     return 22
 }
