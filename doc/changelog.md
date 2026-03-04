@@ -5,7 +5,8 @@ regarding changes, take a look at the Cyth [<u>**backlog**</u>](backlog.md).
 
 # Cyth Version 0.1.4 \[3-3-2026\]
 ### What's new:
-- _
+- The Preprocessor will now look to the INCLUDE environment variable when processing include directives. On Windows, the INCLUDE environment variable's value
+will be split by a semicolon and for other OS's will be split by a colon.
 ### Changes:
 - _
 ### Bug Fixes

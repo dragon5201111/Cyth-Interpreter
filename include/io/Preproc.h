@@ -9,7 +9,9 @@ namespace fs = std::filesystem;
 class Preprocessor {
     std::vector<fs::path> dir_stack;
     std::vector<fs::path> include_dirs;
+
     const std::regex INCLUDE = std::regex(R"(include\s+\"(.+)\")");
+    const std::string INCLUDE_ENV = "INCLUDE";
 
     FileReader file_reader;
 

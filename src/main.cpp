@@ -6,6 +6,9 @@
 #include "../include/token/Tokenizer.h"
 #include "../include/ast/AstPrinter.h"
 #include "../include/io/Preproc.h"
+#include <windows.h>
+
+#include "sys/Utils.h"
 
 int USAGE_WIDTH = 25;
 char ESCAPED_ARG_PREFIX = '\\';

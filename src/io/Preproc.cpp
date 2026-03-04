@@ -1,5 +1,9 @@
 #include "../../include/io/Preproc.h"
+
+#include <iostream>
 #include <map>
+
+#include "sys/Utils.h"
 
 std::string Preprocessor::preprocess(const std::string& in_path) {
     dir_stack.clear(); // Need to clear stack in case of multiple calls to preprocess
@@ -36,6 +40,12 @@ std::string Preprocessor::include_next_path(const std::string &path) const {
     for (const auto& dir : include_dirs) {
         try {
             return fs::canonical(dir / relative_path).string();
+        }catch (std::exception& _) {}
+    }
+
+    for (const auto& dir : utils::get_env_values(INCLUDE_ENV)) {
+        try {
+            return fs::canonical(fs::path(dir) / relative_path).string();
         }catch (std::exception& _) {}
     }
 
