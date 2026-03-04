@@ -10,13 +10,13 @@ class Preprocessor {
     std::vector<fs::path> dir_stack;
     std::vector<fs::path> include_dirs;
 
-    const std::regex INCLUDE = std::regex(R"(include\s+\"(.+)\")");
+    const std::regex INCLUDE = std::regex(R"(include\s+(?:\"(.+)\"|<(.+)>))");
     const std::string INCLUDE_ENV = "INCLUDE";
 
     FileReader file_reader;
 
     std::string process_include_directives(const std::string& in_path);
-    std::string include_next_path(const std::string& path) const;
+    std::string include_next_path(const std::string& path, bool skip_stack = false) const;
 public:
     explicit Preprocessor(const std::vector<std::string>& include_dirs = {}) {
         for (const auto& include_dir : include_dirs) {

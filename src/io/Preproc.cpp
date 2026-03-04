@@ -1,8 +1,4 @@
 #include "../../include/io/Preproc.h"
-
-#include <iostream>
-#include <map>
-
 #include "sys/Utils.h"
 
 std::string Preprocessor::preprocess(const std::string& in_path) {
@@ -18,9 +14,12 @@ std::string Preprocessor::process_include_directives(const std::string& in_path)
 
     const std::string input = file_reader.rread(in_path);
     auto search_start = input.cbegin();
+    bool skip_stack = false;
     while (std::regex_search(search_start, input.end(), match, INCLUDE)) {
         search_start = match.suffix().first;
-        input_result += process_include_directives(include_next_path(match.str(1)));
+        skip_stack = match[2].matched;
+        input_result += process_include_directives(
+            include_next_path(skip_stack ? match.str(2) : match.str(1), skip_stack));
     }
 
     dir_stack.pop_back();
@@ -28,13 +27,15 @@ std::string Preprocessor::process_include_directives(const std::string& in_path)
     return input_result;
 }
 
-std::string Preprocessor::include_next_path(const std::string &path) const {
+std::string Preprocessor::include_next_path(const std::string &path, const bool skip_stack) const {
     const auto relative_path = fs::path(path);
 
-    for (const auto& dir : dir_stack) {
-        try {
-            return fs::canonical(dir / relative_path).string();
-        }catch (std::exception& _) {}
+    if (!skip_stack) {
+        for (const auto& dir : dir_stack) {
+            try {
+                return fs::canonical(dir / relative_path).string();
+            }catch (std::exception& _) {}
+        }
     }
 
     for (const auto& dir : include_dirs) {

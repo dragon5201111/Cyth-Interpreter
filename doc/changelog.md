@@ -7,6 +7,9 @@ regarding changes, take a look at the Cyth [<u>**backlog**</u>](backlog.md).
 ### What's new:
 - The Preprocessor will now look to the INCLUDE environment variable when processing include directives. On Windows, the INCLUDE environment variable's value
 will be split by a semicolon and for other OS's will be split by a colon.
+- The Preprocessor now supports angle-wrapped include files. When a file to be included is 
+wrapped in angle-brackets, the Preprocessor will only search directories specified by each -I option
+and the INCLUDE environment variable.
 ### Changes:
 - _
 ### Bug Fixes
