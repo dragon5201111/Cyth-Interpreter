@@ -43,19 +43,18 @@ Cyth language as best as possible.
 <hex> := "0" ("x" | "X") ("0-9" | "a-f" | "A-F")*
 <string> := "\"" <char>* "\""
 <char> := any printable character
-<op> := <single-op> | <double-op>
-<single-op> := 
+<op> := <eval-op> | <comp-op>
+<eval-op> := 
     "+" 
     | "-" 
     | "*" 
     | "/"  
-    | "||" 
     | "|" 
     | "&" 
     | "<<" 
     | ">>"
     | "%" 
-<multi-op> :=
+<comp-op> :=
     | "==" 
     | "!=" 
     | "<=" 
@@ -63,6 +62,7 @@ Cyth language as best as possible.
     | ">=" 
     | ">" 
     | "&&" 
+    | "||" 
 
 <function-call> := "call" <identifier> "(" <expression-list>? ")"
 <expression-list> := <expression> ("," <expression>)*
@@ -80,7 +80,7 @@ Cyth language as best as possible.
     
 <declaration> := decl <identifier> ("=" <expression>)?
 <assignment> := (<identifier> |  <postfix>) <assignment-operator> <expression>
-<assignment-operator> := "=" | <single-op> "="
+<assignment-operator> := "=" | <eval-op> "="
 <for> := for ((<declaration> | <assignment>)?,<expression>?,<assignment>?) { <statement>+ }
 <while> := while (<expression>) { <statement>+ }
 <if> := if (<expression>) { <statement>+ } (else { <statement>+ })?
